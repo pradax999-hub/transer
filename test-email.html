@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Wayro — Перевірка Email</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #0d0c08;
+      color: #e9e2d2;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+    }
+    .card {
+      background: #141209;
+      border: 1px solid #2c2819;
+      border-radius: 12px;
+      padding: 32px;
+      max-width: 420px;
+      width: 100%;
+    }
+    h1 {
+      color: #f5c66b;
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+    p {
+      color: #9c9585;
+      font-size: 13px;
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+    label {
+      display: block;
+      font-size: 12px;
+      color: #8a8474;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    input {
+      width: 100%;
+      background: #1a1710;
+      border: 1px solid #2c2819;
+      border-radius: 6px;
+      padding: 12px;
+      color: #fff;
+      font-size: 14px;
+      margin-bottom: 16px;
+    }
+    input:focus {
+      outline: none;
+      border-color: #f5c66b;
+    }
+    button {
+      width: 100%;
+      background: linear-gradient(170deg, #ffd88f, #f5c66b 55%, #dcaa4b);
+      color: #171204;
+      border: none;
+      border-radius: 6px;
+      padding: 14px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    button:hover {
+      opacity: 0.9;
+    }
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    .result {
+      margin-top: 20px;
+      padding: 14px;
+      border-radius: 6px;
+      font-size: 13px;
+      display: none;
+    }
+    .result.success {
+      background: rgba(74, 222, 128, 0.1);
+      border: 1px solid rgba(74, 222, 128, 0.3);
+      color: #4ade80;
+    }
+    .result.error {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #ef4444;
+    }
+    .back {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+      color: #8a8474;
+      font-size: 12px;
+    }
+    .back:hover {
+      color: #f5c66b;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>📧 Перевірка Email</h1>
+    <p>Введіть email щоб перевірити роботу сервера</p>
+    
+    <form id="form">
+      <label for="email">Email для тесту</label>
+      <input type="email" id="email" placeholder="test@example.com" required>
+      <button type="submit" id="btn">Надіслати тест</button>
+    </form>
+    
+    <div class="result" id="result"></div>
+    
+    <a href="/" class="back">← Повернутися на сайт</a>
+  </div>
+
+  <script>
+    const form = document.getElementById('form');
+    const email = document.getElementById('email');
+    const btn = document.getElementById('btn');
+    const result = document.getElementById('result');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      btn.disabled = true;
+      btn.textContent = 'Відправка...';
+      result.style.display = 'none';
+
+      try {
+        const res = await fetch('/api/test-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ to: email.value })
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          result.className = 'result success';
+          result.innerHTML = `✅ Лист відправлено!<br><small>Message ID: ${data.messageId}</small>`;
+        } else {
+          throw new Error(data.error || 'Помилка сервера');
+        }
+      } catch (err) {
+        result.className = 'result error';
+        result.textContent = `❌ Помилка: ${err.message}`;
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Надіслати тест';
+        result.style.display = 'block';
+      }
+    });
+  </script>
+</body>
+</html>

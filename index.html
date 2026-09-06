@@ -1,0 +1,1962 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#000000">
+  <meta name="color-scheme" content="dark">
+  <meta name="description" content="Wayro – taxi na letiště Václava Havla Praha a zpět. Fixní cena, živá pozice řidiče na mapě, sledování letu, autosedačka zdarma, platba u řidiče.">
+  <title>Wayro | Taxi na letiště Praha</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23f5c66b'%3E%3Cpath d='M4 10 6 4h12l2 6v9h-3v-2H7v2H4v-9Zm3.2 5h9.6M7 13.5h2m6 0h2'/%3E%3Cpath d='M4.6 10.4h14.8v7.2H4.6z'/%3E%3C/svg%3E">
+  <style>
+    html, body { background: #000000 !important; color: #ffffff; }
+    @font-face { font-family: "Inter"; font-style: normal; font-weight: 100 900; font-display: swap; src: url("inter.woff2") format("woff2"); }
+    @font-face { font-family: "Instrument Serif"; font-style: italic; font-weight: 400; font-display: swap; src: url("instrument-serif-italic.woff2") format("woff2"); }
+    :root {
+      --bg: #000000;
+      --text: #ffffff;
+      --muted: #9c968a;
+      --accent: #f5c66b;
+      --accent-soft: #ffd88f;
+      --accent-ink: #1c1403;
+      --surface: #100e0a;
+      --field: #17150f;
+      --line: rgba(255,255,255,.14);
+      --line-soft: rgba(255,255,255,.09);
+      --font: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --gutter: 60px;
+      --ease: cubic-bezier(.16,1,.3,1);
+    }
+    html, body { background: #000000; background: var(--bg, #000000); color: #ffffff; color: var(--text, #ffffff); }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; scrollbar-color: #45402f #08080a; }
+    body { font-family: var(--font); font-size: 14px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; overflow-x: hidden; position: relative; }
+    a { color: inherit; text-decoration: none; }
+    button, input, select, textarea { font: inherit; }
+    button { color: inherit; cursor: pointer; background: none; border: 0; }
+    input, select, textarea { color: inherit; min-width: 0; }
+    button, a, input, select, textarea, summary { -webkit-tap-highlight-color: transparent; }
+    button:disabled { opacity: .45; cursor: not-allowed; }
+    :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+    ::selection { color: #17120a; background: var(--accent); }
+    [hidden] { display: none !important; }
+    img { display: block; max-width: 100%; }
+    svg { display: block; flex-shrink: 0; }
+    .icon { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+    .grain { position: fixed; inset: 0; pointer-events: none; z-index: 100; opacity: .028; }
+    .grain > svg { width: 100%; height: 100%; }
+    .hero-photo { position: absolute; inset: 0 0 auto; height: min(760px,88vh); overflow: hidden; animation: photo-in 1.7s var(--ease) both; }
+    .hero-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center 42%; }
+    .hero-photo::after { content: ""; position: absolute; inset: 0; background: linear-gradient(92deg,rgba(0,0,0,.96) 0%,rgba(0,0,0,.86) 28%,rgba(0,0,0,.45) 54%,rgba(0,0,0,.08) 82%),linear-gradient(180deg,rgba(0,0,0,.6) 0%,transparent 26%,transparent 55%,#000 97%); }
+    .page { position: relative; z-index: 1; display: flex; flex-direction: column; min-height: 100vh; min-height: 100dvh; }
+    .header { position: relative; z-index: 50; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 22px; min-height: 88px; padding: 19px var(--gutter); }
+    .header::after { position: absolute; content: ""; bottom: 0; left: var(--gutter); right: var(--gutter); height: 1px; background: rgba(255,255,255,.1); }
+    .logo { display: inline-flex; align-items: center; gap: 10px; justify-self: start; font-size: 25px; line-height: 1; font-weight: 700; letter-spacing: -.055em; }
+    .logo-mark { display: grid; place-items: center; width: 33px; height: 33px; border-radius: 8px; background: linear-gradient(150deg,var(--accent),#c9963c); color: #1a1204; }
+    .logo-mark .icon { width: 19px; height: 19px; stroke-width: 1.8; }
+    .logo em { font-family: "Instrument Serif","Times New Roman",serif; font-style: italic; font-weight: 400; color: var(--accent); letter-spacing: -.02em; }
+    .site-nav { display: flex; align-items: center; gap: 27px; justify-self: center; }
+    .nav-link { position: relative; display: inline-flex; align-items: center; gap: 7px; min-height: 40px; color: #b3ada2; font-size: 13px; font-weight: 450; letter-spacing: -.01em; white-space: nowrap; transition: color .25s; }
+    .nav-link:hover, .nav-link.active { color: #fff; }
+    .nav-link.active::before { content: ""; width: 4px; height: 4px; border-radius: 50%; background: var(--accent); }
+    .header-actions { display: flex; align-items: center; justify-self: end; gap: 14px; }
+    .lang-switch { display: inline-flex; align-items: center; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; }
+    .lang-switch button { padding: 0 9px; height: 32px; font-size: 11px; font-weight: 500; color: #a49d91; transition: background .25s,color .25s; }
+    .lang-switch button[aria-pressed="true"] { color: var(--accent-ink); background: var(--accent); }
+    .btn { position: relative; isolation: isolate; overflow: hidden; display: inline-flex; align-items: center; justify-content: center; gap: 11px; min-height: 44px; padding: 0 19px; border: 1px solid transparent; border-radius: 7px; font-size: 13px; font-weight: 550; letter-spacing: -.02em; line-height: 1.2; white-space: nowrap; transition: background .35s,border-color .35s,box-shadow .35s,color .35s; }
+    .btn::after { content: ""; position: absolute; z-index: -1; inset: 0; background: linear-gradient(115deg,transparent 22%,rgba(255,255,255,.32) 50%,transparent 78%); transform: translateX(-130%); transition: transform .65s ease; pointer-events: none; }
+    .btn:hover::after { transform: translateX(130%); }
+    .btn-solid { color: var(--accent-ink); background: linear-gradient(170deg,var(--accent-soft),var(--accent) 55%,#dcaa4b); border-color: var(--accent-soft); }
+    .btn-solid:hover { box-shadow: 0 0 26px rgba(245,198,107,.22); }
+    .btn-ghost { color: #f0ece3; border-color: rgba(255,255,255,.26); background: linear-gradient(135deg,rgba(255,255,255,.07),rgba(0,0,0,.35) 60%,rgba(245,198,107,.06)); }
+    .btn-ghost:hover { border-color: rgba(245,198,107,.6); background: rgba(245,198,107,.08); }
+    .btn-small { min-height: 36px; padding: 0 14px; font-size: 12px; gap: 8px; }
+    .header-cta { min-height: 40px; padding: 0 16px; font-size: 12.5px; gap: 9px; }
+    .trip-count { min-width: 18px; height: 18px; display: grid; place-items: center; border-radius: 50%; background: var(--accent); color: var(--accent-ink); font-size: 10px; font-weight: 700; }
+    .burger { display: none; width: 42px; height: 42px; border-radius: 7px; border: 1px solid var(--line); background: rgba(10,10,10,.6); position: relative; z-index: 80; place-content: center; gap: 5px; transition: background .25s,border-color .25s; }
+    .burger span { width: 16px; height: 1.5px; background: #fff; border-radius: 1px; transition: transform .25s,opacity .2s; }
+    .burger:hover { border-color: rgba(245,198,107,.5); }
+    .menu-open .burger span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .menu-open .burger span:nth-child(2) { opacity: 0; }
+    .menu-open .burger span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+    .menu-backdrop { display: none; }
+    .mobile-only { display: none; }
+    #app { flex: 1; min-width: 0; }
+    .hero { display: flex; align-items: flex-end; padding: 60px var(--gutter) 34px; min-height: 400px; }
+    .hero-copy { position: relative; z-index: 1; max-width: 780px; }
+    .eyebrow { display: flex; align-items: center; gap: 10px; color: #c3bcae; font-size: 10px; font-weight: 500; letter-spacing: .17em; text-transform: uppercase; }
+    .eyebrow-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 10px rgba(245,198,107,.5); }
+    .hero .eyebrow { margin-bottom: 24px; }
+    h1 { font-size: clamp(52px,5.6vw,92px); font-weight: 500; letter-spacing: -.06em; line-height: 1.03; }
+    .headline-line { display: block; overflow: hidden; padding: .03em .1em .1em; margin: 0 -.1em; }
+    .headline-line + .headline-line { margin-top: -.05em; }
+    .headline-line > span { display: block; }
+    em { font-family: "Instrument Serif","Times New Roman",Times,serif; font-style: italic; font-weight: 400; font-size: 1.1em; letter-spacing: -.04em; color: var(--accent); }
+    .hero h1 em { display: inline-block; animation: in-em 1.2s var(--ease) .72s both; }
+    .lede { max-width: 430px; margin-top: 20px; color: #aca69a; font-size: 15px; line-height: 1.7; letter-spacing: -.015em; }
+    .hero-badges { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
+    .pill { display: inline-flex; align-items: center; gap: 7px; padding: 8px 13px; border: 1px solid rgba(245,198,107,.3); border-radius: 40px; background: rgba(20,17,10,.6); backdrop-filter: blur(9px); -webkit-backdrop-filter: blur(9px); color: #e6ddc9; font-size: 11.5px; letter-spacing: -.01em; }
+    .pill .icon { width: 14px; height: 14px; color: var(--accent); }
+    .booking { margin: 0 var(--gutter); padding: 21px 24px 18px; border: 1px solid #35301f; border-radius: 13px; background: rgba(14,12,8,.97); }
+    .booking-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 18px; flex-wrap: wrap; }
+    .mode-switch { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+    .mode-switch button { display: inline-flex; align-items: center; gap: 8px; height: 36px; padding: 0 14px; border: 1px solid #35301f; border-radius: 7px; color: #a9a293; font-size: 12px; transition: background .25s,color .25s,border-color .25s; }
+    .mode-switch button .icon { width: 15px; height: 15px; }
+    .mode-switch button[aria-pressed="true"] { color: var(--accent); border-color: rgba(245,198,107,.55); background: rgba(245,198,107,.09); }
+    .booking-note { color: #8b8477; font-size: 11px; display: inline-flex; align-items: center; gap: 7px; }
+    .booking-note .icon { width: 13px; height: 13px; color: var(--accent); }
+    .booking-grid { position: relative; display: grid; grid-template-columns: 1.25fr 26px 1.25fr 1.02fr .62fr .78fr 176px; gap: 9px; align-items: center; }
+    .booking-grid.hourly { grid-template-columns: 1.4fr 1fr 1fr .7fr .8fr 176px; }
+    .field { position: relative; display: flex; flex-direction: column; justify-content: center; height: 64px; border: 1px solid #35301f; border-radius: 7px; padding: 10px 11px 9px 38px; background: var(--field); transition: border-color .2s; min-width: 0; }
+    .field:focus-within { border-color: #a9924f; }
+    .field > .icon { position: absolute; left: 12px; top: 23px; width: 16px; height: 16px; color: #a4977a; }
+    .field.plain { padding-left: 12px; }
+    .field-caption { color: #97907f; font-size: 9.5px; line-height: 1.5; margin-bottom: 5px; white-space: nowrap; }
+    .field input, .field select { display: block; width: 100%; border: 0; outline: none; background: transparent; font-size: 12.5px; line-height: 1.4; text-overflow: ellipsis; }
+    .field input::placeholder { color: #cfc9bc; opacity: 1; }
+    .field select { cursor: pointer; }
+    option { background: #15130e; color: #fff; }
+    .datetime { display: grid; grid-template-columns: 1fr 62px; gap: 4px; align-items: center; }
+    .datetime input { font-size: 11.5px; }
+    .datetime input::-webkit-calendar-picker-indicator { width: 10px; margin: 0; opacity: .55; }
+    .swap { display: grid; place-items: center; width: 26px; height: 34px; color: #a99c7f; transition: color .25s,transform .35s; }
+    .swap:hover { color: var(--accent); transform: rotate(180deg); }
+    .swap .icon { width: 17px; height: 17px; }
+    .quote-btn { display: flex; justify-content: space-between; align-items: center; height: 64px; padding: 9px 16px; text-align: left; gap: 10px; }
+    .quote-btn > span { display: flex; flex-direction: column; gap: 5px; }
+    .quote-amount { font-size: 21px; font-weight: 700; letter-spacing: -.045em; }
+    .quote-btn small { font-size: 9.5px; font-weight: 500; opacity: .85; }
+    .booking-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 15px; color: #918a7c; font-size: 10.5px; flex-wrap: wrap; }
+    .booking-foot > span { display: inline-flex; align-items: center; gap: 7px; }
+    .booking-foot .icon { width: 13px; height: 13px; color: #b6a479; }
+    .foot-right { display: flex; align-items: center; gap: 17px; }
+    .text-link { color: #ddd2ba; text-decoration: underline; text-decoration-color: rgba(221,210,186,.35); text-underline-offset: 4px; transition: color .2s; }
+    .text-link:hover { color: var(--accent); }
+    .extra-row { display: flex; align-items: center; gap: 11px; flex-wrap: wrap; padding-top: 14px; color: #b6afa1; font-size: 12px; }
+    .extra-row input { background: var(--field); border: 1px solid #35301f; padding: 8px 10px; border-radius: 5px; max-width: 160px; }
+    .quick-routes { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding-top: 14px; }
+    .chip { padding: 7px 12px; border: 1px solid #34301f; border-radius: 40px; color: #a9a294; font-size: 11px; transition: border-color .25s,color .25s; }
+    .chip:hover { color: var(--accent); border-color: rgba(245,198,107,.5); }
+    .home-rich { padding: 62px var(--gutter) 24px; }
+    .home-section { padding: 58px 0; border-top: 1px solid var(--line-soft); }
+    .home-section:first-child { border-top: 0; padding-top: 0; }
+    .section-kicker { color: #ad9968; font-size: 10px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; margin-bottom: 13px; }
+    .home-title { max-width: 760px; font-size: clamp(30px,3.5vw,52px); font-weight: 500; line-height: 1.12; letter-spacing: -.055em; }
+    .home-lede { max-width: 640px; margin-top: 16px; color: #9d968a; font-size: 14px; line-height: 1.8; letter-spacing: -.012em; }
+    .feature-grid { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 12px; margin-top: 30px; }
+    .feature { min-height: 150px; border: 1px solid var(--line-soft); border-radius: 13px; padding: 20px; background: linear-gradient(160deg,rgba(255,255,255,.04),rgba(255,255,255,.012)); }
+    .feature .icon { color: var(--accent); margin-bottom: 18px; }
+    .feature h3 { font-size: 15px; font-weight: 550; letter-spacing: -.025em; }
+    .feature p { color: #8f887b; font-size: 12px; line-height: 1.7; margin-top: 9px; }
+    .home-split { display: grid; grid-template-columns: 1.08fr .92fr; gap: 42px; align-items: start; }
+    .home-media { position: relative; overflow: hidden; min-height: 390px; border-radius: 16px; background: #14120c; }
+    .home-media img { width: 100%; height: 100%; min-height: 390px; object-fit: cover; filter: saturate(.78); }
+    .home-media::after { content: ""; position: absolute; inset: 0; background: linear-gradient(0deg,rgba(0,0,0,.72),transparent 50%); }
+    .media-caption { position: absolute; z-index: 1; left: 22px; right: 22px; bottom: 20px; display: flex; justify-content: space-between; gap: 14px; align-items: end; color: #fff; }
+    .media-caption strong { display: block; font-size: 22px; font-weight: 500; letter-spacing: -.04em; }
+    .media-caption span { color: #c9c0ac; font-size: 12px; line-height: 1.6; }
+    .info-stack { display: grid; gap: 13px; }
+    .info-row { display: grid; grid-template-columns: 42px 1fr; gap: 15px; align-items: start; padding: 17px 0; border-bottom: 1px solid var(--line-soft); }
+    .info-num { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 50%; border: 1px solid rgba(245,198,107,.28); color: var(--accent); font-size: 11px; letter-spacing: .08em; }
+    .info-row h3 { font-size: 16px; font-weight: 520; letter-spacing: -.025em; }
+    .info-row p { color: #918a7d; font-size: 12.5px; line-height: 1.75; margin-top: 7px; }
+    .route-board { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; margin-top: 30px; }
+    .route-card { display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: center; min-height: 96px; border: 1px solid var(--line-soft); border-radius: 13px; padding: 18px; background: rgba(17,15,9,.72); transition: border-color .3s, transform .35s var(--ease); }
+    .route-card:hover { border-color: rgba(245,198,107,.4); transform: translateY(-2px); }
+    .route-card h3 { font-size: 16px; font-weight: 520; letter-spacing: -.025em; }
+    .route-card p { color: #8e8779; font-size: 11.5px; line-height: 1.7; margin-top: 6px; }
+    .route-price { color: var(--accent); font-size: 21px; font-weight: 700; letter-spacing: -.04em; white-space: nowrap; }
+    .route-price small { display: block; color: #827a69; font-size: 10px; font-weight: 400; text-align: right; margin-top: 4px; letter-spacing: 0; }
+    .fleet-strip { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 14px; margin-top: 30px; }
+    .mini-car { border: 1px solid var(--line-soft); border-radius: 14px; overflow: hidden; background: #11100b; }
+    .mini-car button { display: block; width: 100%; text-align: left; }
+    .mini-car img { width: 100%; aspect-ratio: 1.55; object-fit: cover; filter: saturate(.72); transition: transform .6s var(--ease), filter .6s; }
+    .mini-car:hover img { transform: scale(1.04); filter: saturate(1); }
+    .mini-body { padding: 15px; }
+    .mini-body h3 { display: flex; justify-content: space-between; gap: 10px; font-size: 15px; font-weight: 560; letter-spacing: -.03em; }
+    .mini-body h3 span:last-child { color: var(--accent); white-space: nowrap; }
+    .mini-body p { color: #8b8476; font-size: 11.5px; line-height: 1.6; margin-top: 8px; }
+    .terminal-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 14px; margin-top: 30px; }
+    .terminal { position: relative; overflow: hidden; min-height: 250px; border-radius: 14px; background: #15120b; }
+    .terminal img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: saturate(.64); opacity: .72; }
+    .terminal::after { content: ""; position: absolute; inset: 0; background: linear-gradient(0deg,rgba(0,0,0,.86),rgba(0,0,0,.1)); }
+    .terminal-body { position: absolute; z-index: 1; inset: auto 18px 18px; }
+    .terminal-body span { color: var(--accent); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; }
+    .terminal-body h3 { margin-top: 8px; font-size: 19px; font-weight: 520; letter-spacing: -.035em; }
+    .terminal-body p { color: #d1c7b1; font-size: 12px; line-height: 1.65; margin-top: 8px; }
+    .review-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 14px; margin-top: 30px; }
+    .quote { border-left: 1px solid rgba(245,198,107,.42); padding: 4px 0 4px 18px; }
+    .quote p { color: #d5cdbd; font-size: 14px; line-height: 1.75; letter-spacing: -.015em; }
+    .quote small { display: block; margin-top: 13px; color: #877f6f; font-size: 11px; line-height: 1.6; }
+    .app-band { display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: center; border: 1px solid #3a321c; border-radius: 16px; padding: 28px; background: radial-gradient(circle at 84% 30%,rgba(245,198,107,.16),transparent 28%),linear-gradient(140deg,#171309,#0b0a07); }
+    .app-band h2 { font-size: clamp(26px,3vw,42px); font-weight: 500; letter-spacing: -.05em; line-height: 1.15; }
+    .app-band p { max-width: 570px; color: #9d9585; font-size: 13px; line-height: 1.75; margin-top: 12px; }
+    .app-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+    .mini-phone { width: 172px; height: 240px; border: 1px solid rgba(245,198,107,.35); border-radius: 26px; padding: 14px; background: #090806; box-shadow: inset 0 0 0 5px #14110a; }
+    .mini-screen { height: 100%; border-radius: 18px; background: linear-gradient(180deg,#20190b,#0e0d09); padding: 18px 13px; }
+    .mini-screen .bar { height: 7px; border-radius: 20px; background: rgba(245,198,107,.28); margin-bottom: 14px; }
+    .mini-screen .bar:nth-child(2) { width: 70%; }
+    .mini-screen .bar:nth-child(3) { width: 45%; background: rgba(255,255,255,.14); }
+    .mini-screen .mapline { height: 86px; border: 1px dashed rgba(245,198,107,.45); border-radius: 16px; margin-top: 22px; position: relative; }
+    .mini-screen .mapline::before, .mini-screen .mapline::after { content: ""; position: absolute; width: 10px; height: 10px; border-radius: 50%; background: var(--accent); }
+    .mini-screen .mapline::before { left: 21px; top: 18px; }
+    .mini-screen .mapline::after { right: 22px; bottom: 18px; }
+    .faq-preview { display: grid; grid-template-columns: 1fr 1fr; gap: 0 32px; margin-top: 28px; }
+    .faq-preview details { border-bottom: 1px solid var(--line-soft); padding: 18px 0; }
+    .faq-preview summary { cursor: pointer; list-style: none; font-size: 14px; line-height: 1.5; }
+    .faq-preview summary::-webkit-details-marker { display: none; }
+    .faq-preview p { color: #928b7d; font-size: 12.5px; line-height: 1.75; margin-top: 10px; }
+    .stats { display: flex; align-items: center; justify-content: space-between; gap: 22px; padding: 26px var(--gutter) max(28px,env(safe-area-inset-bottom)); color: #b1aa9c; }
+    .stat { display: inline-flex; align-items: center; gap: 12px; font-size: 12px; letter-spacing: -.012em; white-space: nowrap; }
+    .stat .icon { width: 19px; height: 19px; color: var(--accent); }
+    .stat small { display: block; color: #7e786c; font-size: 10px; margin-top: 4px; }
+    .is-sub .hero-photo { display: none; }
+    .subpage { width: 100%; max-width: 1560px; margin: 0 auto; padding: 50px var(--gutter) 78px; }
+    .back-link { display: inline-flex; align-items: center; gap: 8px; color: #8c8577; font-size: 11px; margin-bottom: 28px; }
+    .back-link .icon { width: 15px; height: 15px; transform: rotate(180deg); }
+    .kicker { color: #b09a67; font-size: 10px; font-weight: 500; letter-spacing: .18em; text-transform: uppercase; margin-bottom: 16px; }
+    .page-heading { font-size: clamp(34px,4.4vw,62px); font-weight: 500; letter-spacing: -.055em; line-height: 1.09; }
+    .page-desc { max-width: 620px; margin-top: 19px; color: #969084; font-size: 14.5px; line-height: 1.8; letter-spacing: -.015em; }
+    .section-h { font-size: 24px; font-weight: 500; letter-spacing: -.04em; }
+    .tabs { display: flex; align-items: center; gap: 24px; border-bottom: 1px solid var(--line-soft); margin-top: 32px; overflow-x: auto; }
+    .tabs button, .tabs a { white-space: nowrap; position: relative; padding: 14px 0; font-size: 12px; color: #99927f; border-bottom: 1px solid transparent; }
+    .tabs .active, .tabs [aria-pressed="true"] { color: var(--accent); border-bottom-color: var(--accent); }
+    .toolbar { display: flex; justify-content: space-between; gap: 18px; align-items: center; margin-top: 32px; flex-wrap: wrap; }
+    .toolbar .tabs { margin: 0; flex: 1; border: 0; }
+    .cards { display: grid; grid-template-columns: repeat(auto-fit,minmax(255px,1fr)); gap: 16px; margin-top: 34px; }
+    .card { border: 1px solid var(--line-soft); border-radius: 12px; padding: 24px; background: linear-gradient(160deg,rgba(255,255,255,.035),rgba(0,0,0,0)); transition: border-color .3s,transform .4s var(--ease); }
+    .card:hover { border-color: rgba(245,198,107,.4); transform: translateY(-3px); }
+    .card-icon { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 10px; background: rgba(245,198,107,.12); color: var(--accent); margin-bottom: 19px; }
+    .card h3 { font-size: 17px; font-weight: 500; letter-spacing: -.03em; }
+    .card p { color: #918b7e; font-size: 12.5px; line-height: 1.75; margin-top: 10px; }
+    .card .text-link { display: inline-block; margin-top: 15px; font-size: 12px; }
+    .fleet-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 38px 26px; margin-top: 30px; }
+    .car-media { display: block; width: 100%; overflow: hidden; position: relative; background: #16140f; aspect-ratio: 1.75; border-radius: 10px; }
+    .car-media img { width: 100%; height: 100%; object-fit: cover; filter: saturate(.66); transition: transform .8s var(--ease),filter .8s; }
+    .car-media:hover img { transform: scale(1.045); filter: saturate(.95); }
+    .car-media::after { position: absolute; content: ""; inset: 0; border-radius: 10px; box-shadow: inset 0 0 0 1px rgba(255,255,255,.07); }
+    .car-tag { position: absolute; left: 13px; top: 13px; padding: 6px 11px; border-radius: 30px; background: rgba(8,7,4,.78); backdrop-filter: blur(8px); color: var(--accent); font-size: 10.5px; letter-spacing: .04em; }
+    .car-top { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; margin-top: 18px; }
+    .car-top h2 { font-size: 22px; font-weight: 500; letter-spacing: -.04em; }
+    .car-price { font-size: 20px; color: var(--accent); font-weight: 600; letter-spacing: -.04em; white-space: nowrap; }
+    .car-price small { display: block; color: #827c6f; font-size: 10px; font-weight: 400; text-align: right; margin-top: 4px; letter-spacing: 0; }
+    .car-model { color: #8f887b; font-size: 12px; margin-top: 6px; }
+    .car-bottom { display: flex; justify-content: space-between; align-items: center; gap: 14px; margin-top: 17px; padding-top: 16px; border-top: 1px solid var(--line-soft); flex-wrap: wrap; }
+    .specs { display: flex; gap: 17px; color: #a7a091; font-size: 11.5px; flex-wrap: wrap; }
+    .specs > span { display: inline-flex; align-items: center; gap: 6px; }
+    .specs .icon { width: 15px; height: 15px; color: #b3a37c; }
+    .fine { color: #787266; font-size: 11px; line-height: 1.8; margin-top: 26px; }
+    .steps { display: grid; grid-template-columns: repeat(4,1fr); gap: 22px; margin-top: 36px; }
+    .step { padding-top: 19px; border-top: 1px solid var(--line); }
+    .step-num { color: var(--accent); font-size: 11px; letter-spacing: .1em; }
+    .step h3 { font-size: 16px; font-weight: 500; margin-top: 13px; letter-spacing: -.025em; }
+    .step p { color: #8d8779; font-size: 12px; line-height: 1.75; margin-top: 9px; }
+    .meet-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; margin-top: 32px; }
+    .meet { border: 1px solid var(--line-soft); border-radius: 12px; padding: 22px; }
+    .meet-badge { display: inline-flex; align-items: center; gap: 8px; color: var(--accent); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; }
+    .meet h3 { font-size: 19px; font-weight: 500; margin-top: 14px; letter-spacing: -.03em; }
+    .meet p { color: #8f887b; font-size: 12.5px; line-height: 1.8; margin-top: 11px; }
+    .split { display: grid; grid-template-columns: 1.1fr .9fr; gap: 70px; margin-top: 42px; align-items: start; }
+    .list { list-style: none; }
+    .list li { display: flex; align-items: flex-start; gap: 13px; padding: 17px 0; border-bottom: 1px solid var(--line-soft); color: #c2bbad; font-size: 13.5px; line-height: 1.65; }
+    .list .icon { color: var(--accent); width: 17px; height: 17px; margin-top: 2px; }
+    .panel { border: 1px solid #35301f; border-radius: 12px; padding: 26px; background: var(--surface); }
+    .panel h2 { font-size: 21px; font-weight: 500; letter-spacing: -.035em; margin-bottom: 21px; }
+    .form-field { display: flex; flex-direction: column; gap: 8px; margin-bottom: 17px; }
+    .form-field > span { font-size: 12px; color: #b0a998; }
+    .input { width: 100%; min-height: 46px; border: 1px solid #3a3524; background: #191710; border-radius: 6px; padding: 11px 13px; outline: none; font-size: 13px; transition: border-color .2s; }
+    .input:focus { border-color: #b09a5f; }
+    .input::placeholder { color: #736c5c; }
+    textarea.input { resize: vertical; min-height: 88px; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 15px; }
+    .note { color: #7d7768; font-size: 10.5px; line-height: 1.7; }
+    .total-row { display: flex; justify-content: space-between; gap: 14px; align-items: baseline; border-top: 1px solid #37321f; padding-top: 18px; margin-top: 16px; }
+    .total-row strong { font-size: 26px; letter-spacing: -.045em; color: var(--accent); font-weight: 600; }
+    .total-row > span { font-size: 12px; color: #aca595; }
+    .wide { width: 100%; margin-top: 21px; min-height: 48px; }
+    .banner { display: flex; gap: 12px; align-items: flex-start; background: #16130c; border-left: 2px solid var(--accent); padding: 15px 17px; margin-top: 24px; color: #b3ac9c; font-size: 12px; line-height: 1.75; border-radius: 0 8px 8px 0; }
+    .banner .icon { color: var(--accent); width: 17px; height: 17px; margin-top: 1px; }
+    .empty { padding: 56px 0 42px; max-width: 600px; }
+    .empty .icon { width: 58px; height: 58px; color: #b3a37c; stroke-width: 1; margin-bottom: 22px; }
+    .empty h2 { font-size: 23px; font-weight: 450; letter-spacing: -.035em; }
+    .empty p { color: #8d8779; font-size: 13px; line-height: 1.85; max-width: 460px; margin: 14px 0 24px; }
+    .trip { padding: 23px 0; border-bottom: 1px solid var(--line-soft); display: grid; grid-template-columns: 1fr auto; gap: 20px; }
+    .trip-meta { display: flex; align-items: center; gap: 13px; font-size: 10px; color: #8d8779; margin-bottom: 12px; flex-wrap: wrap; }
+    .status { display: inline-flex; align-items: center; gap: 6px; color: var(--accent); font-size: 11px; }
+    .status::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+    .status.off { color: #a98d78; }
+    .trip-route { font-size: 18px; letter-spacing: -.035em; font-weight: 450; line-height: 1.5; }
+    .trip-route .arw { color: #8a7f66; margin: 0 11px; }
+    .trip-sub { font-size: 11px; color: #8d8779; margin-top: 9px; }
+    .trip-right { display: flex; flex-direction: column; align-items: flex-end; gap: 14px; }
+    .trip-price { font-size: 20px; font-weight: 600; letter-spacing: -.04em; }
+    .row-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+    .order-grid { display: grid; grid-template-columns: .9fr 1.1fr; gap: 46px; margin-top: 30px; }
+    .points { display: flex; flex-direction: column; gap: 22px; padding: 0 0 22px 27px; position: relative; }
+    .points::before { content: ""; position: absolute; top: 8px; bottom: 40px; left: 5px; width: 1px; background: #4c452e; }
+    .point { position: relative; font-size: 14px; }
+    .point::before { content: ""; position: absolute; left: -26px; top: 5px; width: 9px; height: 9px; border: 2px solid var(--accent); background: #000; border-radius: 50%; }
+    .point:last-child::before { border-radius: 2px; background: var(--accent); }
+    .point small { display: block; margin-top: 6px; color: #8d8779; font-size: 11px; }
+    .dline { display: flex; justify-content: space-between; gap: 16px; padding: 11px 0; border-top: 1px solid var(--line-soft); font-size: 12px; color: #8d8779; }
+    .dline span:last-child { color: #ddd6c6; text-align: right; }
+    .driver { display: flex; align-items: center; gap: 13px; padding: 18px 0; margin-top: 8px; border-top: 1px solid var(--line); }
+    .avatar { width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center; background: #2a2314; color: var(--accent); font-size: 18px; }
+    .driver strong { font-size: 13px; font-weight: 500; }
+    .driver p { color: #8d8779; font-size: 10.5px; margin-top: 5px; }
+    .map-wrap { border: 1px solid #2c2819; background: #0b0a07; overflow: hidden; border-radius: 11px; }
+    .map { width: 100%; height: auto; display: block; }
+    .map-road { fill: none; stroke: #26231a; stroke-width: 9; }
+    .map-road.minor { stroke-width: 3; stroke: #1c1a13; }
+    .map-river { fill: none; stroke: #14231f; stroke-width: 16; }
+    .map-route { fill: none; stroke: var(--accent); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 6 5; }
+    .map-txt { fill: #6f6959; font: 10px var(--font); letter-spacing: 2px; }
+    .map-cap { padding: 11px 16px; display: flex; justify-content: space-between; gap: 14px; border-top: 1px solid #262319; font-size: 10px; color: #8a8474; }
+    .live { border: 1px solid #2c2819; border-radius: 12px; overflow: hidden; background: #0b0a07; }
+    .live-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 11px 15px; border-bottom: 1px solid #262319; }
+    .live-top > div { display: flex; align-items: center; gap: 9px; font-size: 12px; color: #ddd5c4; }
+    .live-top .icon { width: 16px; height: 16px; color: var(--accent); }
+    .live-badge { padding: 4px 10px; border-radius: 30px; border: 1px solid rgba(245,198,107,.4); color: var(--accent); font-size: 10px; letter-spacing: .05em; white-space: nowrap; transition: color .3s,border-color .3s; }
+    .live-badge.off { color: #a29a8a; border-color: rgba(255,255,255,.14); }
+    .live-badge.err { color: #e6b98f; border-color: rgba(230,185,143,.42); }
+    #live-map { height: 322px; background: #0d0c08; }
+    .live-geo { position: relative; display: grid; place-items: center; align-content: center; gap: 15px; height: 322px; text-align: center; padding: 26px; }
+    .live-geo p { max-width: 340px; color: #9c9585; font-size: 12px; line-height: 1.75; }
+    .live-radar { width: 62px; height: 62px; border-radius: 50%; border: 1px solid rgba(245,198,107,.4); position: relative; }
+    .live-radar::before { content: ""; position: absolute; inset: 22px; border-radius: 50%; background: var(--accent); opacity: .55; }
+    .live-radar::after { content: ""; position: absolute; inset: -1px; border-radius: 50%; border: 1px solid rgba(245,198,107,.55); animation: radar 2.3s var(--ease) infinite; }
+    @keyframes radar { 0% { transform: scale(.55); opacity: .9; } 100% { transform: scale(1.95); opacity: 0; } }
+    .live-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: #211e14; }
+    .live-stat { background: #0d0c08; padding: 13px 15px; }
+    .live-stat span { display: block; color: #867f6e; font-size: 9.5px; letter-spacing: .1em; text-transform: uppercase; }
+    .live-stat strong { display: block; margin-top: 6px; font-size: 16px; letter-spacing: -.03em; font-weight: 600; }
+    .live-note { padding: 10px 15px; border-top: 1px solid #262319; color: #827c6d; font-size: 10px; line-height: 1.6; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+    .live-bar { height: 3px; border-radius: 3px; background: rgba(255,255,255,.1); overflow: hidden; width: 84px; }
+    .live-bar > i { display: block; height: 100%; width: 0; background: var(--accent); transition: width 1.2s linear; }
+    .pin { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50% 50% 50% 3px; transform: rotate(45deg); background: var(--accent); box-shadow: 0 6px 14px rgba(0,0,0,.55); }
+    .pin > i { display: block; width: 8px; height: 8px; border-radius: 50%; background: #171204; transform: rotate(-45deg); }
+    .pin.dest { background: #f2eee5; }
+    .pin.dest > i { background: #14120c; }
+    .pin-car { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: var(--accent); border: 2px solid #fff; box-shadow: 0 0 0 6px rgba(245,198,107,.18), 0 8px 18px rgba(0,0,0,.6); }
+    .pin-car .icon { width: 17px; height: 17px; color: #171204; }
+    .leaflet-container { font-family: var(--font); background: #0b0a07; }
+    .leaflet-marker-icon { transition: transform 1.1s linear; }
+    .leaflet-control-attribution { background: rgba(8,8,6,.75) !important; color: #7c7668 !important; font-size: 9px !important; }
+    .leaflet-control-attribution a { color: #b6a87f !important; }
+    .leaflet-bar a { background: #141209 !important; color: #e9e2d2 !important; border-color: #2c2819 !important; }
+    .leaflet-bar a:hover { background: #1f1c11 !important; color: var(--accent) !important; }
+    .timeline { list-style: none; margin-top: 24px; }
+    @media (max-width: 620px) { #live-map, .live-geo { height: 246px; } .live-stats { grid-template-columns: 1fr; } .live-stat { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; padding: 11px 15px; } .live-stat strong { margin-top: 0; } }
+    .timeline li { display: flex; position: relative; gap: 13px; padding-bottom: 17px; align-items: center; color: #6b6555; font-size: 12px; }
+    .timeline li:not(:last-child)::after { content: ""; position: absolute; left: 9px; top: 22px; bottom: 2px; width: 1px; background: #2d2919; }
+    .timeline li.done, .timeline li.now { color: #ded7c7; }
+    .timeline li.now { font-weight: 500; }
+    .tdot { display: grid; place-items: center; width: 20px; height: 20px; flex-shrink: 0; border: 1px solid #453f2a; border-radius: 50%; font-size: 9px; }
+    .done .tdot { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+    .now .tdot { border-color: var(--accent); color: var(--accent); box-shadow: 0 0 0 4px rgba(245,198,107,.07); }
+    .tdot .icon { width: 11px; height: 11px; }
+    .ctrls { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 17px; }
+    .faq { border-bottom: 1px solid var(--line-soft); }
+    .faq summary { list-style: none; padding: 20px 34px 20px 0; font-size: 14px; line-height: 1.6; cursor: pointer; position: relative; }
+    .faq summary::-webkit-details-marker { display: none; }
+    .faq summary::after { content: "+"; position: absolute; right: 3px; top: 19px; font-size: 19px; color: var(--accent); font-weight: 300; }
+    .faq[open] summary::after { content: "−"; }
+    .faq p { color: #948d80; font-size: 13px; line-height: 1.85; padding: 0 26px 20px 0; }
+    .search { display: flex; align-items: center; gap: 11px; border-bottom: 1px solid #45402c; padding: 9px 0 14px; color: #948a72; margin-bottom: 12px; }
+    .search input { border: 0; outline: 0; background: transparent; width: 100%; font-size: 14px; }
+    .search input::placeholder { color: #6f6959; }
+    .aside { border-top: 1px solid #45402c; padding-top: 23px; }
+    .aside h2 { font-size: 20px; letter-spacing: -.035em; font-weight: 450; }
+    .aside p { font-size: 12px; line-height: 1.85; color: #8a8477; margin-top: 12px; }
+    .aside .btn { margin-top: 20px; }
+    .links { display: flex; flex-direction: column; gap: 16px; margin-top: 28px; font-size: 12px; color: #c0b8a6; align-items: flex-start; }
+    .ref-code { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 20px 0; border-block: 1px solid #40391f; margin-top: 18px; }
+    .ref-code strong { color: var(--accent); font-size: 28px; font-weight: 600; letter-spacing: .05em; }
+    .steps-ol { list-style: none; counter-reset: r; }
+    .steps-ol li { display: flex; gap: 20px; padding: 18px 0; border-bottom: 1px solid var(--line-soft); font-size: 13.5px; line-height: 1.7; color: #bcb5a7; }
+    .steps-ol li::before { counter-increment: r; content: "0" counter(r); font-size: 11px; color: #8f8875; padding-top: 3px; }
+    .review { max-width: 830px; padding: 26px 0; border-bottom: 1px solid var(--line); }
+    .stars { color: var(--accent); display: flex; gap: 3px; margin-bottom: 15px; }
+    .stars .icon { width: 15px; height: 15px; fill: currentColor; stroke: none; }
+    .review-txt { font-size: 18px; line-height: 1.65; letter-spacing: -.02em; }
+    .review-by { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 17px; color: #8d8779; font-size: 11px; }
+    dialog { color: #fff; width: min(900px,calc(100vw - 40px)); max-height: calc(100dvh - 50px); margin: auto; border: 1px solid #3d3724; border-radius: 14px; padding: 0; background: #0d0b07; box-shadow: 0 35px 100px rgba(0,0,0,.7); overscroll-behavior: contain; }
+    dialog::backdrop { background: rgba(0,0,0,.78); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+    dialog[open] { animation: dialog-in .35s var(--ease); }
+    dialog.slim { width: min(560px,calc(100vw - 32px)); }
+    .modal-open { overflow: hidden; }
+    .shell { position: relative; padding: 30px; }
+    .x { position: absolute; z-index: 2; top: 21px; right: 21px; display: grid; place-items: center; width: 32px; height: 32px; border: 1px solid #3c3624; border-radius: 50%; color: #a89e85; background: #100e09; }
+    .x:hover { color: var(--accent); border-color: var(--accent); }
+    .x .icon { width: 15px; height: 15px; }
+    .d-eyebrow { font-size: 9px; letter-spacing: .17em; text-transform: uppercase; color: #a89263; margin-bottom: 12px; }
+    .d-title { font-size: 26px; font-weight: 500; line-height: 1.2; letter-spacing: -.045em; padding-right: 28px; }
+    .d-desc { margin-top: 11px; color: #8f8878; font-size: 12px; line-height: 1.8; }
+    .checkout { display: grid; grid-template-columns: 1fr 244px; gap: 28px; margin-top: 24px; align-items: start; }
+    .co-main { min-width: 0; }
+    .summary { border-left: 1px solid #302b1c; padding-left: 22px; position: sticky; top: 0; }
+    .sum-h { color: #a89263; font-size: 10px; text-transform: uppercase; letter-spacing: .14em; margin-bottom: 17px; }
+    .sum-route { font-size: 13px; line-height: 1.6; }
+    .sum-route > span { display: block; color: #7d765f; margin: 5px 0; }
+    .sum-det { color: #8b8474; font-size: 10.5px; line-height: 1.85; margin-top: 13px; }
+    .pline-wrap { margin-top: 18px; }
+    .pline { display: flex; justify-content: space-between; gap: 12px; font-size: 11px; color: #928b79; margin-top: 10px; }
+    .pline > span:last-child { color: #ccc4b1; white-space: nowrap; }
+    .pline.disc, .pline.disc > span:last-child { color: var(--accent); }
+    .summary .total-row strong { font-size: 24px; }
+    .sum-inc { margin-top: 20px; color: #7f7867; font-size: 10px; line-height: 1.95; }
+    .picks { display: grid; grid-template-columns: repeat(2,1fr); gap: 8px; margin-bottom: 20px; }
+    .pick { position: relative; display: flex; justify-content: space-between; align-items: center; border: 1px solid #37311f; padding: 12px 11px; border-radius: 6px; cursor: pointer; gap: 8px; font-size: 11.5px; }
+    .pick:has(input:checked) { border-color: var(--accent); background: rgba(245,198,107,.07); }
+    .pick input { accent-color: var(--accent); width: 13px; height: 13px; }
+    .pick span { flex: 1; }
+    .pick small { color: #b0a077; font-size: 10.5px; white-space: nowrap; }
+    .pick.wide-pick { grid-column: 1 / -1; }
+    .s-label { display: block; font-size: 12px; margin: 20px 0 11px; color: #c3bcab; font-weight: 500; }
+    .counter-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 0; border-bottom: 1px solid #262316; }
+    .c-label { display: flex; align-items: center; gap: 11px; font-size: 11.5px; color: #c1baa9; }
+    .c-label .icon { color: #ab9c74; width: 17px; height: 17px; }
+    .c-label small { display: block; margin-top: 4px; color: #857e6c; font-size: 9.5px; }
+    .counter { display: flex; align-items: center; gap: 11px; }
+    .counter button { width: 25px; height: 25px; display: grid; place-items: center; border: 1px solid #47402a; border-radius: 5px; color: var(--accent); }
+    .counter button .icon { width: 12px; height: 12px; }
+    .counter output { min-width: 12px; text-align: center; font-size: 12px; }
+    .check { display: flex; align-items: flex-start; gap: 9px; font-size: 11.5px; line-height: 1.7; color: #a49d8c; cursor: pointer; margin-top: 13px; }
+    .check input { accent-color: var(--accent); width: 14px; height: 14px; margin-top: 2px; flex-shrink: 0; }
+    .promo-row { display: flex; gap: 8px; margin-top: 8px; }
+    .promo-row input { flex: 1; text-transform: uppercase; }
+    .promo-msg { font-size: 10.5px; line-height: 1.6; margin-top: 8px; color: #cdbf9c; min-height: 15px; }
+    .err { color: #e6b98f; font-size: 11.5px; line-height: 1.65; margin-top: 11px; }
+    .d-actions { display: flex; align-items: center; gap: 10px; margin-top: 22px; }
+    .d-actions .btn-solid { flex: 1; }
+    .gallery-img { width: 100%; aspect-ratio: 1.62; object-fit: cover; margin-top: 20px; border-radius: 9px; background: #17150f; }
+    .g-ctrl { display: flex; align-items: center; justify-content: space-between; margin-top: 16px; gap: 14px; }
+    .g-ctrl > span { color: #9d968a; font-size: 12px; }
+    .g-arrows { display: flex; gap: 8px; }
+    .icon-btn { display: grid; place-items: center; width: 36px; height: 36px; border: 1px solid #3f3927; border-radius: 50%; }
+    .icon-btn:hover { color: var(--accent); border-color: var(--accent); }
+    .icon-btn .icon { width: 17px; height: 17px; }
+    .rate { display: flex; gap: 7px; margin: 22px 0; }
+    .rate button { color: #4a412a; padding: 3px; }
+    .rate button.on { color: var(--accent); }
+    .rate .icon { width: 29px; height: 29px; fill: currentColor; stroke: none; }
+    .chat-log { margin-top: 20px; max-height: 280px; min-height: 110px; overflow-y: auto; display: flex; flex-direction: column; gap: 11px; }
+    .bubble { background: #18160e; padding: 12px 15px; border-radius: 9px 9px 9px 0; max-width: 93%; color: #b9b2a1; font-size: 12px; line-height: 1.7; }
+    .bubble.me { align-self: flex-end; background: #2c2513; color: #ece2cb; border-radius: 9px 9px 0 9px; }
+    .chat-form { display: flex; gap: 8px; margin-top: 18px; }
+    .toasts { position: fixed; z-index: 200; bottom: max(22px,env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); width: min(450px,calc(100vw - 34px)); pointer-events: none; display: flex; flex-direction: column; gap: 9px; }
+    .toast { border: 1px solid #6d6142; padding: 14px 17px; background: #1c1810; border-radius: 9px; color: #eae2d1; font-size: 12px; line-height: 1.6; box-shadow: 0 6px 30px #0009; animation: in-soft .35s var(--ease); }
+    .appear { opacity: 1; animation-duration: 1.05s; animation-fill-mode: both; animation-timing-function: var(--ease); animation-delay: var(--d,.08s); }
+    .a-scale { animation-name: in-scale; }
+    .a-soft { animation-name: in-soft; }
+    .a-mask { animation-name: in-mask; }
+    .a-pop { animation-name: in-pop; }
+    .a-btn { animation-name: in-btn; }
+    .a-side { animation-name: in-side; }
+    .a-stat { animation-name: in-stat; }
+    .appear.is-in, .hero-photo.is-in { animation: none; opacity: 1; transform: none; clip-path: none; filter: none; }
+    @keyframes in-scale { from { opacity: 0; transform: scale(.85); } to { opacity: 1; transform: scale(1); } }
+    @keyframes in-soft { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes in-mask { from { opacity: 0; transform: translateY(40%); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes in-pop { 0% { opacity: 0; transform: scale(.9); } 70% { opacity: 1; transform: scale(1.03); } 100% { opacity: 1; transform: scale(1); } }
+    @keyframes in-btn { from { opacity: 0; transform: translateY(18px) scale(.94); } to { opacity: 1; transform: none; } }
+    @keyframes in-side { from { opacity: 0; transform: translateX(22px); } to { opacity: 1; transform: translateX(0); } }
+    @keyframes in-stat { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes in-em { from { opacity: .35; filter: blur(4px); } to { opacity: 1; filter: blur(0); } }
+    @keyframes photo-in { from { opacity: 0; transform: scale(1.05); } to { opacity: 1; transform: scale(1); } }
+    @keyframes dialog-in { from { opacity: 0; transform: translateY(16px) scale(.98); } to { opacity: 1; transform: none; } }
+    @media (min-width: 1600px) {
+      :root { --gutter: 78px; }
+      .header { min-height: 100px; }
+      .logo { font-size: 28px; }
+      .nav-link { font-size: 14px; }
+      h1 { font-size: min(96px,13vh); }
+      .lede { font-size: 16.5px; max-width: 470px; }
+      .booking-grid { grid-template-columns: 1.25fr 28px 1.25fr 1.02fr .62fr .78fr 196px; gap: 11px; }
+      .field, .quote-btn { height: 70px; }
+      .field input, .field select { font-size: 13.5px; }
+      .datetime { grid-template-columns: 1fr 72px; }
+      .stat { font-size: 13px; }
+    }
+    @media (min-width: 1920px) {
+      :root { --gutter: 96px; }
+      h1 { font-size: min(112px,13vh); }
+      .hero-copy { max-width: 940px; }
+      .field, .quote-btn { height: 74px; }
+      .quote-amount { font-size: 24px; }
+    }
+    @media (min-width: 901px) and (max-width: 1279px) {
+      :root { --gutter: 32px; }
+      .header { min-height: 78px; gap: 14px; }
+      .logo { font-size: 22px; }
+      .site-nav { gap: 18px; }
+      .nav-link { font-size: 11.5px; }
+      .hero { padding-top: 42px; }
+      .booking { padding: 18px; }
+      .booking-grid { grid-template-columns: 1.2fr 22px 1.2fr 1fr .62fr .8fr 144px; gap: 7px; }
+      .field { padding-left: 31px; padding-right: 8px; }
+      .field > .icon { left: 9px; width: 14px; }
+      .field input, .field select { font-size: 11px; }
+      .datetime { grid-template-columns: 1fr 52px; gap: 3px; }
+      .datetime input { font-size: 10px; }
+      .quote-btn { padding-inline: 12px; }
+      .quote-amount { font-size: 18px; }
+      .stat { font-size: 10.5px; gap: 9px; }
+      .stat small { display: none; }
+      .split { gap: 38px; }
+      .steps { grid-template-columns: repeat(2,1fr); }
+    }
+    @media (min-width: 901px) and (max-height: 860px) {
+      .hero { padding-top: 34px; padding-bottom: 26px; min-height: 330px; }
+      h1 { font-size: min(70px,11.4vh); }
+      .hero .eyebrow { margin-bottom: 17px; }
+      .lede { margin-top: 15px; font-size: 13.5px; }
+      .hero-badges { margin-top: 17px; }
+      .stats { padding-block: 20px; }
+    }
+    @media (max-width: 900px) {
+      :root { --gutter: 22px; }
+      html, body { height: auto; overflow-y: auto; }
+      .header { grid-template-columns: 1fr auto auto; gap: 9px; min-height: 78px; padding: max(16px,env(safe-area-inset-top)) max(22px,env(safe-area-inset-right)) 16px max(22px,env(safe-area-inset-left)); }
+      .logo, .header-actions, .burger { position: relative; z-index: 80; }
+      .lang-switch { display: none; }
+      .burger { display: grid; }
+      .menu-backdrop { display: block; position: fixed; inset: 0; z-index: 40; background: rgba(6,6,6,.68); opacity: 0; visibility: hidden; transition: opacity .28s,visibility .28s,backdrop-filter .28s; }
+      .menu-open .menu-backdrop { opacity: 1; visibility: visible; backdrop-filter: blur(22px); -webkit-backdrop-filter: blur(22px); }
+      .site-nav { position: fixed; inset: 0; z-index: 45; display: flex; flex-direction: column; align-items: stretch; justify-content: center; gap: 10px; padding: max(94px,calc(env(safe-area-inset-top) + 86px)) 22px 30px; opacity: 0; visibility: hidden; pointer-events: none; transition: opacity .28s,visibility .28s; overflow-y: auto; }
+      .menu-open .site-nav { opacity: 1; visibility: visible; pointer-events: auto; }
+      .site-nav .nav-link { justify-content: center; height: 54px; min-height: 54px; border: 1px solid rgba(255,255,255,.16); border-radius: 10px; background: rgba(16,14,10,.85); font-size: 18px; }
+      .mobile-only { display: inline-flex; }
+      .menu-open { overflow: hidden; }
+      .hero-photo { height: 640px; }
+      .hero-photo img { object-position: 62% center; }
+      .hero { min-height: 430px; padding: 54px var(--gutter) 34px; }
+      h1 { font-size: clamp(46px,10.5vw,68px); }
+      .lede { font-size: 14px; max-width: 380px; }
+      .booking { padding: 20px; }
+      .booking-grid, .booking-grid.hourly { grid-template-columns: 1fr 1fr; gap: 11px; }
+      .field { height: 66px; padding-left: 41px; }
+      .field input, .field select { font-size: 16px; }
+      .field > .icon { top: 25px; left: 13px; }
+      .field-caption { font-size: 10px; }
+      .f-from { grid-column: 1; }
+      .f-to { grid-column: 2; }
+      .swap { position: absolute; z-index: 2; left: calc(50% - 16px); top: 17px; width: 32px; height: 32px; background: #1a1710; border: 1px solid #4a4330; border-radius: 50%; }
+      .f-when, .quote-btn, .f-hours { grid-column: 1 / -1; }
+      .datetime { grid-template-columns: 1fr 108px; }
+      .datetime input { font-size: 16px; }
+      .quote-btn { height: 60px; }
+      .quote-btn > span { flex-direction: row; align-items: center; gap: 16px; }
+      .quote-btn small { font-size: 12px; }
+      .stats { flex-wrap: wrap; gap: 15px 22px; padding-block: 26px; }
+      .stat { font-size: 11.5px; }
+      .stat small { display: none; }
+      .home-rich { padding-top: 50px; }
+      .home-section { padding: 46px 0; }
+      .feature-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
+      .home-split { grid-template-columns: 1fr; gap: 30px; }
+      .route-board { grid-template-columns: 1fr; }
+      .fleet-strip { grid-template-columns: repeat(2,minmax(0,1fr)); }
+      .terminal-grid { grid-template-columns: 1fr; }
+      .terminal { min-height: 230px; }
+      .review-grid { grid-template-columns: 1fr; }
+      .app-band { grid-template-columns: 1fr; }
+      .mini-phone { display: none; }
+      .faq-preview { grid-template-columns: 1fr; gap: 0; }
+      .fleet-grid, .meet-grid, .steps { grid-template-columns: 1fr 1fr; }
+      .split { grid-template-columns: 1fr; gap: 34px; }
+      .order-grid { grid-template-columns: 1fr 1fr; gap: 24px; }
+      .checkout { grid-template-columns: 1fr 208px; gap: 20px; }
+      .summary { padding-left: 17px; }
+      .shell { padding: 26px; }
+    }
+    @media (max-width: 620px) {
+      :root { --gutter: 18px; }
+      .logo { font-size: 21px; gap: 8px; }
+      .logo-mark { width: 30px; height: 30px; }
+      .header-cta { font-size: 11px; padding-inline: 12px; min-height: 38px; gap: 7px; }
+      .header-cta span.label { display: none; }
+      .hero-photo { height: 560px; }
+      .hero { min-height: 380px; padding-top: 44px; padding-bottom: 30px; }
+      h1 { font-size: clamp(38px,12vw,58px); }
+      .hero .eyebrow { font-size: 8.5px; letter-spacing: .15em; margin-bottom: 18px; }
+      .lede { font-size: 13px; max-width: 300px; margin-top: 16px; }
+      .hero-badges { gap: 6px; }
+      .pill { font-size: 10.5px; padding: 7px 11px; }
+      .booking { padding: 18px 15px 16px; }
+      .booking-head { gap: 13px; }
+      .mode-switch { width: 100%; }
+      .mode-switch button { flex: 1; justify-content: center; padding: 0 9px; font-size: 11px; }
+      .mode-switch button .icon { display: none; }
+      .f-from, .f-to { grid-column: 1 / -1; padding-right: 34px; }
+      .swap { left: auto; right: 12px; top: 57px; transform: rotate(90deg); }
+      .swap:hover { transform: rotate(270deg); }
+      .datetime { grid-template-columns: 1fr 92px; }
+      .booking-foot { flex-direction: column; align-items: flex-start; gap: 10px; }
+      .foot-right { width: 100%; justify-content: space-between; }
+      .stats { flex-direction: column; align-items: flex-start; gap: 17px; }
+      .stat small { display: block; }
+      .home-rich { padding: 40px var(--gutter) 18px; }
+      .home-section { padding: 38px 0; }
+      .home-title { font-size: 30px; }
+      .feature-grid, .fleet-strip { grid-template-columns: 1fr; }
+      .feature { min-height: auto; }
+      .media-caption { align-items: flex-start; flex-direction: column; }
+      .home-media, .home-media img { min-height: 300px; }
+      .route-card { grid-template-columns: 1fr; }
+      .route-price small { text-align: left; }
+      .app-band { padding: 22px; }
+      .subpage { padding-top: 24px; padding-bottom: 52px; }
+      .page-heading { font-size: 36px; }
+      .page-desc { font-size: 13px; }
+      .cards, .fleet-grid, .meet-grid, .steps, .order-grid { grid-template-columns: 1fr; }
+      .steps { gap: 16px; }
+      .order-grid { gap: 26px; }
+      .o-map { grid-row: 1; }
+      .o-det { grid-row: 2; }
+      .timeline { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 8px; }
+      .timeline li { padding-bottom: 3px; font-size: 10.5px; gap: 8px; }
+      .timeline li::after { display: none; }
+      .trip { grid-template-columns: 1fr; }
+      .trip-right { align-items: flex-start; flex-direction: row; justify-content: space-between; flex-wrap: wrap; }
+      .trip-route { font-size: 16px; }
+      dialog, dialog.slim { width: calc(100vw - 18px); max-height: calc(100dvh - 26px); }
+      .shell { padding: 24px 18px 22px; }
+      .d-title { font-size: 23px; }
+      .x { top: 16px; right: 14px; }
+      .checkout { display: flex; flex-direction: column-reverse; gap: 22px; }
+      .summary { border-left: 0; border-bottom: 1px solid #3a341f; padding: 0 0 19px; position: static; }
+      .sum-h, .sum-inc { display: none; }
+      .sum-route > span { display: inline; padding: 0 8px; }
+      .picks { grid-template-columns: 1fr; }
+      .form-grid { grid-template-columns: 1fr; gap: 0; }
+      .input { font-size: 16px; }
+      .d-actions { flex-wrap: wrap; }
+      .d-actions .btn { min-height: 46px; }
+      .review-txt { font-size: 16px; }
+      .ref-code strong { font-size: 24px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition: none !important; animation: none !important; }
+      .appear, .hero-photo, h1 em { opacity: 1; transform: none; filter: none; }
+    }
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900&family=Instrument+Serif:ital@1&display=swap">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+</head>
+<body style="background:#000;color:#fff">
+  <div class="grain" aria-hidden="true">
+    <svg xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="gf"><feTurbulence type="fractalNoise" baseFrequency=".8" numOctaves="3" stitchTiles="stitch"/></filter>
+        <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></symbol>
+        <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.4"/><path d="M5.5 20v-2.3a6.5 6.5 0 0 1 13 0V20"/></symbol>
+        <symbol id="i-pin" viewBox="0 0 24 24"><path d="M19 10c0 5.5-7 11-7 11S5 15.5 5 10a7 7 0 0 1 14 0Z"/><circle cx="12" cy="10" r="2.3"/></symbol>
+        <symbol id="i-takeoff" viewBox="0 0 24 24"><path d="M3 20h18M2.5 13.8l2-3.4 4.2 1.2 3.4-6.1 2.3.7-1.6 6.3 4.6 1.3 1.4-2.2 1.6.5-1 4-16.9-2.3Z"/></symbol>
+        <symbol id="i-landing" viewBox="0 0 24 24"><path d="M3 20h18M4 16.2l.3-3.9 4.2 1.5L10.6 7l2.3.8-.2 6.5 4.7 1.6 1.9-1.8 1.4.9-2.2 3.5L4 16.2Z"/></symbol>
+        <symbol id="i-route" viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.6"/><circle cx="18" cy="18" r="2.6"/><path d="M6 8.6v5a4 4 0 0 0 4 4h5.4"/></symbol>
+        <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+        <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M8 3v4m8-4v4M4 11h16"/></symbol>
+        <symbol id="i-swap" viewBox="0 0 24 24"><path d="M3 8h16m-4-4 4 4-4 4M21 16H5m4-4-4 4 4 4"/></symbol>
+        <symbol id="i-shield" viewBox="0 0 24 24"><path d="m12 3 8 3v6c0 4.6-8 9-8 9s-8-4.4-8-9V6l8-3Z"/><path d="m8 12 2.5 2.5L16 9"/></symbol>
+        <symbol id="i-sign" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8m-4-4v4M7 8h10M9 12h6"/></symbol>
+        <symbol id="i-seat" viewBox="0 0 24 24"><path d="M7 4h4a3 3 0 0 1 3 3v6H7V4Z"/><path d="M14 13h3a3 3 0 0 1 0 6h-9a4 4 0 0 1-4-4V9"/></symbol>
+        <symbol id="i-card" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18M7 15h3"/></symbol>
+        <symbol id="i-cash" viewBox="0 0 24 24"><rect x="2.5" y="6" width="19" height="12" rx="2"/><circle cx="12" cy="12" r="2.6"/><path d="M6 12h.01M18 12h.01"/></symbol>
+        <symbol id="i-car" viewBox="0 0 24 24"><path d="m4 10 2-6h12l2 6M3 10h18v9H3v-9ZM5 19v2m14-2v2M6 14h2m8 0h2"/></symbol>
+        <symbol id="i-van" viewBox="0 0 24 24"><path d="M2 17V9a2 2 0 0 1 2-2h9l5 5h2a2 2 0 0 1 2 2v3M2 17h3m14 0h3M2 12h11"/><circle cx="7.5" cy="17.5" r="2"/><circle cx="17" cy="17.5" r="2"/></symbol>
+        <symbol id="i-case" viewBox="0 0 24 24"><rect x="4" y="7" width="16" height="13" rx="2"/><path d="M9 7V4h6v3M9 11v5m6-5v5"/></symbol>
+        <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4.5 4.5L19 7"/></symbol>
+        <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+        <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+        <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+        <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7v.1"/></symbol>
+        <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 3 2.8 5.7 6.3.9-4.5 4.4 1 6.2-5.6-2.9-5.6 2.9 1-6.2L3 9.6l6.2-.9L12 3Z"/></symbol>
+        <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M16 8V3H4v13h4"/></symbol>
+        <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></symbol>
+        <symbol id="i-msg" viewBox="0 0 24 24"><path d="M21 4H3v14h5v4l5-4h8V4ZM7 9h10M7 13h6"/></symbol>
+        <symbol id="i-play" viewBox="0 0 24 24"><path d="m8 4 12 8-12 8V4Z"/></symbol>
+        <symbol id="i-pause" viewBox="0 0 24 24"><path d="M8 5v14M16 5v14"/></symbol>
+        <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v13m-5-5 5 5 5-5M4 16v5h16v-5"/></symbol>
+        <symbol id="i-building" viewBox="0 0 24 24"><path d="M4 21V5a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v16M15 10h3a2 2 0 0 1 2 2v9M3 21h18M8 7h3M8 11h3M8 15h3"/></symbol>
+        <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.7 3.8 9S14.5 18.4 12 21c-2.5-2.6-3.8-5.7-3.8-9S9.5 5.6 12 3Z"/></symbol>
+        <symbol id="i-wifi" viewBox="0 0 24 24"><path d="M4.5 9.5a11 11 0 0 1 15 0M7.5 13a7 7 0 0 1 9 0M12 17h.01"/></symbol>
+        <symbol id="i-headset" viewBox="0 0 24 24"><path d="M4 13v-2a8 8 0 0 1 16 0v6a4 4 0 0 1-4 4h-3"/><rect x="3" y="11" width="4" height="7" rx="2"/><rect x="17" y="11" width="4" height="7" rx="2"/></symbol>
+        <symbol id="i-ticket" viewBox="0 0 24 24"><path d="M3 9V6h18v3a3 3 0 0 0 0 6v3H3v-3a3 3 0 0 0 0-6Z"/><path d="M12 7v2m0 2v2m0 2v2"/></symbol>
+        <symbol id="i-navigation" viewBox="0 0 24 24"><path d="M3 11 21 3l-8 18-2-7-8-3Z"/></symbol>
+        <symbol id="i-satellite" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 3v3m0 12v3M3 12h3m12 0h3M6.4 6.4l2.1 2.1m7 7 2.1 2.1m0-11.2-2.1 2.1m-7 7-2.1 2.1"/></symbol>
+      </defs>
+      <rect width="100%" height="100%" filter="url(#gf)" opacity=".7"/>
+    </svg>
+  </div>
+  <div class="hero-photo" aria-hidden="true">
+    <img src="https://images.pexels.com/photos/15121199/pexels-photo-15121199.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200" alt="" fetchpriority="high" decoding="async">
+  </div>
+  <div class="page">
+    <div class="menu-backdrop" id="backdrop"></div>
+    <header class="header">
+      <a class="logo appear a-scale" href="#/" aria-label="Wayro" style="--d:.08s">
+        <span class="logo-mark"><svg class="icon" aria-hidden="true"><use href="#i-car"/></svg></span>
+        <span>Way<em>ro</em></span>
+      </a>
+      <nav class="site-nav" id="nav" aria-label="Hlavní navigace"></nav>
+      <div class="header-actions">
+        <div class="lang-switch appear a-scale" id="langs" role="group" aria-label="Jazyk / Language" style="--d:.3s"></div>
+        <a class="btn btn-ghost header-cta appear a-scale" href="#/jizdy" style="--d:.34s"><svg class="icon" aria-hidden="true"><use href="#i-user"/></svg><span class="label" id="cta-label">Moje jízdy</span><span class="trip-count" id="tcount" hidden>0</span></a>
+      </div>
+      <button class="burger appear a-scale" type="button" id="burger" aria-controls="nav" aria-expanded="false" aria-label="Menu" style="--d:.34s"><span></span><span></span><span></span></button>
+    </header>
+    <main id="app"></main>
+    <footer class="stats" id="stats" hidden></footer>
+  </div>
+  <datalist id="places"></datalist>
+  <dialog id="modal" aria-labelledby="d-title"><div id="modal-body"></div></dialog>
+  <div class="toasts" id="toasts" role="status" aria-live="polite"></div>
+  <noscript><p style="position:relative;padding:22px;color:#f5c66b;background:#000;font:14px system-ui">Pro výpočet ceny a rezervaci prosím povolte JavaScript. Tato ukázka neodesílá objednávky dispečinku.</p></noscript>
+  <script>
+  (() => {
+    'use strict';
+
+    /* Real online payments require a merchant backend: it must price the ride,
+       create the payment (e.g. YooKassa/Stripe/GoPay) and verify it by webhook.
+       No shop secret may ever live in this file. Empty = demo only. */
+    // Подключаем локальный/боевой серверный эндпоинт обработки платежей
+    const CONFIG = Object.freeze({ 
+      bookingEndpoint: '/api/checkout', 
+      statusEndpoint: '/api/order-status',
+      /* Skutečnou pozici řidiče dodává pouze backend. Když server neběží,
+         mapa ukáže jen plánovanou trasu – souřadnice si nikdy nevymýšlíme. */
+      driverEndpoint: '/api/driver',
+      sandboxDriveEndpoint: '/api/sandbox-drive',
+      routeEndpoint: 'https://router.project-osrm.org/route/v1/driving',
+      trackPollMs: 2500,
+      paymentHosts: ['localhost', 'gopay.com', 'yoomoney.ru', 'yookassa.ru', 'stripe.com'] 
+    });
+    const SITE = Object.freeze({ faq: 'https://www.phcars.cz/faq/', app: 'https://letiste-praha.taxi/aplikace/', admin: 'https://book.letiste-praha.taxi/bookings', home: 'https://www.phcars.cz/' });
+
+    const $ = (s, r = document) => r.querySelector(s);
+    const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+    const app = $('#app');
+    const modal = $('#modal');
+    const mbody = $('#modal-body');
+    const esc = v => { const n = document.createElement('span'); n.textContent = String(v ?? ''); return n.innerHTML.replaceAll('"', '&#34;').replaceAll("'", '&#39;'); };
+    const icon = (n, c = '') => `<svg class="icon ${c}" aria-hidden="true"><use href="#i-${n}"/></svg>`;
+    const uid = () => globalThis.crypto?.randomUUID ? crypto.randomUUID() : `${Date.now().toString(36)}${Math.random().toString(36).slice(2, 10)}`;
+    const KEY = 'wayro.app.v2';
+    const TZ = 'Europe/Prague';
+    const dstr = d => { const p = new Intl.DateTimeFormat('en-CA', { timeZone: TZ, year: 'numeric', month: '2-digit', day: '2-digit' }).formatToParts(d); const g = k => p.find(x => x.type === k).value; return `${g('year')}-${g('month')}-${g('day')}`; };
+    const plusDays = n => { const d = new Date(`${dstr(new Date())}T12:00:00+01:00`); d.setUTCDate(d.getUTCDate() + n); return dstr(d); };
+    const stamp = (date, time) => new Date(`${date}T${time}:00${offset(date)}`);
+    function offset(date) { const probe = new Date(`${date}T12:00:00Z`); const s = new Intl.DateTimeFormat('en-US', { timeZone: TZ, timeZoneName: 'longOffset' }).formatToParts(probe).find(p => p.type === 'timeZoneName').value; return s.replace('GMT', '') || '+01:00'; }
+
+    /* ---------- Fleet & prices: actual Wayro tariff (airport <-> Prague fixed, long = per km) ---------- */
+    const FLEET = {
+      sedan:   { label: 'Sedan',       base: 850,  pax: 4, bags: 3, seats: 1, rate: 34, city: 390, hour: 690,  ico: 'car',
+                 model: { cs: 'Škoda Superb nebo obdobný vůz', en: 'Škoda Superb or similar' },
+                 img: 'https://images.pexels.com/photos/15194845/pexels-photo-15194845.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200', inside: null },
+      minibus: { label: 'Minibus',     base: 1250, pax: 7, bags: 7, seats: 3, rate: 43, city: 590, hour: 890,  ico: 'van',
+                 model: { cs: 'Sedmimístný minivan', en: 'Seven-seat minivan' },
+                 img: 'https://images.pexels.com/photos/17455625/pexels-photo-17455625.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200',
+                 inside: 'https://images.pexels.com/photos/17455632/pexels-photo-17455632.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200' },
+      mercE:   { label: 'Mercedes E',  base: 1290, pax: 3, bags: 2, seats: 0, rate: 55, city: 790, hour: 1190, ico: 'car',
+                 model: { cs: 'Mercedes-Benz třídy E', en: 'Mercedes-Benz E-Class' },
+                 img: 'https://images.pexels.com/photos/19758544/pexels-photo-19758544.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200',
+                 inside: 'https://images.pexels.com/photos/11877387/pexels-photo-11877387.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200' },
+      mercV:   { label: 'Mercedes V',  base: 1790, pax: 7, bags: 7, seats: 2, rate: 65, city: 990, hour: 1490, ico: 'van',
+                 model: { cs: 'Mercedes-Benz třídy V', en: 'Mercedes-Benz V-Class' },
+                 img: 'https://images.pexels.com/photos/17455633/pexels-photo-17455633.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200',
+                 inside: 'https://images.pexels.com/photos/17455632/pexels-photo-17455632.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200' }
+    };
+    const AIRPORT = 'Letiště Praha (PRG)';
+    /* Souřadnice jsou skutečné (rozsah města / letiště / vzdálená města). */
+    const PLACES = [
+      { n: 'Letiště Praha (PRG)', g: 'prg', km: 17, lat: 50.1023, lng: 14.2637 },
+      { n: 'Praha – centrum', g: 'prg-city', km: 0, lat: 50.0875, lng: 14.4213 },
+      { n: 'Praha – Hlavní nádraží', g: 'prg-city', km: 2, lat: 50.0831, lng: 14.4360 },
+      { n: 'Praha – Smíchov', g: 'prg-city', km: 4, lat: 50.0750, lng: 14.4060 },
+      { n: 'Praha – Karlín', g: 'prg-city', km: 4, lat: 50.0900, lng: 14.4450 },
+      { n: 'Praha – Dejvice', g: 'prg-city', km: 6, lat: 50.1065, lng: 14.3860 },
+      { n: 'Praha – Chodov', g: 'prg-city', km: 11, lat: 50.0340, lng: 14.4980 },
+      { n: 'Kladno', g: 'cz', km: 30, lat: 50.1461, lng: 14.1067 },
+      { n: 'Karlovy Vary', g: 'cz', km: 130, lat: 50.2326, lng: 12.8714 },
+      { n: 'Špindlerův Mlýn', g: 'cz', km: 150, lat: 50.7525, lng: 15.4080 },
+      { n: 'Český Krumlov', g: 'cz', km: 175, lat: 48.8127, lng: 14.3175 },
+      { n: 'Brno', g: 'cz', km: 205, lat: 49.1951, lng: 16.6068 },
+      { n: 'Drážďany / Dresden', g: 'eu', km: 150, lat: 51.0504, lng: 13.7373 },
+      { n: 'Bratislava', g: 'eu', km: 330, lat: 48.1486, lng: 17.1077 },
+      { n: 'Vídeň / Vienna', g: 'eu', km: 335, lat: 48.2082, lng: 16.3738 },
+      { n: 'Berlín / Berlin', g: 'eu', km: 350, lat: 52.5200, lng: 13.4050 },
+      { n: 'Mnichov / Munich', g: 'eu', km: 385, lat: 48.1351, lng: 11.5820 }
+    ];
+    const SEATS = { egg: { cs: 'Vajíčko (0–1 rok)', en: 'Infant seat (0–1 y)' }, mid: { cs: 'Střední sedačka (1–4 roky)', en: 'Child seat (1–4 y)' }, boost: { cs: 'Podsedák (4–12 let)', en: 'Booster (4–12 y)' } };
+    const MEETS = {
+      t1: { t: 'Terminál 1', s: 'Mattoni Bar', lat: 50.1028, lng: 14.2580, d: { cs: 'Řidič čeká v příletové hale terminálu 1 před Mattoni Barem s cedulkou se jménem.', en: 'Your driver waits in Terminal 1 arrivals in front of the Mattoni Bar with a name sign.' }, img: 'https://images.pexels.com/photos/16453351/pexels-photo-16453351.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200' },
+      t2: { t: 'Terminál 2', s: 'Visitor Centre', lat: 50.1069, lng: 14.2647, d: { cs: 'Řidič čeká v příletové hale terminálu 2 před Visitor Centrem s cedulkou se jménem.', en: 'Your driver waits in Terminal 2 arrivals in front of the Visitor Centre with a name sign.' }, img: 'https://images.pexels.com/photos/6544060/pexels-photo-6544060.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200' },
+      hn: { t: 'Praha Hlavní nádraží', s: 'Burger King', lat: 50.0831, lng: 14.4360, d: { cs: 'Řidič čeká uvnitř haly před restaurací Burger King s cedulkou se jménem.', en: 'Your driver waits inside the hall in front of Burger King with a name sign.' }, img: 'https://images.pexels.com/photos/12940671/pexels-photo-12940671.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200' }
+    };
+
+    /* ---------- i18n ---------- */
+    const D = {
+      cs: {
+        nav: { services: 'Služby', fleet: 'Vozy a ceny', airport: 'Letiště', business: 'Pro firmy', help: 'Nápověda', trips: 'Moje jízdy' },
+        hero: { eyebrow: 'Praha · Letiště Václava Havla (PRG) · nonstop 24/7', l1: 'Taxi na letiště.', l2a: 'Bez ', l2em: 'stresu.', lede: 'Fixní cenu znáte předem. Řidič sleduje váš let, čeká s cedulkou a jeho auto vidíte na mapě. Platíte až po jízdě.', p1: 'Letiště – Praha od 850 Kč', p2: 'Autosedačka zdarma', p3: 'Sledujeme váš let', p4: 'Platba u řidiče', p5: 'Živá poloha auta' },
+        modes: { to: 'Na letiště', from: 'Z letiště', long: 'Dálková jízda', hourly: 'Hodinová dispozice' },
+        f: { from: 'Odkud', to: 'Kam', when: 'Datum a čas (SEČ)', pax: 'Osoby', car: 'Vůz', hours: 'Počet hodin', cta: 'Vybrat vůz', promo: 'Máte slevový kód?', fixed: 'Fixní cena. Bez skrytých poplatků.', est: 'Orientační cena – potvrdí dispečer.', hourNote: 'Hodinová sazba, minimálně 2 hodiny.', demo: 'Cena dle ceníku Wayro · odsouhlasí backend', ret: 'Zpáteční jízda', retNote: 'Účtuje se cena za každý směr.', quick: 'Oblíbené trasy:' },
+        stats: { s1: 'Fixní cena předem', s1s: 'Bez příplatků za provoz a zavazadla', s2: 'Sledujeme váš let', s2s: 'Zpoždění letu čekáme zdarma', s3: 'Autosedačka zdarma', s3s: 'Vajíčko, sedačka i podsedák', s4: 'Platba u řidiče', s4s: 'Hotově nebo kartou po jízdě' },
+        pax: n => n === 1 ? '1 osoba' : n < 5 ? `${n} osoby` : `${n} osob`,
+        hrs: n => n === 1 ? '1 hodina' : n < 5 ? `${n} hodiny` : `${n} hodin`,
+        stages: ['Odesláno – zpracování', 'Potvrzeno dispečerem', 'Řidič přidělen', 'Řidič na cestě', 'Řidič na místě', 'Jízda probíhá', 'Dokončeno'],
+        pay: { cash: 'Hotově u řidiče', card: 'Kartou u řidiče', online: 'Online kartou předem', cashS: 'Zaplatíte po jízdě, doklad od řidiče.', cardS: 'Terminál ve voze, doklad od řidiče.', onlineS: 'Vyžaduje připojenou platební bránu.' },
+        back: 'Zpět na hlavní stranu', more: 'Více'
+      },
+      en: {
+        nav: { services: 'Services', fleet: 'Fleet & prices', airport: 'Airport', business: 'Business', help: 'Help', trips: 'My rides' },
+        hero: { eyebrow: 'Prague · Václav Havel Airport (PRG) · 24/7', l1: 'Airport taxi.', l2a: 'Zero ', l2em: 'stress.', lede: 'A fixed price upfront. Your driver tracks the flight, waits with a name sign and you can watch the car on a live map. Pay after the ride.', p1: 'Airport – Prague from 850 CZK', p2: 'Free child seat', p3: 'Flight tracking', p4: 'Pay the driver', p5: 'Live car position' },
+        modes: { to: 'To airport', from: 'From airport', long: 'Long distance', hourly: 'Hourly hire' },
+        f: { from: 'From', to: 'To', when: 'Date and time (CET)', pax: 'People', car: 'Vehicle', hours: 'Hours', cta: 'Choose vehicle', promo: 'Have a promo code?', fixed: 'Fixed price. No hidden fees.', est: 'Estimate – confirmed by the dispatcher.', hourNote: 'Hourly rate, minimum 2 hours.', demo: 'Priced from the Wayro rate list · confirmed by the backend', ret: 'Return ride', retNote: 'Each direction is charged separately.', quick: 'Popular routes:' },
+        stats: { s1: 'Fixed price upfront', s1s: 'No traffic or luggage surcharges', s2: 'We track your flight', s2s: 'Delayed flight? We wait for free', s3: 'Free child seat', s3s: 'Infant, child and booster seats', s4: 'Pay the driver', s4s: 'Cash or card after the ride' },
+        pax: n => n === 1 ? '1 person' : `${n} people`,
+        hrs: n => n === 1 ? '1 hour' : `${n} hours`,
+        stages: ['Sent – processing', 'Confirmed by dispatcher', 'Driver assigned', 'Driver on the way', 'Driver at pickup', 'Ride in progress', 'Completed'],
+        pay: { cash: 'Cash to the driver', card: 'Card to the driver', online: 'Card online in advance', cashS: 'Pay after the ride, receipt from the driver.', cardS: 'Terminal in the car, receipt from the driver.', onlineS: 'Requires a connected payment gateway.' },
+        back: 'Back to home', more: 'More'
+      }
+    };
+    const FAQ = [
+      { q: { cs: 'Je cena v rezervaci konečná?', en: 'Is the quoted price final?' }, a: { cs: 'U tras letiště – Praha ano, cena za vozidlo je pevná a znáte ji před odesláním rezervace. Účtují se pouze změny domluvené přímo s řidičem, například zastávka navíc. Ceny dálkových a hodinových jízd jsou zde orientační a potvrzuje je dispečer.', en: 'For airport – Prague routes yes: the price is per vehicle and fixed before you send the booking. Only changes agreed directly with the driver, such as an extra stop, are added. Long-distance and hourly prices here are estimates confirmed by the dispatcher.' }, k: 'cena price fixní poplatky' },
+      { q: { cs: 'Jak objednám autosedačku?', en: 'How do I order a child seat?' }, a: { cs: 'V detailech rezervace vyberte typ: vajíčko 0–1 rok, střední sedačka 1–4 roky nebo podsedák 4–12 let, a zvolte počet. Autosedačky jsou zdarma. Děti se počítají do celkového počtu osob.', en: 'In the booking details pick the type: infant 0–1 y, child seat 1–4 y or booster 4–12 y, and set the count. Child seats are free. Children count towards the total number of passengers.' }, k: 'autosedačka dítě child seat sedačka' },
+      { q: { cs: 'Je rezervace ihned platná?', en: 'Is my booking valid immediately?' }, a: { cs: 'Ne. Rezervace je ve stavu zpracování, dokud ji dispečer nezkontroluje a nepotvrdí e-mailem. Teprve potvrzením je vůz rezervovaný. Bez spuštěného backendu zůstává záznam jen ve vašem prohlížeči – dispečink ji nedostane.', en: 'No. A booking stays in processing until the dispatcher checks it and confirms by e-mail. Only then is the car reserved. Without the backend running the record stays in your browser – dispatch will not receive it.' }, k: 'rezervace potvrzení booking confirm' },
+      { q: { cs: 'Mám zpoždění letu, počká řidič?', en: 'My flight is delayed, will the driver wait?' }, a: { cs: 'Ano. Uveďte číslo letu, například LH1400. Řidič sleduje skutečný čas přistání a při zpoždění čeká zdarma. Pokud nakonec nenastoupíte, dejte vědět. Reálná data o letu dodává napojení na letecký API na serveru; v rozhraní si můžeš posun zkontrolovat na tlačítku „Simulovat zpoždění“ v detailu jízdy.', en: 'Yes. Enter the flight number, e.g. LH1400. The driver follows the real landing time and waits free of charge if it is delayed. Tell us if you do not board. Live flight data comes from a flight-data API on the server; you can check the shift with the “Simulate delay” button in the ride detail.' }, k: 'let zpoždění flight delay číslo letu' },
+      { q: { cs: 'Kde se potkám s řidičem na letišti?', en: 'Where do I meet the driver at the airport?' }, a: { cs: 'Po přistání si zapněte telefon, řidič vás kontaktuje telefonicky nebo přes WhatsApp. Terminál 1: příletová hala před Mattoni Barem. Terminál 2: před Visitor Centrem. Praha hlavní nádraží: uvnitř haly před Burger Kingem. Řidič drží cedulku se jménem a pomůže se zavazadly.', en: 'Turn your phone on after landing; the driver will contact you by phone or WhatsApp. Terminal 1: arrivals hall in front of the Mattoni Bar. Terminal 2: in front of the Visitor Centre. Prague main station: inside the hall in front of Burger King. The driver holds a name sign and helps with the luggage.' }, k: 'letiště terminál meeting cedulka pickup' },
+      { q: { cs: 'Jak zruším rezervaci?', en: 'How do I cancel a booking?' }, a: { cs: 'Bezplatně nejpozději 2 hodiny před jízdou. U vozů Mercedes E a Mercedes V nebo u jízd začínajících více než 50 km od Prahy je lhůta 12 hodin. Storno řešte telefonicky nebo v administraci rezervací.', en: 'Free of charge at least 2 hours before the ride. For Mercedes E and Mercedes V, or rides starting more than 50 km from Prague, the limit is 12 hours. Cancel by phone or in the booking administration.' }, k: 'storno zrušit cancel refund' },
+      { q: { cs: 'Jak se platí?', en: 'How do I pay?' }, a: { cs: 'Neplatíte nic předem. Po jízdě zaplatíte řidiči hotově nebo kartou a dostanete daňový doklad. Online platba kartou běží přes platební bránu na serveru – číslo karty se tady nezadává vůbec, platí se vždy na stránce banky.', en: 'You pay nothing upfront. After the ride you pay the driver in cash or by card and get a tax receipt. Online card payment runs through the gateway on the server – no card number is ever entered here, it is always typed on the bank page.' }, k: 'platba payment karta hotově doklad' },
+      { q: { cs: 'Vozíte i mimo Prahu?', en: 'Do you drive outside Prague?' }, a: { cs: 'Ano, dálkové jízdy po celé ČR i do zahraničí, například Vídeň, Mnichov, Berlín nebo Drážďany, včetně zastávek po cestě. Cenu pro tyto trasy potvrzuje dispečer, kalkulace zde je orientační.', en: 'Yes, long-distance rides across Czechia and abroad, for example Vienna, Munich, Berlin or Dresden, including stops on the way. The dispatcher confirms the price for these routes; the calculation here is indicative.' }, k: 'dálková intercity vídeň mnichov europe' },
+      { q: { cs: 'Co s velkými zavazadly?', en: 'What about oversized luggage?' }, a: { cs: 'Sedan pojme 3 zavazadla, Mercedes E dvě, minibus a Mercedes V až sedm. Kočárek, lyže nebo kolo napište do poznámky, kalkulačka vás upozorní, pokud objem přesáhne kapacitu vozu.', en: 'The sedan takes 3 bags, Mercedes E two, the minibus and Mercedes V up to seven. Note a pram, skis or a bike in the comments; the calculator warns you when the volume exceeds the vehicle capacity.' }, k: 'zavazadla luggage kufr kočárek lyže' },
+      { q: { cs: 'Kde jsou moje data?', en: 'Where is my data stored?' }, a: { cs: 'Prohlížeč si drží historii jízd v localStorage, takže se neztratí po refreshi. Není to účet se synchronizací mezi zařízeními. Celé telefonní číslo a e-mail se neukládají, jen poslední čtyři číslice. Historii smažeš kdykoli v sekci Moje jízdy.', en: 'The browser keeps your ride history in localStorage so it survives a reload. It is not an account and does not sync between devices. Only the last four digits of the phone number are stored, never the full number or e-mail. You can delete the history any time in My rides.' }, k: 'data soukromí privacy localStorage' }
+    ];
+
+    let store = {};
+    let storageOk = true;
+    try { store = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch { storageOk = false; }
+    const okOrder = o => o && typeof o.id === 'string' && o.id.length < 80 && typeof o.from === 'string' && typeof o.to === 'string' && Object.hasOwn(FLEET, o.car) && Number.isFinite(o.total) && Number.isInteger(o.stage) && o.stage >= 0 && o.stage <= 6 && typeof o.date === 'string' && typeof o.time === 'string' && o.ext && typeof o.ext === 'object';
+    let orders = Array.isArray(store.orders) ? store.orders.filter(okOrder) : [];
+    let reviews = Array.isArray(store.reviews) ? store.reviews.filter(r => r && typeof r.text === 'string' && typeof r.orderId === 'string' && Number.isInteger(r.rating) && r.rating > 0 && r.rating < 6) : [];
+    const refCode = typeof store.ref === 'string' && /^WY-[A-Z0-9]{6}$/.test(store.ref) ? store.ref : `WY-${uid().replaceAll('-', '').slice(0, 6).toUpperCase()}`;
+    let lang = ['cs', 'en'].includes(store.lang) ? store.lang : (navigator.language || 'cs').toLowerCase().startsWith('cs') ? 'cs' : 'en';
+
+    const S = {
+      mode: 'from', from: AIRPORT, to: 'Praha – centrum', date: plusDays(1), time: '12:00', pax: 2, car: 'sedan',
+      hours: 3, roundtrip: false, retDate: plusDays(2), retTime: '12:00',
+      flight: '', meet: 't1', sign: '', seatType: 'mid', seats: 0, bagsBig: 1, bagsSmall: 1, pram: false,
+      notes: '', promo: '', discount: 0, name: '', phone: '', email: '', pay: 'cash', consent: false
+    };
+    let path = '/', fleetFilter = 'all', tripFilter = 'all', kind = '', step = 1, gCar = 'sedan', gIdx = 0;
+    let revId = '', rating = 5, lastFocus = null, timer = null, simId = null, busy = false, navCount = 0;
+
+    const t = k => k.split('.').reduce((o, p) => o?.[p], D[lang]);
+    const money = v => new Intl.NumberFormat(lang === 'cs' ? 'cs-CZ' : 'en-GB', { style: 'currency', currency: 'CZK', maximumFractionDigits: 0 }).format(v);
+    const dateLbl = d => { const p = new Date(`${d}T12:00:00`); return Number.isNaN(p.getTime()) ? d : p.toLocaleDateString(lang === 'cs' ? 'cs-CZ' : 'en-GB', { day: 'numeric', month: 'long' }); };
+    const dtLbl = (d, tm) => `${dateLbl(d)}, ${tm}`;
+    const placeName = n => lang === 'en' ? n.replace('Letiště Praha', 'Prague Airport').replace('Praha – ', 'Prague – ').replace('Hlavní nádraží', 'Main Station') : n;
+
+    function save() {
+      try { localStorage.setItem(KEY, JSON.stringify({ orders, reviews, ref: refCode, lang })); storageOk = true; }
+      catch { storageOk = false; }
+      count();
+    }
+    function toast(msg) {
+      const el = document.createElement('div');
+      el.className = 'toast';
+      el.textContent = msg;
+      const region = $('#toasts');
+      const host = modal.open ? modal : document.body;
+      if (region.parentElement !== host) host.append(region);
+      region.append(el);
+      setTimeout(() => el.remove(), 5200);
+    }
+    function count() {
+      const n = orders.filter(o => !o.cancelled && o.stage < 6).length;
+      $('#tcount').textContent = n;
+      $('#tcount').hidden = n === 0;
+    }
+    function anim(root = document) {
+      const els = $$('.appear:not(.is-in), .hero-photo:not(.is-in)', root);
+      els.forEach(el => {
+        const done = e => { if (e.target !== el) return; el.classList.add('is-in'); el.removeEventListener('animationend', done); };
+        el.addEventListener('animationend', done);
+      });
+      requestAnimationFrame(() => requestAnimationFrame(() => els.forEach(el => {
+        try { if (!el.getAnimations || !el.getAnimations().some(a => a.playState === 'running' || a.playState === 'finished')) el.classList.add('is-in'); }
+        catch { el.classList.add('is-in'); }
+      })));
+    }
+
+    /* ---------- pricing ---------- */
+    const place = n => PLACES.find(p => p.n.toLocaleLowerCase('cs') === String(n).trim().toLocaleLowerCase('cs'));
+    function fare(b = S) {
+      const car = FLEET[b.car];
+      let base = car.base, kindOf = 'est', km = null;
+      if (b.mode === 'hourly') { base = car.hour * Math.max(2, b.hours); kindOf = 'hour'; }
+      else {
+        const A = place(b.from), B = place(b.to);
+        if (A && B) {
+          const gs = [A.g, B.g];
+          if (gs.includes('prg') && gs.includes('prg-city')) { base = car.base; kindOf = 'fixed'; km = 17; }
+          else if (A.g === 'prg-city' && B.g === 'prg-city') { km = Math.max(3, Math.abs(A.km - B.km) + 3); base = Math.max(car.city, Math.round(km * car.rate / 10) * 10); }
+          else { const far = (A.g === 'prg' || A.g === 'prg-city') ? B : A; km = far.km + (gs.includes('prg') ? 17 : 0); base = Math.round((km * car.rate + car.base * .4) / 10) * 10; }
+        }
+      }
+      const ret = b.roundtrip && b.mode !== 'hourly' ? base : 0;
+      const sub = base + ret;
+      const disc = Math.round(sub * b.discount);
+      return { base, ret, disc, total: sub - disc, kind: kindOf, km };
+    }
+    const longRide = () => { const A = place(S.from), B = place(S.to); return [A, B].some(p => p && (p.g === 'cz' || p.g === 'eu')); };
+    const strictCancel = () => ['mercE', 'mercV'].includes(S.car) || longRide();
+    function cancelDeadline(o) {
+      const hrs = ['mercE', 'mercV'].includes(o.car) || o.ext.long ? 12 : 2;
+      const d = stamp(o.date, o.time);
+      d.setHours(d.getHours() - hrs);
+      return { hrs, when: d };
+    }
+
+    /* ---------- shell ---------- */
+    function shellChrome() {
+      $('#nav').innerHTML = [
+        ['services', '#/sluzby'], ['fleet', '#/vozy'], ['airport', '#/letiste'], ['business', '#/firmy']
+      ].map(([k, href], i) => `<a class="nav-link appear ${i % 2 ? 'a-soft' : 'a-scale'}" href="${href}" data-p="${k}" style="--d:${.16 + i * .12}s">${t('nav.' + k)}</a>`).join('')
+        + `<a class="nav-link mobile-only" href="#/napoveda" data-p="help">${t('nav.help')}</a>`
+        + `<a class="nav-link mobile-only" href="#/jizdy" data-p="trips">${t('nav.trips')}</a>`;
+      $('#langs').innerHTML = ['cs', 'en'].map(l => `<button type="button" data-a="lang" data-v="${l}" aria-pressed="${l === lang}">${l.toUpperCase()}</button>`).join('');
+      $('#cta-label').textContent = t('nav.trips');
+      $('#places').innerHTML = PLACES.map(p => `<option value="${esc(p.n)}">`).join('');
+      document.documentElement.lang = lang;
+    }
+    function statsBar() {
+      $('#stats').innerHTML = [['shield', 's1'], ['landing', 's2'], ['seat', 's3'], ['cash', 's4']]
+        .map(([ic, k], i) => `<div class="stat appear a-stat" style="--d:${1.05 + i * .14}s">${icon(ic)}<span>${t('stats.' + k)}<small>${t('stats.' + k + 's')}</small></span></div>`).join('');
+    }
+
+    /* ---------- home ---------- */
+    function renderHome() {
+      const h = t('hero'), f = t('f');
+      const opts = (sel) => PLACES.map(p => `<option value="${esc(p.n)}" ${p.n === sel ? 'selected' : ''}>${esc(placeName(p.n))}</option>`).join('');
+      const lockedFrom = S.mode === 'from', lockedTo = S.mode === 'to';
+      const fromField = lockedFrom
+        ? `<label class="field f-from">${icon('landing')}<span class="field-caption">${f.from}</span><select id="from">${opts(AIRPORT)}</select></label>`
+        : `<label class="field f-from">${icon('pin')}<span class="field-caption">${f.from}</span><input id="from" list="places" value="${esc(S.from)}" maxlength="120" autocomplete="off" required></label>`;
+      const toField = lockedTo
+        ? `<label class="field f-to">${icon('takeoff')}<span class="field-caption">${f.to}</span><select id="to">${opts(AIRPORT)}</select></label>`
+        : `<label class="field f-to">${icon('pin')}<span class="field-caption">${f.to}</span><input id="to" list="places" value="${esc(S.to)}" maxlength="120" autocomplete="off" required></label>`;
+      const hourly = S.mode === 'hourly';
+      const featureItems = [
+        ['shield', L('Pevná cena předem', 'Fixed price upfront'), L('U transferu letiště – Praha vidíte konečnou cenu za celé vozidlo. Žádné příplatky za provoz, zavazadla nebo čekání v koloně.', 'For airport – Prague transfers you see the final price for the whole vehicle. No traffic, luggage or queueing surcharges.')],
+        ['landing', L('Let pod kontrolou', 'Flight under control'), L('Stačí zadat číslo letu. Řidič sleduje přílet a při zpoždění letu čeká bezplatně.', 'Enter the flight number. The driver follows the arrival time and waits for free if the flight is delayed.')],
+        ['seat', L('Autosedačka zdarma', 'Free child seat'), L('Vajíčko, střední sedačka i podsedák připravíme podle věku dítěte. Vyberete v detailech rezervace.', 'Infant seat, child seat and booster are prepared by child age. Pick them in the booking details.')],
+        ['cash', L('Platba po jízdě', 'Pay after the ride'), L('Neplatíte nic předem. Zaplatíte pohodlně hotově nebo kartou přímo u řidiče.', 'You pay nothing upfront. Pay conveniently in cash or by card directly to the driver.')],
+        ['sign', L('Cedulka se jménem', 'Name sign'), L('Na letišti nebo nádraží vás řidič vyzvedne na jasně určeném místě a pomůže se zavazadly.', 'At the airport or station the driver meets you at a clearly defined spot and helps with luggage.')],
+        ['case', L('Bagaž bez stresu', 'Luggage without stress'), L('Kalkulačka hlídá počet kufrů, příručních zavazadel i kočárek a doporučí větší vůz, když je potřeba.', 'The calculator checks suitcases, cabin bags and prams and recommends a larger vehicle when needed.')],
+        ['wifi', L('Wi-Fi a voda', 'Wi-Fi and water'), L('Na cestě můžete pracovat, napsat rodině nebo si jen v klidu odpočinout.', 'Work on the way, message your family or simply relax.')],
+        ['headset', L('Nonstop provoz 24/7', '24/7 service'), L('Letíte brzy ráno, přistáváte v noci nebo jedete mimo Prahu? Transfer objednáte kdykoli.', 'Flying early, landing late or travelling outside Prague? Book anytime.')]
+      ];
+      const routeDeals = [
+        ['PRG → Praha centrum', L('Fixní cena letištního transferu', 'Fixed airport transfer price'), FLEET.sedan.base, 't1'],
+        ['Praha → PRG', L('Včasný odvoz na odlet', 'On-time departure pickup'), FLEET.sedan.base, 't2'],
+        ['PRG → Karlovy Vary', L('Dálková jízda bez přestupů', 'Long-distance ride with no transfers'), Math.round((130 * FLEET.sedan.rate + FLEET.sedan.base * .4) / 10) * 10, 't3'],
+        ['Praha → Vídeň', L('Soukromý transfer do Rakouska', 'Private transfer to Austria'), Math.round((335 * FLEET.sedan.rate + FLEET.sedan.base * .4) / 10) * 10, 't4']
+      ];
+      const process = [
+        [L('Vyplníte trasu', 'Enter the route'), L('Zvolíte směr, čas, počet osob a vůz. Cena se přepočítá okamžitě.', 'Choose direction, time, people and car. The price updates instantly.')],
+        [L('Doplníte detaily', 'Add details'), L('Let, místo setkání, dětské sedačky, zavazadla a poznámka pro řidiče.', 'Flight, meeting point, child seats, luggage and a driver note.')],
+        [L('Dispečer potvrdí', 'Dispatch confirms'), L('Objednávka je platná až po kontrole a potvrzení e-mailem.', 'The booking is valid only after dispatcher review and e-mail confirmation.')],
+        [L('Jedete v klidu', 'Ride calmly'), L('Řidič přijede včas, pomůže s kufry a po jízdě vystaví doklad.', 'The driver arrives on time, helps with bags and provides a receipt.')]
+      ];
+      const terminalItems = Object.entries(MEETS).map(([k, m]) => ({ key: k, ...m }));
+      app.innerHTML = `
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow appear a-pop" style="--d:.2s"><span class="eyebrow-dot"></span>${h.eyebrow}</p>
+          <h1><span class="headline-line"><span class="appear a-mask" style="--d:.4s">${h.l1}</span></span><span class="headline-line"><span class="appear a-mask" style="--d:.6s">${h.l2a}<em>${h.l2em}</em></span></span></h1>
+          <p class="lede appear a-soft" style="--d:.8s;animation-duration:1.2s">${h.lede}</p>
+          <div class="hero-badges appear a-soft" style="--d:.92s">
+            <span class="pill">${icon('shield')}${h.p1}</span><span class="pill">${icon('navigation')}${h.p5}</span>
+            <span class="pill">${icon('seat')}${h.p2}</span><span class="pill">${icon('landing')}${h.p3}</span>
+            <span class="pill">${icon('card')}${h.p4}</span>
+          </div>
+        </div>
+      </section>
+      <section class="booking appear a-soft" style="--d:1s" aria-label="${f.cta}">
+        <div class="booking-head">
+          <div class="mode-switch" role="group">
+            ${[['to', 'takeoff'], ['from', 'landing'], ['long', 'route'], ['hourly', 'clock']].map(([m, ic]) => `<button type="button" data-a="mode" data-v="${m}" aria-pressed="${S.mode === m}">${icon(ic)}${t('modes.' + m)}</button>`).join('')}
+          </div>
+          <span class="booking-note">${icon('info')}${hourly ? f.hourNote : S.mode === 'long' ? f.est : f.fixed}</span>
+        </div>
+        <form id="book-form">
+          <div class="booking-grid ${hourly ? 'hourly' : ''}">
+            ${fromField}
+            ${hourly ? '' : `<button class="swap" type="button" data-a="swap" aria-label="↔">${icon('swap')}</button>${toField}`}
+            <div class="field f-when">${icon('calendar')}<span class="field-caption">${f.when}</span><div class="datetime"><input id="date" type="date" aria-label="${f.when}" required><input id="time" type="time" value="${S.time}" aria-label="${f.when}" required></div></div>
+            ${hourly ? `<label class="field plain f-hours"><span class="field-caption">${f.hours}</span><select id="hours">${[2, 3, 4, 5, 6, 8, 10, 12].map(n => `<option value="${n}" ${n === S.hours ? 'selected' : ''}>${t('hrs')(n)}</option>`).join('')}</select></label>` : ''}
+            <label class="field plain"><span class="field-caption">${f.pax}</span><select id="pax">${[1, 2, 3, 4, 5, 6, 7].map(n => `<option value="${n}" ${n === S.pax ? 'selected' : ''}>${t('pax')(n)}</option>`).join('')}</select></label>
+            <label class="field plain"><span class="field-caption">${f.car}</span><select id="car">${Object.entries(FLEET).map(([k, c]) => `<option value="${k}" ${k === S.car ? 'selected' : ''}>${c.label}</option>`).join('')}</select></label>
+            <button class="btn btn-solid quote-btn" type="submit"><span><strong class="quote-amount" id="price" aria-live="polite">${money(fare().total)}</strong><small>${f.cta}</small></span>${icon('arrow')}</button>
+          </div>
+          ${hourly ? '' : `<div class="extra-row"><label class="check" style="margin:0"><input type="checkbox" id="rt" ${S.roundtrip ? 'checked' : ''}>${f.ret}</label>${S.roundtrip ? `<input class="input" id="ret-date" type="date" value="${S.retDate}" aria-label="${f.ret}" style="max-width:170px"><input class="input" id="ret-time" type="time" value="${S.retTime}" aria-label="${f.ret}" style="max-width:110px"><span class="note">${f.retNote}</span>` : ''}</div>`}
+          <div class="quick-routes"><span class="note">${f.quick}</span>
+            <button class="chip" type="button" data-a="quick" data-v="t1">PRG → ${lang === 'cs' ? 'centrum' : 'city centre'}</button>
+            <button class="chip" type="button" data-a="quick" data-v="t2">${lang === 'cs' ? 'centrum' : 'city centre'} → PRG</button>
+            <button class="chip" type="button" data-a="quick" data-v="t3">PRG → Karlovy Vary</button>
+            <button class="chip" type="button" data-a="quick" data-v="t4">${lang === 'cs' ? 'Praha' : 'Prague'} → ${lang === 'cs' ? 'Vídeň' : 'Vienna'}</button>
+          </div>
+          <p class="err" id="book-err" role="alert" hidden></p>
+        </form>
+        <div class="booking-foot">
+          <span>${icon('shield')}<span id="quote-note">${fare().kind === 'fixed' ? f.fixed : fare().kind === 'hour' ? f.hourNote : f.est}</span></span>
+          <div class="foot-right"><span class="note">${f.demo}</span><button class="text-link" type="button" data-a="promo-open">${f.promo}</button></div>
+        </div>
+      </section>
+      <div class="home-rich">
+        <section class="home-section appear a-soft" style="--d:.06s">
+          <p class="section-kicker">${L('Proč Wayro', 'Why Wayro')}</p>
+          <h2 class="home-title">${L('Letištní transfer, který je jasný ještě před nástupem.', 'An airport transfer that is clear before you get in.')}</h2>
+          <p class="home-lede">${L('Wayro staví službu na přesné ceně, jednoduchém vyzvednutí a lidské komunikaci. Víte, kde se potkáte s řidičem, kolik zaplatíte, co je v ceně a kde zrovna jede auto.', 'Wayro is built around exact pricing, simple pickup and human communication. You know where you meet the driver, what you pay, what is included and where the car is right now.')}</p>
+          <div class="feature-grid">${featureItems.map(([ic, title, text]) => `<article class="feature">${icon(ic)}<h3>${title}</h3><p>${text}</p></article>`).join('')}</div>
+        </section>
+
+        <section class="home-section">
+          <div class="home-split">
+            <div>
+              <p class="section-kicker">${L('Jak probíhá cesta', 'How the ride works')}</p>
+              <h2 class="home-title">${L('Od objednávky po doklad. Bez volání navíc.', 'From booking to receipt. No extra calls needed.')}</h2>
+              <p class="home-lede">${L('Každý krok má jasný stav. U letištního příletu stačí číslo letu, po přistání zapnete telefon a řidič vás kontaktuje.', 'Each step has a clear status. For airport arrivals, just enter the flight number, turn your phone on after landing and the driver contacts you.')}</p>
+              <div class="info-stack" style="margin-top:24px">${process.map(([title, text], i) => `<article class="info-row"><span class="info-num">0${i + 1}</span><div><h3>${title}</h3><p>${text}</p></div></article>`).join('')}</div>
+            </div>
+            <div class="home-media"><img src="https://images.pexels.com/photos/16453351/pexels-photo-16453351.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200" alt="${L('Cestující v letištní hale', 'Travellers in an airport terminal')}" loading="lazy" decoding="async"><div class="media-caption"><div><strong>${L('PRG pickup', 'PRG pickup')}</strong><span>${L('Terminál 1, Terminál 2 i Hlavní nádraží mají jasný bod setkání.', 'Terminal 1, Terminal 2 and Main Station each have a clear meeting point.')}</span></div><a class="btn btn-ghost btn-small" href="#/letiste">${L('Instrukce', 'Instructions')} ${icon('arrow')}</a></div></div>
+          </div>
+        </section>
+
+        <section class="home-section">
+          <p class="section-kicker">${L('Oblíbené trasy', 'Popular routes')}</p>
+          <h2 class="home-title">${L('Ceny, které dávají smysl i před dlouhou cestou.', 'Prices that make sense even before a long ride.')}</h2>
+          <p class="home-lede">${L('Letiště Praha ↔ centrum má fixní cenu. Dálkové trasy počítáme podle kilometrů a třídy vozu, finální cenu potvrzuje dispečer.', 'Prague Airport ↔ city centre has a fixed price. Long-distance routes are calculated by kilometres and vehicle class; final price is confirmed by dispatch.')}</p>
+          <div class="route-board">${routeDeals.map(([name, desc, price, preset]) => `<button class="route-card" type="button" data-a="quick" data-v="${preset}"><div><h3>${name}</h3><p>${desc}</p></div><span class="route-price">${money(price)}<small>${preset === 't3' || preset === 't4' ? L('odhad sedan', 'sedan estimate') : L('fixní cena', 'fixed price')}</small></span></button>`).join('')}</div>
+        </section>
+
+        <section class="home-section">
+          <div class="toolbar" style="margin-top:0"><div><p class="section-kicker">${L('Vozy a ceny', 'Fleet and prices')}</p><h2 class="home-title">${L('Standard nebo business. Sedan nebo minivan.', 'Standard or business. Sedan or minivan.')}</h2></div><a class="btn btn-ghost btn-small" href="#/vozy">${L('Celý vozový park', 'Full fleet')} ${icon('arrow')}</a></div>
+          <div class="fleet-strip">${Object.entries(FLEET).map(([k, c]) => `<article class="mini-car"><button type="button" data-a="gallery" data-v="${k}"><img src="${c.img}" alt="${esc(c.label)}" loading="lazy" decoding="async"><div class="mini-body"><h3><span>${c.label}</span><span>${money(c.base)}</span></h3><p>${c.model[lang] || c.model.cs}<br>${L('Max.', 'Max')} ${c.pax} · ${c.bags} ${L('zavazadel', 'bags')} · ${c.seats} ${L('autosedaček', 'child seats')}</p></div></button></article>`).join('')}</div>
+        </section>
+
+        <section class="home-section">
+          <p class="section-kicker">${L('Místa setkání', 'Meeting points')}</p>
+          <h2 class="home-title">${L('Vystoupíte z letadla a víte, kam jít.', 'You leave the plane and know where to go.')}</h2>
+          <div class="terminal-grid">${terminalItems.map(m => `<article class="terminal"><img src="${m.img}" alt="${esc(m.t)}" loading="lazy" decoding="async"><div class="terminal-body"><span>${m.s}</span><h3>${m.t}</h3><p>${m.d[lang] || m.d.cs}</p><button class="text-link" type="button" data-a="pick-meet" data-v="${m.key}">${L('Vybrat místo', 'Choose point')} →</button></div></article>`).join('')}</div>
+        </section>
+
+        <section class="home-section">
+          <div class="app-band">
+            <div><p class="section-kicker">${L('Mobilní aplikace', 'Mobile app')}</p><h2>${L('Mějte rezervaci, řidiče i příjezd pod kontrolou.', 'Keep your booking, driver and arrival under control.')}</h2><p>${L('Pro klienty, kteří cestují častěji, je aplikace nejrychlejší cesta k nové objednávce, opakování trasy a přehledu jízd.', 'For frequent travellers, the app is the fastest way to make a new booking, repeat a route and see ride history.')}</p><div class="app-actions"><a class="btn btn-solid" href="${SITE.app}" target="_blank" rel="noopener">${L('Stáhnout aplikaci', 'Download app')} ${icon('arrow')}</a><a class="btn btn-ghost" href="#/jizdy">${t('nav.trips')}</a></div></div>
+            <div class="mini-phone" aria-hidden="true"><div class="mini-screen"><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="mapline"></div></div></div>
+          </div>
+        </section>
+
+        <section class="home-section">
+          <div class="home-split">
+            <div><p class="section-kicker">${L('Co říkají klienti', 'What clients say')}</p><h2 class="home-title">${L('Nejdůležitější je klid po přistání.', 'The most important thing is calm after landing.')}</h2></div>
+            <div class="review-grid" style="margin-top:0">
+              <blockquote class="quote"><p>${L('„Po nočním letu jsem přesně věděl, kde řidič čeká. Cena byla stejná jako v objednávce.“', '“After a night flight I knew exactly where the driver was waiting. The price matched the booking.”')}</p><small>PRG Terminal 2 → Praha 1</small></blockquote>
+              <blockquote class="quote"><p>${L('„Dítě mělo připravenou sedačku a řidič pomohl s kočárkem. Bez stresu.“', '“The child seat was ready and the driver helped with the pram. No stress.”')}</p><small>${L('Rodinný transfer', 'Family transfer')} · Minibus</small></blockquote>
+              <blockquote class="quote"><p>${L('„Dálková cesta do Vídně byla pohodlnější než vlak. Zastávku jsme domluvili předem.“', '“The long ride to Vienna was more comfortable than the train. We arranged a stop in advance.”')}</p><small>Praha → Vienna</small></blockquote>
+            </div>
+          </div>
+        </section>
+
+        <section class="home-section">
+          <div class="toolbar" style="margin-top:0"><div><p class="section-kicker">${L('Rychlé odpovědi', 'Quick answers')}</p><h2 class="home-title">${L('Než kliknete na objednávku.', 'Before you click book.')}</h2></div><a class="btn btn-ghost btn-small" href="#/napoveda">${L('Všechna FAQ', 'All FAQ')} ${icon('arrow')}</a></div>
+          <div class="faq-preview">${FAQ.slice(0, 6).map((item, i) => `<details ${i === 0 ? 'open' : ''}><summary>${esc(item.q[lang] || item.q.cs)}</summary><p>${esc(item.a[lang] || item.a.cs)}</p></details>`).join('')}</div>
+        </section>
+      </div>`;
+      syncHome();
+    }
+    function syncHome() {
+      if (!$('#book-form')) return;
+      $('#date').value = S.date; $('#date').min = plusDays(0);
+      $('#time').value = S.time;
+      const q = fare();
+      $('#price').textContent = `${q.kind === 'fixed' ? '' : '≈ '}${money(q.total)}`;
+      $('#quote-note').textContent = q.kind === 'fixed' ? t('f.fixed') : q.kind === 'hour' ? t('f.hourNote') : t('f.est');
+    }
+    function readHome() {
+      if (!$('#book-form')) return;
+      S.from = $('#from').value.trim();
+      if ($('#to')) S.to = $('#to').value.trim();
+      S.date = $('#date').value; S.time = $('#time').value;
+      S.pax = Number($('#pax').value); S.car = $('#car').value;
+      if ($('#hours')) S.hours = Number($('#hours').value);
+      if ($('#rt')) S.roundtrip = $('#rt').checked;
+      if ($('#ret-date')) S.retDate = $('#ret-date').value;
+      if ($('#ret-time')) S.retTime = $('#ret-time').value;
+    }
+    function fitVehicle() {
+      if (S.pax > FLEET[S.car].pax) {
+        const better = Object.entries(FLEET).find(([, c]) => c.pax >= S.pax);
+        if (better) { S.car = better[0]; toast(lang === 'cs' ? `Pro ${S.pax} osob jsme vybrali vůz ${FLEET[S.car].label}.` : `Selected ${FLEET[S.car].label} for ${S.pax} passengers.`); }
+      }
+    }
+    function setMode(m) {
+      S.mode = m;
+      if (m === 'from') { S.from = AIRPORT; if (place(S.to)?.g === 'prg') S.to = 'Praha – centrum'; }
+      if (m === 'to') { S.to = AIRPORT; if (place(S.from)?.g === 'prg') S.from = 'Praha – centrum'; }
+      if (m === 'hourly') S.roundtrip = false;
+    }
+    function validateRide() {
+      const L = lang === 'cs';
+      if (!S.from || (S.mode !== 'hourly' && !S.to)) return L ? 'Vyplňte prosím odkud a kam jedete.' : 'Please fill in the pickup and destination.';
+      if (S.mode !== 'hourly' && S.from.trim().toLowerCase() === S.to.trim().toLowerCase()) return L ? 'Místo vyzvednutí a cíl musí být různé.' : 'Pickup and destination must differ.';
+      const dep = stamp(S.date, S.time);
+      if (Number.isNaN(dep.getTime()) || dep.getTime() < Date.now() + 30 * 60000) return L ? 'Zvolte prosím čas nejdříve za 30 minut.' : 'Choose a pickup at least 30 minutes from now.';
+      if (S.roundtrip) {
+        const back = stamp(S.retDate, S.retTime);
+        if (Number.isNaN(back.getTime()) || back.getTime() < dep.getTime() + 2 * 3600000) return L ? 'Zpáteční jízda musí být alespoň o 2 hodiny později.' : 'The return ride must be at least 2 hours later.';
+      }
+      if (S.pax > FLEET[S.car].pax) return L ? `Vůz ${FLEET[S.car].label} pojme ${FLEET[S.car].pax} osob. Zvolte větší vůz.` : `${FLEET[S.car].label} seats ${FLEET[S.car].pax}. Please pick a larger vehicle.`;
+      return '';
+    }
+
+    /* ---------- pages ---------- */
+    const head = (kick, title, desc, back = true) => `<section class="subpage appear a-soft" style="--d:.04s">${back ? `<a class="back-link" href="#/">${icon('arrow')}${t('back')}</a>` : ''}<p class="kicker">${kick}</p><h1 class="page-heading">${title}</h1>${desc ? `<p class="page-desc">${desc}</p>` : ''}`;
+    const L = (cs, en) => lang === 'cs' ? cs : en;
+
+    function renderServices() {
+      const items = [
+        ['takeoff', L('Taxi na letiště Praha', 'Taxi to Prague Airport'), L('Dovezeme vás včas na odlet. Doporučujeme plánovat odjezd s časovou rezervou, řidič pomůže se zavazadly a po jízdě předá daňový doklad.', 'We get you to departures on time. Plan a time buffer; the driver helps with the luggage and hands over a tax receipt after the ride.'), 'to'],
+        ['landing', L('Taxi z letiště Praha', 'Taxi from Prague Airport'), L('Řidič sleduje přílet, čeká s cedulkou u domluveného místa a při zpoždění letu čeká zdarma.', 'The driver follows your arrival, waits with a name sign at the agreed meeting point and waits free of charge if the flight is delayed.'), 'from'],
+        ['route', L('Dálkové taxi', 'Long-distance taxi'), L('Přeprava po celé ČR i do zahraničí – Vídeň, Mnichov, Berlín, Drážďany – s pevnou cenou domluvenou předem a zastávkami po cestě.', 'Transfers across Czechia and abroad – Vienna, Munich, Berlin, Dresden – with a price agreed upfront and stops along the way.'), 'long'],
+        ['seat', L('Taxi s autosedačkou', 'Taxi with a child seat'), L('Vajíčko, střední sedačka i podsedák podle věku dítěte, vždy zdarma. Stačí vybrat typ a počet v detailech rezervace.', 'Infant seat, child seat or booster by the child age, always free. Just pick the type and count in the booking details.'), 'from'],
+        ['clock', L('Hodinová dispozice', 'Hourly hire'), L('Vůz i řidič k dispozici na hodiny – schůzky, focení, celodenní program. Minimálně 2 hodiny, cenu potvrdí dispečer.', 'Car and driver at your disposal by the hour – meetings, shoots, full-day programmes. Minimum 2 hours, price confirmed by the dispatcher.'), 'hourly'],
+        ['building', L('Taxi pro firmy', 'Corporate taxi'), L('Přeprava klientů, partnerů i zaměstnanců s jednotným standardem a přehledem jízd.', 'Transport for clients, partners and staff with one standard and a clear ride overview.'), 'business']
+      ];
+      app.innerHTML = head(L('Naše služby', 'Our services'), L('Odvezeme vás.<br><em>Kamkoli.</em>', 'We drive you.<br><em>Anywhere.</em>'), L('Letiště, dálkové trasy i firemní přeprava. Jedna linka, jeden standard, nonstop 24/7.', 'Airport runs, long-distance routes and corporate rides. One line, one standard, 24/7.'))
+        + `<div class="cards">${items.map(([ic, ttl, txt, mode]) => `<article class="card"><div class="card-icon">${icon(ic)}</div><h3>${ttl}</h3><p>${txt}</p><button class="text-link" type="button" data-a="${mode === 'business' ? 'go-business' : 'pick-mode'}" data-v="${mode}">${mode === 'business' ? L('Zobrazit', 'Open') : L('Objednat', 'Book')} →</button></article>`).join('')}</div>`
+        + `<h2 class="section-h" style="margin-top:56px">${L('Jak to u nás funguje', 'How it works')}</h2><div class="steps">${[
+          [L('Objednávka', 'Booking'), L('Zadáte trasu, čas a vůz. Cenu vidíte hned, bez závazku.', 'Enter route, time and vehicle. You see the price instantly, with no commitment.')],
+          [L('Potvrzení', 'Confirmation'), L('Dispečer rezervaci zkontroluje a potvrdí e-mailem. Teprve tím je vůz rezervovaný.', 'The dispatcher checks the booking and confirms by e-mail. Only then is the car reserved.')],
+          [L('Příjezd řidiče', 'Driver arrives'), L('Řidič přijede včas, na letišti čeká s cedulkou a pomůže se zavazadly.', 'The driver arrives on time, waits with a name sign at the airport and helps with the luggage.')],
+          [L('Platba', 'Payment'), L('Zaplatíte po jízdě hotově nebo kartou u řidiče a dostanete doklad.', 'You pay after the ride in cash or by card and receive a receipt.')]
+        ].map(([ttl, txt], i) => `<div class="step"><span class="step-num">0${i + 1}</span><h3>${ttl}</h3><p>${txt}</p></div>`).join('')}</div>`
+        + `<div class="banner">${icon('info')}<p>${L('Ceny letiště – Praha odpovídají ceníku Wayro a jsou pevné. Dálkové a hodinové kalkulace jsou orientační, finální cenu potvrzuje dispečink.', 'Airport – Prague prices follow the Wayro price list and are fixed. Long-distance and hourly calculations are estimates; dispatch confirms the final price.')}</p></div></section>`;
+    }
+    function renderFleet() {
+      const items = Object.entries(FLEET).filter(([k]) => fleetFilter === 'all' || fleetFilter === k);
+      app.innerHTML = head(L('Vozový park', 'Our fleet'), L('Vyberte si.<br>Cena je <em>za vůz.</em>', 'Pick your car.<br>Price is <em>per vehicle.</em>'), L('Ceny platí pro trasu letiště Praha – centrum Prahy. Cena je za vozidlo, ne za osobu.', 'Prices apply to the Prague Airport – Prague centre route. The price is per vehicle, not per person.'))
+        + `<div class="tabs">${[['all', L('Všechny vozy', 'All vehicles')], ...Object.entries(FLEET).map(([k, c]) => [k, c.label])].map(([k, n]) => `<button type="button" data-a="fleet-filter" data-v="${k}" aria-pressed="${fleetFilter === k}">${n}</button>`).join('')}</div>
+        <div class="fleet-grid">${items.map(([k, c], i) => `<article class="appear a-soft" style="--d:${.06 + i * .07}s">
+          <button class="car-media" type="button" data-a="gallery" data-v="${k}" aria-label="${c.label}"><img src="${c.img}" alt="${esc(c.model[lang] || c.model.cs)}" loading="lazy" decoding="async"><span class="car-tag">${c.seats ? L(`${c.seats}× autosedačka`, `${c.seats}× child seat`) : L('bez autosedačky', 'no child seat')}</span></button>
+          <div class="car-top"><h2>${c.label}</h2><span class="car-price">${money(c.base)}<small>${L('letiště – Praha', 'airport – Prague')}</small></span></div>
+          <p class="car-model">${c.model[lang] || c.model.cs}</p>
+          <div class="car-bottom"><div class="specs"><span>${icon('user')}${L('max ' + c.pax, 'max ' + c.pax)}</span><span>${icon('case')}${c.bags} ${L('zavazadel', 'bags')}</span><span>${icon('wifi')}Wi-Fi</span></div>
+          <button class="btn btn-ghost btn-small" type="button" data-a="pick-car" data-v="${k}">${L('Vybrat vůz', 'Choose')} ${icon('arrow')}</button></div></article>`).join('')}</div>
+        <h2 class="section-h" style="margin-top:52px">${L('Co je v ceně', "What's included")}</h2>
+        <ul class="list" style="max-width:640px;margin-top:18px">
+          ${[L('Fixní cena bez příplatků za provoz a čekání v koloně', 'Fixed price with no surcharges for traffic or queueing'),
+             L('Vyzvednutí s cedulkou se jménem a pomoc se zavazadly', 'Meet and greet with a name sign and luggage help'),
+             L('Autosedačka podle věku dítěte zdarma', 'Child seat by age, free of charge'),
+             L('Sledování letu a bezplatné čekání při zpoždění', 'Flight tracking and free waiting when the flight is late'),
+             L('Platba hotově nebo kartou u řidiče, daňový doklad', 'Payment in cash or by card to the driver, tax receipt')].map(x => `<li>${icon('check')}${x}</li>`).join('')}
+        </ul>
+        <p class="fine">${L('Fotografie ilustrují třídu vozu, konkrétní model potvrzuje dispečink. Ceny dálkových a hodinových jízd v kalkulačce jsou orientační.', 'Photos illustrate the vehicle class; the exact model is confirmed by dispatch. Long-distance and hourly prices in the calculator are estimates.')}</p></section>`;
+    }
+    function renderAirport() {
+      app.innerHTML = head(L('Letiště Václava Havla', 'Václav Havel Airport'), L('Přistáli jste.<br>Řidič už <em>čeká.</em>', 'You landed.<br>The driver is <em>waiting.</em>'), L('Kde se potkáte s řidičem a co dělat po příletu nebo před odletem.', 'Where you meet the driver and what to do after landing or before departure.'))
+        + `<div class="meet-grid">${Object.entries(MEETS).map(([k, m]) => `<article class="meet"><div class="car-media" style="aspect-ratio:1.9;margin-bottom:16px"><img src="${m.img}" alt="${esc(m.t)}" loading="lazy" decoding="async"></div><span class="meet-badge">${icon('sign')}${m.s}</span><h3>${m.t}</h3><p>${m.d[lang] || m.d.cs}</p><button class="text-link" type="button" data-a="pick-meet" data-v="${k}" style="font-size:12px;margin-top:12px">${L('Vyzvednout zde', 'Meet me here')} →</button></article>`).join('')}</div>
+        <div class="split">
+          <div><h2 class="section-h">${L('Přilétám', 'Arriving')}</h2><ul class="list">
+            ${[L('V rezervaci uveďte číslo letu, například LH1400.', 'Enter your flight number in the booking, e.g. LH1400.'),
+               L('Po přistání si zapněte telefon – řidič vás kontaktuje.', 'Turn your phone on after landing – the driver will contact you.'),
+               L('Po vyzvednutí zavazadel jděte na domluvené místo, řidič drží cedulku se jménem.', 'After baggage claim head to the meeting point; the driver holds a name sign.'),
+               L('Zpoždění letu? Čekáme na vás zdarma.', 'Flight delayed? We wait for you free of charge.')].map(x => `<li>${icon('check')}${x}</li>`).join('')}</ul>
+            <h2 class="section-h" style="margin-top:46px">${L('Odlétám', 'Departing')}</h2><ul class="list">
+            ${[L('Plánujte odjezd s časovou rezervou podle typu letu.', 'Plan the pickup with a time buffer based on your flight.'),
+               L('Řidič přijede na zadanou adresu v domluvený čas a pomůže se zavazadly.', 'The driver comes to your address at the agreed time and helps with the luggage.'),
+               L('Po jízdě obdržíte daňový doklad od řidiče.', 'After the ride you receive a tax receipt from the driver.')].map(x => `<li>${icon('check')}${x}</li>`).join('')}</ul></div>
+          <aside class="panel"><h2>${L('Jedu z letiště', 'I am coming from the airport')}</h2>
+            <p class="note" style="margin-bottom:18px">${L('Nastavíme rezervaci na vyzvednutí na letišti a předvyplníme místo setkání.', 'We switch the booking to an airport pickup and pre-fill the meeting point.')}</p>
+            <label class="form-field"><span>${L('Číslo letu', 'Flight number')}</span><input class="input" id="ap-flight" placeholder="LH1400" maxlength="9" value="${esc(S.flight)}" style="text-transform:uppercase"></label>
+            <label class="form-field"><span>${L('Místo setkání', 'Meeting point')}</span><select class="input" id="ap-meet">${Object.entries(MEETS).map(([k, m]) => `<option value="${k}" ${S.meet === k ? 'selected' : ''}>${m.t} · ${m.s}</option>`).join('')}</select></label>
+            <button class="btn btn-solid wide" type="button" data-a="from-airport">${L('Pokračovat v rezervaci', 'Continue booking')} ${icon('arrow')}</button>
+            <p class="note" style="margin-top:14px">${L('Automatické sledování letu vyžaduje napojení na letová data. V ukázce si můžete vyzkoušet simulaci zpoždění v detailu jízdy.', 'Automatic flight tracking needs a live data feed. In the demo you can try the delay simulation in the ride detail.')}</p>
+          </aside>
+        </div></section>`;
+    }
+    function renderBusiness() {
+      app.innerHTML = head(L('Wayro pro firmy', 'Wayro for business'), L('Vaši klienti.<br>Naše <em>starost.</em>', 'Your clients.<br>Our <em>care.</em>'), L('Přeprava partnerů, klientů i týmu s jedním standardem a přehledem nákladů.', 'Transport for partners, clients and your team with one standard and a clear cost overview.'))
+        + `<div class="split"><div><ul class="list">
+          ${[L('Transfery klientů a delegací na letiště i na jednání', 'Client and delegation transfers to the airport and meetings'),
+             L('Pravidelné jízdy zaměstnanců podle firemní politiky', 'Recurring staff rides following your travel policy'),
+             L('Přehled jízd a export pro účetní uzávěrku', 'Ride overview and export for accounting'),
+             L('Dálkové trasy po ČR i do zahraničí', 'Long-distance routes in Czechia and abroad')].map(x => `<li>${icon('check')}${x}</li>`).join('')}</ul>
+          <p class="fine">${L('Firemní účet, fakturace a smluvní ceny se domlouvají individuálně s dispečinkem. Zde si spočítáte orientační měsíční rozpočet a stáhnete podklad pro poptávku.', 'Corporate accounts, invoicing and contract rates are agreed individually with dispatch. Here you can estimate a monthly budget and download a request document.')}</p></div>
+          <form class="panel" id="biz-form"><h2>${L('Orientační rozpočet', 'Budget estimate')}</h2>
+          <label class="form-field"><span>${L('Počet jízd měsíčně', 'Rides per month')}</span><input class="input" id="biz-n" type="number" min="1" max="999" value="20" required></label>
+          <label class="form-field"><span>${L('Vůz', 'Vehicle')}</span><select class="input" id="biz-car">${Object.entries(FLEET).map(([k, c]) => `<option value="${k}" ${k === 'sedan' ? 'selected' : ''}>${c.label}</option>`).join('')}</select></label>
+          <p class="note">${L('Vzorová trasa letiště – Praha. Od 20 jízd −8 %, od 60 jízd −15 % (ukázková sazba).', 'Sample route airport – Prague. From 20 rides −8 %, from 60 rides −15 % (demo rate).')}</p>
+          <div class="total-row"><span>${L('Měsíčně přibližně', 'Approx. per month')}</span><strong id="biz-total">${money(20 * 690 * .92)}</strong></div>
+          <button class="btn btn-solid wide" type="submit">${L('Připravit poptávku', 'Prepare request')} ${icon('arrow')}</button></form></div></section>`;
+      bizTotal();
+    }
+    const bizQuote = () => { const n = Math.max(1, Math.min(999, Number($('#biz-n')?.value) || 1)); const c = $('#biz-car')?.value || 'sedan'; const d = n >= 60 ? .15 : n >= 20 ? .08 : 0; return { n, c, d, total: Math.round(n * FLEET[c].base * (1 - d)) }; };
+    const bizTotal = () => { if ($('#biz-total')) $('#biz-total').textContent = money(bizQuote().total); };
+
+    function renderTrips() {
+      const list = orders.filter(o => tripFilter === 'all' || (tripFilter === 'next' ? !o.cancelled && o.stage < 6 : o.cancelled || o.stage === 6));
+      app.innerHTML = head(L('Moje jízdy', 'My rides'), L('Vaše <em>cesty.</em>', 'Your <em>rides.</em>'), L('Přehled rezervací uložených v tomto prohlížeči.', 'Bookings stored in this browser.'))
+        + `<div class="toolbar"><div class="tabs">${[['all', L('Vše', 'All')], ['next', L('Nadcházející', 'Upcoming')], ['done', L('Dokončené', 'Finished')]].map(([k, n]) => `<button type="button" data-a="trip-filter" data-v="${k}" aria-pressed="${tripFilter === k}">${n}</button>`).join('')}</div>
+          ${orders.length ? `<button class="btn btn-ghost btn-small" type="button" data-a="export">${icon('download')}${L('Export CSV', 'Export CSV')}</button>` : ''}<a class="btn btn-solid btn-small" href="#/">${L('Nová jízda', 'New ride')} ${icon('plus')}</a></div>`
+        + (list.length ? `<div style="margin-top:14px">${list.map(o => `<article class="trip"><div>
+            <div class="trip-meta"><span>${dtLbl(o.date, o.time)}</span><span class="status ${o.cancelled ? 'off' : ''}">${o.cancelled ? L('Zrušeno', 'Cancelled') : t('stages')[o.stage]}</span><span>${o.demo ? L('Ukázka', 'Demo') : esc(o.payState || '')}</span></div>
+            <h2 class="trip-route">${esc(placeName(o.from))}<span class="arw">→</span>${esc(placeName(o.to))}</h2>
+            <p class="trip-sub">${FLEET[o.car].label} · ${t('pax')(o.pax)} · ${esc(o.id)}</p></div>
+            <div class="trip-right"><span class="trip-price">${money(o.total)}</span><div class="row-btns">
+            <button class="btn btn-ghost btn-small" type="button" data-a="again" data-v="${esc(o.id)}">${L('Objednat znovu', 'Book again')}</button>
+            <a class="btn btn-solid btn-small" href="#/jizda/${encodeURIComponent(o.id)}">${L('Detail', 'Detail')} ${icon('arrow')}</a></div></div></article>`).join('')}</div>`
+          : `<div class="empty">${icon('route')}<h2>${orders.length ? L('Tady zatím nic není', 'Nothing here yet') : L('Zatím žádná jízda', 'No rides yet')}</h2><p>${orders.length ? L('V této kategorii nemáte žádné jízdy.', 'You have no rides in this category.') : L('Vytvořte rezervaci a objeví se tady i s možností objednat znovu.', 'Create a booking and it will appear here, ready to be repeated.')}</p><a class="btn btn-solid" href="#/">${L('Spočítat cenu', 'Get a price')} ${icon('arrow')}</a></div>`)
+        + `<p class="fine">${storageOk ? L('Historie je uložená jen v tomto prohlížeči, nejde o zákaznický účet.', 'History is stored only in this browser; it is not a customer account.') : L('Úložiště prohlížeče není dostupné, historie zmizí po zavření stránky.', 'Browser storage is unavailable; history disappears when you close the page.')} ${orders.length ? `<button class="text-link" type="button" data-a="wipe">${L('Smazat historii', 'Delete history')}</button>` : ''}</p></section>`;
+    }
+    /* ---------- Živá pozice řidiče ----------
+       Souřadnice řidiče pocházejí výhradně z backendu (/api/driver/:id).
+       Když server polohu neposkytne, na mapě je jen plánovaná trasa – nic si nedomýšlíme. */
+    const geoOf = name => {
+      const p = place(name);
+      if (p && Number.isFinite(p.lat)) return [p.lat, p.lng];
+      const m = Object.values(MEETS).find(x => x.t === name || x.s === name);
+      return m ? [m.lat, m.lng] : null;
+    };
+    const kmBetween = (a, b) => Math.hypot(a[0] - b[0], (a[1] - b[1]) * Math.cos((a[0] * Math.PI) / 180)) * 111.32;
+    function pointAlong(coords, ratio) {
+      if (!coords || coords.length < 2) return { point: coords ? coords[0] : null, remainKm: 0, totalKm: 0 };
+      const segs = []; let total = 0;
+      for (let i = 1; i < coords.length; i++) { const d = kmBetween(coords[i - 1], coords[i]); segs.push(d); total += d; }
+      const target = total * Math.max(0, Math.min(1, ratio));
+      let acc = 0;
+      for (let i = 0; i < segs.length; i++) {
+        if (acc + segs[i] >= target) {
+          const r = segs[i] ? (target - acc) / segs[i] : 0, a = coords[i], b = coords[i + 1];
+          return { point: [a[0] + (b[0] - a[0]) * r, a[1] + (b[1] - a[1]) * r], remainKm: total - target, totalKm: total };
+        }
+        acc += segs[i];
+      }
+      return { point: coords[coords.length - 1], remainKm: 0, totalKm: total };
+    }
+    const pinIcon = dest => L.divIcon({ className: '', html: `<span class="pin${dest ? ' dest' : ''}"><i></i></span>`, iconSize: [26, 26], iconAnchor: [13, 26] });
+    const carIcon = () => L.divIcon({ className: '', html: '<span class="pin-car"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m4 10 2-6h12l2 6M3 10h18v9H3v-9ZM5 19v2m14-2v2M6 14h2m8 0h2"/></svg></span>', iconSize: [34, 34], iconAnchor: [17, 17] });
+    function trackingPanel() {
+      return `<div class="live">
+        <div class="live-top"><div>${icon('navigation')}<span>${L('Skutečná pozice řidiče', 'Real driver position')}</span></div><div class="live-bar" style="flex:1;width:auto"><i id="live-prog"></i></div><span class="live-badge off" id="live-badge">${L('Připojuji…', 'Connecting…')}</span></div>
+        <div id="live-map"><div class="live-geo"><div class="live-radar"></div><p>${L('Načítáme pozici z dispečinku. Fiktivní polohu nezobrazujeme.', 'Loading the live position from dispatch. We never show an invented position.')}</p></div></div>
+        <div class="live-stats">
+          <div class="live-stat"><span>${L('Přijede za', 'Arrives in')}</span><strong id="live-eta">—</strong></div>
+          <div class="live-stat"><span>${L('Zbývá', 'Remaining')}</span><strong id="live-dist">—</strong></div>
+          <div class="live-stat"><span>${L('Poslední update', 'Last update')}</span><strong id="live-upd">—</strong></div>
+        </div>
+        <div class="live-note"><span>${L('Mapa © OpenStreetMap · dlaždice CARTO', 'Map © OpenStreetMap · CARTO tiles')}</span><span>${L('zdroj dat:', 'data source:')} <span id="live-src">—</span></span></div>
+      </div>`;
+    }
+    let live = { timer: null, map: null, marker: null, route: [], order: null };
+    function stopLive() {
+      if (live.timer) clearInterval(live.timer);
+      if (live.map) { try { live.map.remove(); } catch { /* already removed */ } }
+      live = { timer: null, map: null, marker: null, route: [], order: null };
+    }
+    const setBadgeLive = (text, state = '') => { const b = $('#live-badge'); if (b) { b.textContent = text; b.className = `live-badge ${state}`; } };
+    function clearLiveStats(msg) {
+      ['#live-eta', '#live-dist', '#live-upd'].forEach(sel => { const n = $(sel); if (n) n.textContent = '—'; });
+      const p = $('#live-prog'); if (p) p.style.width = '0';
+      if (msg) { const s = $('#live-src'); if (s) s.textContent = msg; }
+    }
+    async function fetchRoute(from, to) {
+      try {
+        const r = await fetch(`${CONFIG.routeEndpoint}/${from[1]},${from[0]};${to[1]},${to[0]}?overview=full&geometries=geojson`, { signal: AbortSignal.timeout(9000) });
+        if (!r.ok) throw new Error();
+        const d = await r.json();
+        const coords = d && d.routes && d.routes[0] && d.routes[0].geometry && d.routes[0].geometry.coordinates;
+        if (!Array.isArray(coords) || coords.length < 2) throw new Error();
+        return { coords: coords.map(c => [c[1], c[0]]), src: L('reálná trasa OSRM', 'real route via OSRM') };
+      } catch {
+        return { coords: [from, to], src: L('přímá linka – routing nedostupný', 'straight line – routing unavailable') };
+      }
+    }
+    async function startLive(o) {
+      const box = $('#live-map');
+      if (!box || !o) return;
+      if (live.map || live.timer) stopLive();
+      if (!window.L) { setBadgeLive(L('Mapa se nenačetla', 'Map failed to load'), 'err'); clearLiveStats(L('Leaflet offline', 'Leaflet offline')); return; }
+      const meet = o.ext && o.ext.fromAirport ? MEETS[o.ext.meet] : null;
+      const pickup = meet ? [meet.lat, meet.lng] : geoOf(o.from);
+      const target = o.ext && o.ext.mode !== 'hourly' ? geoOf(o.to) : null;
+      if (!pickup) { setBadgeLive(L('Bez souřadnic', 'No coordinates'), 'off'); clearLiveStats(L('trasa není známa', 'route unknown')); return; }
+      let coords = [pickup], src = L('bez trasy', 'no route');
+      if (target) { const r = await fetchRoute(pickup, target); coords = r.coords; src = r.src; }
+      const s = $('#live-src'); if (s) s.textContent = src;
+      box.innerHTML = '';
+      const map = L.map(box, { scrollWheelZoom: false, zoomControl: true });
+      live.map = map; live.route = coords; live.order = o.id;
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { subdomains: 'abcd', maxZoom: 19, attribution: '&copy; OpenStreetMap &copy; CARTO' }).addTo(map);
+      L.marker(pickup, { icon: pinIcon(false) }).addTo(map).bindTooltip(L('Vyzvednutí', 'Pickup'), { direction: 'top', offset: [0, -22] });
+      if (target) L.marker(target, { icon: pinIcon(true) }).addTo(map).bindTooltip(L('Cíl', 'Destination'), { direction: 'top', offset: [0, -22] });
+      if (coords.length > 1) L.polyline(coords, { color: '#f5c66b', weight: 3, opacity: .85, dashArray: '6 5' }).addTo(map);
+      const b = L.latLngBounds(coords);
+      map.fitBounds(b, { padding: [44, 44] });
+      if (target && b.getNorth() - b.getSouth() > 0.6) map.setZoom(7);
+      setTimeout(() => { if (live.map) live.map.invalidateSize(); }, 120);
+      await pollLive();
+      live.timer = setInterval(pollLive, CONFIG.trackPollMs);
+    }
+    async function pollLive() {
+      const map = live.map, id = live.order;
+      if (!map || !id) return;
+      try {
+        const r = await fetch(`${CONFIG.driverEndpoint}/${encodeURIComponent(id)}`, { signal: AbortSignal.timeout(6000) });
+        if (r.status === 404) { setBadgeLive(L('Rezervace není v dispečinku', 'Booking not in dispatch'), 'off'); clearLiveStats(L('dispečink', 'dispatch')); return; }
+        if (!r.ok) throw new Error();
+        const d = await r.json();
+        if (d.source) { const s = $('#live-src'); if (s) s.textContent = d.source; }
+        if (!d.assigned) {
+          setBadgeLive(L('Čeká na přidělení řidiče', 'Waiting for driver assignment'), 'off');
+          if (live.marker) { map.removeLayer(live.marker); live.marker = null; }
+          clearLiveStats();
+          return;
+        }
+        const hasRealPos = Number.isFinite(d.lat) && Number.isFinite(d.lng);
+        const along = live.route.length > 1 ? pointAlong(live.route, d.progress || 0) : null;
+        const pos = hasRealPos ? [d.lat, d.lng] : along && along.point;
+        if (!pos) { setBadgeLive(L('Řidič nevysílá polohu', 'Driver not broadcasting'), 'off'); clearLiveStats(); return; }
+        if (!live.marker) live.marker = L.marker(pos, { icon: carIcon(), zIndexOffset: 900 }).addTo(map);
+        else live.marker.setLatLng(pos);
+        if (!map.getBounds().contains(pos)) map.panTo(pos, { animate: true });
+        const remainKm = Number.isFinite(d.remainingKm) ? d.remainingKm : (along ? along.remainKm : 0);
+        const speed = Math.max(8, Number(d.speedKmh) || 32);
+        const etaSec = Number.isFinite(d.etaSec) ? d.etaSec : Math.round((remainKm / speed) * 3600);
+        const doneP = (d.progress || 0) >= 1;
+        setBadgeLive(doneP ? L('Řidič je na místě', 'Driver is at the spot') : `${L('Jede', 'En route')} · ${Math.round((d.progress || 0) * 100)} %`);
+        const prog = $('#live-prog'); if (prog) prog.style.width = `${Math.round((d.progress || 0) * 100)}%`;
+        const eta = $('#live-eta'); if (eta) eta.textContent = etaSec <= 0 ? L('teď', 'now') : `${Math.max(1, Math.round(etaSec / 60))} min`;
+        const dist = $('#live-dist');
+        if (dist) dist.textContent = `${remainKm.toFixed(1).replace('.', lang === 'cs' ? ',' : '.')} km`;
+        const upd = $('#live-upd');
+        if (upd) {
+          const age = d.updatedAt ? Math.max(0, Math.round((Date.now() - new Date(d.updatedAt).getTime()) / 1000)) : null;
+          upd.textContent = age === null ? '—' : age < 5 ? L('právě teď', 'just now') : L(`před ${age} s`, `${age} s ago`);
+        }
+      } catch {
+        setBadgeLive(L('Dispečink nedostupný', 'Dispatch unreachable'), 'err');
+      }
+    }
+    function renderOrder(id) {
+      const o = orders.find(x => x.id === id);
+      if (!o) { renderMissing(); return; }
+      const running = simId === id, done = o.stage === 6, e = o.ext;
+      const dl = cancelDeadline(o);
+      const meet = MEETS[e.meet];
+      app.innerHTML = head(`${L('Rezervace', 'Booking')} ${esc(o.id)}`, o.cancelled ? L('Rezervace <em>zrušena.</em>', 'Booking <em>cancelled.</em>') : done ? L('Jste na <em>místě.</em>', 'You have <em>arrived.</em>') : L('Vše běží <em>podle plánu.</em>', 'All going <em>to plan.</em>'), o.demo ? L('Rezervace je zatím jen v tomto prohlížeči, backend ji nedostal. Spusť server a poloha řidiče se začne zobrazovat.', 'This booking only exists in this browser; the backend never received it. Start the server and driver tracking will light up.') : L('Rezervace je na serveru. Platbu a polohu řidiče drží backend.', 'The booking lives on the server. Payment and driver position are held by the backend.'))
+        + `<div class="toolbar"><a class="back-link" style="margin:0" href="#/jizdy">${icon('arrow')}${t('nav.trips')}</a><span class="status ${o.cancelled ? 'off' : ''}">${o.cancelled ? L('Zrušeno', 'Cancelled') : t('stages')[o.stage]}</span></div>
+        <div class="order-grid"><div class="o-det">
+          <div class="points"><div class="point">${esc(placeName(o.from))}<small>${dtLbl(o.date, o.time)}${o.delayed ? L(' · posunuto o 30 min', ' · shifted by 30 min') : ''}</small></div><div class="point">${esc(placeName(o.to))}<small>${FLEET[o.car].label} · ${t('pax')(o.pax)}</small></div></div>
+          <div class="dline"><span>${L('Cena', 'Price')}</span><span>${money(o.total)}${o.est ? ` · ${L('orientační', 'estimate')}` : ''}</span></div>
+          <div class="dline"><span>${L('Platba', 'Payment')}</span><span>${t('pay')[o.pay] || o.pay}</span></div>
+          <div class="dline"><span>${L('Zavazadla', 'Luggage')}</span><span>${Number(e.bagsBig) || 0}× ${L('velké', 'large')} · ${Number(e.bagsSmall) || 0}× ${L('příruční', 'cabin')}${e.pram ? ` · ${L('kočárek', 'pram')}` : ''}</span></div>
+          ${e.seats ? `<div class="dline"><span>${L('Autosedačky', 'Child seats')}</span><span>${Number(e.seats)}× ${SEATS[e.seatType]?.[lang] || ''} · ${L('zdarma', 'free')}</span></div>` : ''}
+          ${e.flight ? `<div class="dline"><span>${L('Let', 'Flight')}</span><span>${esc(e.flight)}</span></div>` : ''}
+          ${meet && e.fromAirport ? `<div class="dline"><span>${L('Místo setkání', 'Meeting point')}</span><span>${meet.t} · ${meet.s}</span></div>` : ''}
+          ${e.roundtrip ? `<div class="dline"><span>${L('Zpáteční', 'Return')}</span><span>${dtLbl(e.retDate, e.retTime)}</span></div>` : ''}
+          ${e.notes ? `<div class="dline"><span>${L('Poznámka', 'Note')}</span><span>${esc(e.notes)}</span></div>` : ''}
+          <div class="dline"><span>${L('Bezplatné storno do', 'Free cancellation until')}</span><span>${dl.when.toLocaleString(lang === 'cs' ? 'cs-CZ' : 'en-GB', { timeZone: TZ, day: 'numeric', month: 'numeric', hour: '2-digit', minute: '2-digit' })} · ${dl.hrs} h</span></div>
+          <div class="driver"><div class="avatar">${icon('user')}</div><div><strong id="driver-name">${o.stage >= 2 ? L('Řidič přiřazen dispečinkem', 'Driver assigned by dispatch') : L('Čeká na přiřazení řidiče', 'Waiting for driver assignment')}</strong><p>${FLEET[o.car].model[lang] || FLEET[o.car].model.cs}</p><p id="driver-live">${o.liveOnServer ? L('Poloha prýská z řidičské aplikace', 'Position streaming from the driver app') : L('Jakmile řidič vyjede, uvidíš jeho reálnou polohu na mapě', 'Once the driver sets off you will see the real position on the map')}</p></div></div>
+          <div class="ctrls"><button class="btn btn-ghost btn-small" type="button" data-a="again" data-v="${esc(id)}">${L('Objednat znovu', 'Book again')}</button>
+          <button class="btn btn-ghost btn-small" type="button" data-a="voucher" data-v="${esc(id)}">${icon('ticket')}${L('Stáhnout voucher', 'Download voucher')}</button>
+          ${!o.cancelled && !done ? `<button class="btn btn-ghost btn-small" type="button" data-a="cancel" data-v="${esc(id)}">${L('Zrušit', 'Cancel')}</button>` : ''}
+          ${done && !reviews.some(r => r.orderId === id) ? `<button class="btn btn-solid btn-small" type="button" data-a="review" data-v="${esc(id)}">${L('Ohodnotit jízdu', 'Rate the ride')}</button>` : ''}</div></div>
+        <div class="o-map">${trackingPanel(o)}
+          <ol class="timeline">${t('stages').map((s, i) => `<li class="${i < o.stage ? 'done' : i === o.stage ? 'now' : ''}"><span class="tdot">${i < o.stage ? icon('check') : i + 1}</span>${s}</li>`).join('')}</ol>
+          <div class="ctrls">
+            <button class="btn btn-solid btn-small" type="button" data-a="live-toggle" data-v="${esc(id)}">${icon(running ? 'pause' : 'play')}${running ? L('Zastavit pohyb řidiče', 'Stop driver movement') : L('Spustit pohyb řidiče', 'Start driver movement')}</button>
+            ${!done && !o.cancelled ? `<button class="btn btn-ghost btn-small" type="button" data-a="next" data-v="${esc(id)}">${L('Další stav', 'Next status')} ${icon('arrow')}</button>` : ''}
+            <button class="btn btn-ghost btn-small" type="button" data-a="live-refresh" data-v="${esc(id)}">${icon('satellite')}${L('Obnovit polohu', 'Refresh position')}</button>
+          </div>
+          ${e.flight && o.stage < 4 ? `<button class="text-link" style="font-size:11px;margin-top:15px" type="button" data-a="delay" data-v="${esc(id)}" ${o.delayed ? 'disabled' : ''}>${o.delayed ? L('Čas podání posunut o 30 minut', 'Pickup shifted by 30 minutes') : L('Simulovat zpoždění letu +30 min', 'Simulate a 30 min flight delay')}</button>` : ''}
+        </div></div></section>`;
+      startLive(o);
+    }
+    function renderReviews() {
+      app.innerHTML = head(L('Hodnocení', 'Reviews'), L('Skutečné jízdy.<br>Skutečná <em>slova.</em>', 'Real rides.<br>Real <em>words.</em>'), L('Hodnocení se zobrazí po dokončení jízdy. Nevymýšlíme si zákazníky ani hvězdičky.', 'Reviews appear after a completed ride. We do not invent customers or stars.'))
+        + (reviews.length ? reviews.map(r => { const o = orders.find(x => x.id === r.orderId); return `<article class="review"><div class="stars" aria-label="${r.rating}/5">${Array.from({ length: r.rating }, () => icon('star')).join('')}</div><p class="review-txt">${esc(r.text)}</p><div class="review-by"><span>${esc(r.name || L('Host', 'Guest'))}</span><span>${o ? esc(`${placeName(o.from)} → ${placeName(o.to)}`) : ''}</span><span>${L('Ukázkové hodnocení · jen v tomto prohlížeči', 'Demo review · this browser only')}</span></div></article>`; }).join('')
+          : `<div class="empty">${icon('msg')}<h2>${L('Zatím tu nejsou hodnocení', 'No reviews yet')}</h2><p>${L('Hodnotit může jen klient, který u nás dojel. Tady se zobrazují hodnocení z dokončených jízd tohoto prohlížeče, žádné rukou psané recenze.', 'Only clients who actually completed a ride can rate it. This page shows reviews from completed rides in this browser – never hand-written samples.')}</p><a class="btn btn-solid" href="#/jizdy">${t('nav.trips')} ${icon('arrow')}</a></div>`)
+        + '</section>';
+    }
+    const faqList = items => items.length ? items.map(f => `<details class="faq"><summary>${esc(f.q[lang] || f.q.cs)}</summary><p>${esc(f.a[lang] || f.a.cs)}</p></details>`).join('') : `<p class="fine">${L('Nic jsme nenašli. Zkuste „cena“, „zavazadla“ nebo „let“.', 'Nothing found. Try "price", "luggage" or "flight".')}</p>`;
+    function renderHelp() {
+      app.innerHTML = head(L('Nápověda', 'Help'), L('Ptejte se.<br>Rádi <em>odpovíme.</em>', 'Ask us.<br>We are <em>happy to help.</em>'), L('Nejčastější dotazy k rezervaci, ceně, letům i platbě.', 'Frequent questions about booking, price, flights and payment.'))
+        + `<div class="split"><div><label class="search">${icon('search')}<input id="faq-q" type="search" placeholder="${L('Např. zpoždění letu', 'e.g. flight delay')}" aria-label="${L('Hledat', 'Search')}"></label><div id="faq-list">${faqList(FAQ)}</div></div>
+        <aside class="aside"><h2>${L('Nenašli jste odpověď?', 'Still stuck?')}</h2><p>${L('Průvodce vám poradí s rezervací, zavazadly nebo autosedačkou přímo tady v prohlížeči.', 'The assistant helps with bookings, luggage or child seats right here in your browser.')}</p>
+        <button class="btn btn-ghost" type="button" data-a="chat">${icon('msg')}${L('Zeptat se průvodce', 'Ask the assistant')}</button>
+        <p class="fine">${L('Jde o lokální nápovědu, ne o živý dispečink. Zprávy se nikam neodesílají.', 'This is a local helper, not live dispatch. Messages are not sent anywhere.')}</p>
+        <div class="links"><a class="text-link" href="${SITE.faq}" target="_blank" rel="noopener">${L('Kompletní FAQ', 'Full FAQ')} ↗</a><a class="text-link" href="${SITE.admin}" target="_blank" rel="noopener">${L('Správa skutečných rezervací', 'Manage real bookings')} ↗</a><a class="text-link" href="${SITE.app}" target="_blank" rel="noopener">${L('Mobilní aplikace', 'Mobile app')} ↗</a><button class="text-link" type="button" data-a="privacy">${L('O ukázce a datech', 'About the demo and data')}</button></div></aside></div></section>`;
+    }
+    function renderRef() {
+      app.innerHTML = head(L('Doporučení', 'Referrals'), L('Sdílejte.<br>Jezděte <em>výhodněji.</em>', 'Share it.<br>Ride for <em>less.</em>'), L('Váš kód dá kamarádovi slevu na první jízdu.', 'Your code gives a friend a discount on their first ride.'))
+        + `<div class="split"><div><h2 class="section-h">${L('Váš kód', 'Your code')}</h2><div class="ref-code"><strong>${refCode}</strong><button class="icon-btn" type="button" data-a="copy-code" aria-label="${L('Kopírovat', 'Copy')}">${icon('copy')}</button></div>
+        <button class="btn btn-solid wide" type="button" data-a="share">${L('Zkopírovat pozvánku', 'Copy invitation')} ${icon('arrow')}</button>
+        <p class="fine">${L('Ukázková funkce: kód je uložený jen v tomto prohlížeči a slevu uplatní pouze zdejší kalkulačka. Skutečné odměny by vyžadovaly zákaznický účet na straně serveru.', 'Demo feature: the code lives only in this browser and the discount applies only to this calculator. Real rewards would need a server-side customer account.')}</p></div>
+        <ol class="steps-ol"><li>${L('Pošlete kamarádovi kód nebo odkaz.', 'Send your friend the code or link.')}</li><li>${L('Zadá ho v detailech první rezervace.', 'They enter it in the details of their first booking.')}</li><li>${L('Kalkulačka sníží cenu o 10 %. Kódy se nesčítají.', 'The calculator lowers the price by 10 %. Codes do not stack.')}</li></ol></div></section>`;
+    }
+    function renderMissing() {
+      app.innerHTML = head('Wayro', L('Tady <em>nic není.</em>', 'Nothing <em>here.</em>'), L('Tato stránka neexistuje. Vraťme se tam, kde začíná cesta.', 'This page does not exist. Let us head back to the start.')) + `<a class="btn btn-solid" href="#/" style="margin-top:26px">${L('Na hlavní stranu', 'Go home')} ${icon('arrow')}</a></section>`;
+    }
+
+    /* ---------- router ---------- */
+    const stopSim = () => { if (timer) clearInterval(timer); timer = null; simId = null; stopLive(); };
+    function route() {
+      menu(false); stopSim();
+      if (modal.open) modal.close();
+      let h = location.hash.slice(1) || '/';
+      if (!h.startsWith('/')) h = '/';
+      const [p, qs = ''] = h.split('?');
+      path = p.replace(/\/$/, '') || '/';
+      const urlParams = new URLSearchParams(qs || window.location.search);
+      const ref = urlParams.get('ref');
+      if (ref && /^WY-[A-Z0-9]{6}$/.test(ref) && ref !== refCode && !orders.some(o => !o.cancelled)) { S.promo = ref; S.discount = .1; }
+
+      // Обработка возврата после успешной оплаты из платёжного шлюза
+      const paidOrderId = urlParams.get('orderId');
+      const paymentStatus = urlParams.get('payment');
+      if (paidOrderId && paymentStatus === 'success') {
+        const found = orders.find(x => x.id === paidOrderId);
+        if (found) {
+          found.payState = 'paid';
+          save();
+          toast(L('Platba byla úspěšně přijata a potvrzena bankou!', 'Payment was successfully received and confirmed!'));
+        }
+      }
+      const home = path === '/';
+      document.body.classList.toggle('is-sub', !home);
+      $('#stats').hidden = !home;
+      const active = { '/sluzby': 'services', '/vozy': 'fleet', '/letiste': 'airport', '/firmy': 'business', '/napoveda': 'help', '/jizdy': 'trips' }[path] || '';
+      $$('.nav-link').forEach(a => { const on = a.dataset.p === active; a.classList.toggle('active', on); on ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current'); });
+      const R = { '/': renderHome, '/sluzby': renderServices, '/vozy': renderFleet, '/letiste': renderAirport, '/firmy': renderBusiness, '/jizdy': renderTrips, '/hodnoceni': renderReviews, '/napoveda': renderHelp, '/doporuceni': renderRef };
+      if (R[path]) R[path]();
+      else if (path.startsWith('/jizda/')) { try { renderOrder(decodeURIComponent(path.slice(7))); } catch { renderMissing(); } }
+      else renderMissing();
+      const titles = { '/': L('Taxi na letiště Praha', 'Prague airport taxi'), '/sluzby': t('nav.services'), '/vozy': t('nav.fleet'), '/letiste': t('nav.airport'), '/firmy': t('nav.business'), '/jizdy': t('nav.trips'), '/hodnoceni': L('Hodnocení', 'Reviews'), '/napoveda': t('nav.help'), '/doporuceni': L('Doporučení', 'Referrals') };
+      document.title = `Wayro | ${titles[path] || L('Rezervace', 'Booking')}`;
+      count(); anim(app); window.scrollTo(0, 0);
+      if (navCount++ > 0 && !home) { const hh = $('h1', app); hh?.setAttribute('tabindex', '-1'); hh?.focus({ preventScroll: true }); }
+    }
+
+    /* ---------- modal ---------- */
+    function open(slim = false) { modal.classList.toggle('slim', slim); if (!modal.open) { lastFocus = document.activeElement; modal.showModal(); } document.body.classList.add('modal-open'); }
+    modal.addEventListener('close', () => { document.body.classList.remove('modal-open'); document.body.append($('#toasts')); kind = ''; if (lastFocus?.isConnected) lastFocus.focus({ preventScroll: true }); });
+    modal.addEventListener('click', e => { if (e.target === modal && !busy) closeModal(); });
+    modal.addEventListener('cancel', e => { if (busy) e.preventDefault(); else if (kind === 'book') { readModal(); syncHome(); } });
+    function closeModal() { if (kind === 'book') { readModal(); syncHome(); } modal.close(); }
+    const dHead = (eyebrow, title, desc = '') => `<div class="shell"><button class="x" type="button" data-a="close" aria-label="${L('Zavřít', 'Close')}">${icon('close')}</button><p class="d-eyebrow">${eyebrow}</p><h2 class="d-title" id="d-title">${title}</h2>${desc ? `<p class="d-desc">${desc}</p>` : ''}`;
+
+    function summary() {
+      const q = fare();
+      const meet = MEETS[S.meet];
+      return `<aside class="summary"><h3 class="sum-h">${L('Vaše jízda', 'Your ride')}</h3>
+        <p class="sum-route">${esc(placeName(S.from))}<span>↓</span>${S.mode === 'hourly' ? t('hrs')(S.hours) : esc(placeName(S.to))}</p>
+        <p class="sum-det">${dtLbl(S.date, S.time)}<br>${FLEET[S.car].label} · ${t('pax')(S.pax)}${S.roundtrip ? `<br>${L('Zpět', 'Back')}: ${dtLbl(S.retDate, S.retTime)}` : ''}${S.mode === 'from' && meet ? `<br>${meet.t} · ${meet.s}` : ''}</p>
+        <div class="pline-wrap"><div class="pline"><span>${S.mode === 'hourly' ? L('Dispozice', 'Hourly hire') : L('Transfer', 'Transfer')}</span><span>${money(q.base)}</span></div>
+        ${q.ret ? `<div class="pline"><span>${L('Zpáteční jízda', 'Return ride')}</span><span>${money(q.ret)}</span></div>` : ''}
+        ${S.seats ? `<div class="pline"><span>${L('Autosedačky', 'Child seats')} ×${S.seats}</span><span>${L('zdarma', 'free')}</span></div>` : ''}
+        ${q.disc ? `<div class="pline disc"><span>${L('Sleva', 'Discount')} ${Math.round(S.discount * 100)} %</span><span>−${money(q.disc)}</span></div>` : ''}</div>
+        <div class="total-row"><span>${q.kind === 'fixed' ? L('Celkem', 'Total') : L('Odhad', 'Estimate')}</span><strong>${money(q.total)}</strong></div>
+        <p class="sum-inc">${L('Cedulka se jménem', 'Name sign')}<br>${L('Autosedačka zdarma', 'Free child seat')}<br>${L('Wi-Fi a voda ve voze', 'Wi-Fi and water on board')}<br>${L('Platba až po jízdě', 'Pay after the ride')}</p>
+        <p class="fine" style="margin-top:14px">${q.kind === 'fixed' ? L('Pevná cena za vozidlo.', 'Fixed price per vehicle.') : L('Orientační cena, potvrdí dispečer.', 'Estimate, confirmed by dispatch.')}<br>${L('Ukázka bez odeslání a bez platby.', 'Demo: nothing sent, nothing charged.')}</p></aside>`;
+    }
+    const counter = (key, label, note, max, ic) => `<div class="counter-row"><div class="c-label">${icon(ic)}<span>${label}<small>${note}</small></span></div><div class="counter"><button type="button" data-a="cnt" data-k="${key}" data-d="-1" aria-label="−" ${S[key] === 0 ? 'disabled' : ''}>${icon('minus')}</button><output id="c-${key}">${S[key]}</output><button type="button" data-a="cnt" data-k="${key}" data-d="1" aria-label="+" ${S[key] >= max ? 'disabled' : ''}>${icon('plus')}</button></div></div>`;
+
+    function renderBook() {
+      const one = step === 1;
+      const car = FLEET[S.car];
+      mbody.innerHTML = dHead(one ? L('01 / Detaily jízdy', '01 / Ride details') : L('02 / Kontakt a platba', '02 / Contact and payment'),
+        one ? L('Ať sedí každý detail.', 'Let us get the details right.') : L('Kam vám pošleme potvrzení?', 'Where should we confirm?'),
+        one ? L('Vůz, zavazadla a autosedačky. Vše zdarma navíc.', 'Vehicle, luggage and child seats. All extras free.') : L('Dispečer rezervaci potvrzuje e-mailem. V ukázce se nic neodesílá.', 'Dispatch confirms by e-mail. Nothing is sent in this demo.'))
+        + `<div class="checkout"><div class="co-main"><form id="co-form">${one ? `
+        <span class="s-label" style="margin-top:0">${L('Vůz', 'Vehicle')}</span>
+        <div class="picks">${Object.entries(FLEET).map(([k, c]) => `<label class="pick"><input type="radio" name="car" value="${k}" ${S.car === k ? 'checked' : ''}><span>${c.label}<small style="display:block;color:#867f6d">${L('max', 'max')} ${c.pax} · ${c.bags} ${L('zav.', 'bags')}</small></span><small class="pick-price">${money(fare({ ...S, car: k }).total)}</small></label>`).join('')}</div>
+        ${S.mode === 'from' ? `<span class="s-label">${L('Kde vás vyzvedneme', 'Where we meet you')}</span><div class="picks">${Object.entries(MEETS).map(([k, m]) => `<label class="pick ${k === 'hn' ? 'wide-pick' : ''}"><input type="radio" name="meet" value="${k}" ${S.meet === k ? 'checked' : ''}><span>${m.t}<small style="display:block;color:#867f6d">${m.s}</small></span></label>`).join('')}</div>` : ''}
+        <div class="form-grid"><label class="form-field"><span>${L('Číslo letu', 'Flight number')}${S.mode === 'from' ? '' : L(' (nepovinné)', ' (optional)')}</span><input class="input" name="flight" value="${esc(S.flight)}" placeholder="LH1400" maxlength="9" style="text-transform:uppercase"></label>
+        <label class="form-field"><span>${L('Jméno na cedulku', 'Name for the sign')}</span><input class="input" name="sign" value="${esc(S.sign || '')}" placeholder="${L('Např. Novák', 'e.g. Novak')}" maxlength="50"></label></div>
+        <span class="s-label">${L('Zavazadla', 'Luggage')}</span>
+        ${counter('bagsBig', L('Velké zavazadlo', 'Large suitcase'), L('do 75 cm', 'up to 75 cm'), car.bags, 'case')}
+        ${counter('bagsSmall', L('Příruční zavazadlo', 'Cabin bag'), L('do 55 cm', 'up to 55 cm'), 4, 'case')}
+        <label class="check"><input type="checkbox" name="pram" ${S.pram ? 'checked' : ''}>${L('Vezu kočárek nebo sportovní vybavení', 'I have a pram or sports gear')}</label>
+        <span class="s-label">${L('Děti', 'Children')}</span>
+        ${counter('seats', L('Autosedačka', 'Child seat'), L('zdarma', 'free of charge'), Math.min(car.seats, S.pax), 'seat')}
+        ${S.seats ? `<label class="form-field" style="margin-top:15px"><span>${L('Typ sedačky', 'Seat type')}</span><select class="input" name="seatType">${Object.entries(SEATS).map(([k, v]) => `<option value="${k}" ${S.seatType === k ? 'selected' : ''}>${v[lang] || v.cs}</option>`).join('')}</select></label>` : ''}
+        ${car.seats === 0 ? `<p class="note">${L('Mercedes E autosedačky nenabízí. Vyberte Sedan, Minibus nebo Mercedes V.', 'Mercedes E offers no child seats. Choose Sedan, Minibus or Mercedes V.')}</p>` : ''}
+        <label class="form-field" style="margin-top:18px"><span>${L('Poznámka pro řidiče', 'Note for the driver')}</span><textarea class="input" name="notes" rows="2" maxlength="400" placeholder="${L('Zastávka po cestě, nadměrné zavazadlo…', 'Stop on the way, oversized luggage…')}">${esc(S.notes)}</textarea></label>
+        <label class="s-label" for="promo">${L('Slevový kód', 'Promo code')}</label><div class="promo-row"><input class="input" id="promo" value="${esc(S.promo)}" placeholder="WAYRO10" maxlength="20"><button class="btn btn-ghost btn-small" type="button" data-a="promo-apply">${L('Použít', 'Apply')}</button></div>
+        <p class="promo-msg" id="promo-msg" role="status">${S.discount ? L(`Sleva ${Math.round(S.discount * 100)} % je aktivní.`, `${Math.round(S.discount * 100)} % discount active.`) : L('Zadej kód kamaráda nebo WAYRO10 – sleva 10 %.', "Enter a friend's code or WAYRO10 – 10 % off.")}</p>
+        <p class="err" id="co-err" role="alert" hidden></p><div class="d-actions"><button class="btn btn-solid" type="submit">${L('Pokračovat', 'Continue')} ${icon('arrow')}</button></div>` : `
+        <label class="form-field"><span>${L('Jméno a příjmení', 'Full name')}</span><input class="input" name="name" value="${esc(S.name)}" minlength="2" maxlength="60" autocomplete="name" required></label>
+        <div class="form-grid"><label class="form-field"><span>${L('Telefon', 'Phone')}</span><input class="input" name="phone" type="tel" value="${esc(S.phone)}" placeholder="+420 777 123 456" maxlength="25" autocomplete="tel" required></label>
+        <label class="form-field"><span>E-mail</span><input class="input" name="email" type="email" value="${esc(S.email)}" placeholder="jan@example.com" maxlength="120" autocomplete="email" required></label></div>
+        <span class="s-label">${L('Platba', 'Payment')}</span>
+        ${[['cash', 'cash'], ['card', 'card'], ['online', 'globe']].map(([k, ic]) => `<label class="pick" style="margin-bottom:8px"><input type="radio" name="pay" value="${k}" ${S.pay === k ? 'checked' : ''}>${icon(ic)}<span>${t('pay')[k]}<small style="display:block;color:#867f6d">${t('pay')[k + 'S']}</small></span></label>`).join('')}
+        <div class="banner" style="font-size:11.5px">${icon('info')}<p>${S.pay === 'online' && !CONFIG.bookingEndpoint ? L('Online platba běží přes platební bránu na serveru. Bez spuštěného backendu zvol platbu u řidiče, jak je to ve Wayro zvykem.', 'Online payment runs through the gateway on the server. If the backend is not running, choose payment to the driver, which is Wayro standard.') : L('Neplatíte nic předem. Rezervace je ve stavu zpracování, dokud ji dispečer nepotvrdí e-mailem.', 'You pay nothing upfront. The booking stays in processing until dispatch confirms it by e-mail.')}</p></div>
+        <label class="check"><input type="checkbox" name="consent" ${S.consent ? 'checked' : ''} required><span>${L('Souhlasím se zpracováním údajů pro rezervaci a s podmínkami Wayro. Závazná je až potvrzení dispečinkem.', 'I agree to data processing for this booking and to Wayro terms. It becomes binding only after dispatch confirms it.')}</span></label>
+        <p class="err" id="co-err" role="alert" hidden></p>
+        <div class="d-actions"><button class="btn btn-ghost" type="button" data-a="co-back">${L('Zpět', 'Back')}</button><button class="btn btn-solid" id="co-send" type="submit">${L('Odeslat rezervaci', 'Send booking')} ${icon('arrow')}</button></div>`}</form></div><div id="sum">${summary()}</div></div></div>`;
+      modal.scrollTop = 0;
+      syncHome();
+    }
+    function readModal() {
+      const f = $('#co-form');
+      if (!f) return;
+      const d = new FormData(f);
+      if (step === 1) {
+        S.flight = String(d.get('flight') || '').trim().toUpperCase();
+        S.sign = String(d.get('sign') || '').trim();
+        S.notes = String(d.get('notes') || '').trim();
+        S.pram = d.has('pram');
+        if (d.get('meet')) S.meet = String(d.get('meet'));
+        if (d.get('seatType')) S.seatType = String(d.get('seatType'));
+      } else {
+        ['name', 'phone', 'email', 'pay'].forEach(k => { S[k] = String(d.get(k) || '').trim(); });
+        S.consent = d.has('consent');
+      }
+    }
+    function refreshSummary() {
+      if ($('#sum')) $('#sum').innerHTML = summary();
+      $$('input[name="car"]').forEach(i => { const s = i.closest('.pick')?.querySelector('.pick-price'); if (s) s.textContent = money(fare({ ...S, car: i.value }).total); });
+      syncHome();
+    }
+    const coErr = m => { const e = $('#co-err'); if (e) { e.textContent = m; e.hidden = false; e.scrollIntoView({ block: 'nearest' }); } };
+    function startBooking(focusPromo = false) {
+      readHome(); fitVehicle();
+      const err = validateRide();
+      if (err) { const n = $('#book-err'); if (n) { n.textContent = err; n.hidden = false; } else toast(err); syncHome(); return; }
+      if ($('#book-err')) $('#book-err').hidden = true;
+      if (S.mode === 'from') S.flight = S.flight || '';
+      kind = 'book'; step = 1; renderBook(); open();
+      if (focusPromo) setTimeout(() => $('#promo')?.focus(), 90);
+    }
+    function applyPromo() {
+      readModal();
+      const v = $('#promo').value.trim().toUpperCase();
+      const used = orders.some(o => !o.cancelled);
+      let err = '', disc = 0;
+      if (!v) { S.promo = ''; S.discount = 0; }
+      else if (v === 'WAYRO10') disc = .1;
+      else if (v === 'PRG15') { if (used) err = L('Kód platí jen pro první rezervaci.', 'This code is for the first booking only.'); else disc = .15; }
+      else if (/^WY-[A-Z0-9]{6}$/.test(v)) { if (v === refCode) err = L('Vlastní kód nelze použít.', 'You cannot use your own code.'); else if (used) err = L('Kód kamaráda platí na první jízdu.', "A friend's code applies to the first ride."); else disc = .1; }
+      else err = L('Kód neznáme. Zkuste WAYRO10.', 'Unknown code. Try WAYRO10.');
+      if (!err) { S.promo = v; S.discount = disc; }
+      const m = $('#promo-msg');
+      m.textContent = err || (disc ? L(`Sleva ${Math.round(disc * 100)} % byla uplatněna.`, `${Math.round(disc * 100)} % discount applied.`) : L('Kód byl odebrán.', 'Code removed.'));
+      m.style.color = err ? '#e6b98f' : '';
+      refreshSummary();
+    }
+    function validateDetails() {
+      const car = FLEET[S.car];
+      if (S.flight && !/^[A-Z0-9]{2,3}\s?\d{1,4}$/.test(S.flight)) return L('Zkontrolujte číslo letu, například LH1400.', 'Check the flight number, e.g. LH1400.');
+      if (S.mode === 'from' && !S.flight) return L('U jízdy z letiště prosím uveďte číslo letu, ať můžeme sledovat přílet.', 'For an airport pickup please add the flight number so we can track the arrival.');
+      if (S.seats > car.seats) return L(`${car.label} nabízí ${car.seats} autosedaček. Zvolte jiný vůz.`, `${car.label} offers ${car.seats} child seats. Please pick another vehicle.`);
+      if (S.seats > S.pax) return L('Autosedaček nemůže být víc než cestujících.', 'There cannot be more child seats than passengers.');
+      if (S.bagsBig > car.bags || S.bagsBig * 2 + S.bagsSmall + (S.pram ? 2 : 0) > car.bags * 2 + 2) return L(`Tolik zavazadel se do vozu ${car.label} nevejde. Zvolte větší vůz.`, `That much luggage will not fit in the ${car.label}. Please pick a larger vehicle.`);
+      if ((S.promo === 'PRG15' || S.promo.startsWith('WY-')) && orders.some(o => !o.cancelled)) return L('Sleva na první jízdu už není dostupná, použijte WAYRO10.', 'The first-ride discount is no longer available; use WAYRO10.');
+      return validateRide();
+    }
+    function buildOrder(demo = true) {
+      const q = fare();
+      return {
+        id: `WY-${uid().slice(0, 6).toUpperCase()}`, at: new Date().toISOString(),
+        from: S.from, to: S.mode === 'hourly' ? L(`Dispozice ${S.hours} h`, `${S.hours} h hire`) : S.to,
+        date: S.date, time: S.time, car: S.car, pax: S.pax, total: q.total, est: q.kind !== 'fixed',
+        stage: 0, cancelled: false, demo, pay: S.pay, payState: demo ? 'demo' : 'pending',
+        name: S.name, phone4: S.phone.replace(/\D/g, '').slice(-4),
+        ext: { mode: S.mode, hours: S.hours, flight: S.flight, meet: S.meet, fromAirport: S.mode === 'from', sign: S.sign || S.name, seats: S.seats, seatType: S.seatType, bagsBig: S.bagsBig, bagsSmall: S.bagsSmall, pram: S.pram, notes: S.notes, promo: S.promo, roundtrip: S.roundtrip, retDate: S.retDate, retTime: S.retTime, long: longRide() }
+      };
+    }
+    async function sendBooking() {
+      if (busy) return;
+      readModal();
+      const digits = S.phone.replace(/\D/g, '');
+      if (S.name.length < 2 || digits.length < 9 || digits.length > 15) { coErr(L('Vyplňte jméno a platné telefonní číslo.', 'Enter your name and a valid phone number.')); return; }
+      if (!/^[^@\s]+@[^@\s.]+\.[^@\s]{2,}$/.test(S.email)) { coErr(L('Zkontrolujte e-mail, pošleme na něj potvrzení.', 'Check the e-mail, the confirmation goes there.')); return; }
+      if (!S.consent) { coErr(L('Bez souhlasu s podmínkami rezervaci nelze odeslat.', 'The booking cannot be sent without accepting the terms.')); return; }
+      const err = validateDetails();
+      if (err) { coErr(err); return; }
+      busy = true;
+      const btn = $('#co-send');
+      btn.disabled = true; btn.textContent = L('Odesílám…', 'Sending…');
+      try {
+        if (CONFIG.bookingEndpoint) {
+          const url = new URL(CONFIG.bookingEndpoint, location.href);
+          // Разрешаем HTTP для localhost при локальной разработке
+          if (url.protocol !== 'https:' && url.hostname !== 'localhost' && url.hostname !== '127.0.0.1') {
+            throw new Error(L('Rezervace vyžaduje zabezpečený server (HTTPS).', 'Bookings require a secure server (HTTPS).'));
+          }
+          const returnTarget = new URL(location.href);
+          returnTarget.hash = '/jizdy';
+
+          const res = await fetch(url, { 
+            method: 'POST', 
+            credentials: 'same-origin', 
+            headers: { 'Content-Type': 'application/json' }, 
+            body: JSON.stringify({ booking: S, returnUrl: returnTarget.href }), 
+            signal: AbortSignal.timeout(20000) 
+          });
+
+          if (!res.ok) throw new Error(L('Server rezervaci nepotvrdil.', 'The server did not confirm the booking.'));
+          const data = await res.json();
+
+          const receivedId = data.orderId || data.id;
+          if (!receivedId) throw new Error(L('Server nevrátil číslo rezervace.', 'The server returned no booking number.'));
+
+          const real = buildOrder(false); 
+          real.id = receivedId;
+          real.payState = S.pay === 'cash' ? 'cash_on_arrival' : 'pending';
+          orders.unshift(real); 
+          save(); 
+          modal.close();
+
+          // Если сервер предоставил ссылку на платёжный шлюз (Stripe / Bank Gateway)
+          if (data.confirmationUrl && S.pay === 'online') {
+            window.location.href = data.confirmationUrl;
+            return;
+          }
+
+          location.hash = `/jizda/${encodeURIComponent(real.id)}`;
+          return;
+        }
+        const o = buildOrder(true);
+        orders.unshift(o); save();
+        S.name = ''; S.phone = ''; S.email = ''; S.consent = false; S.promo = ''; S.discount = 0;
+        S.flight = ''; S.notes = ''; S.seats = 0; S.pram = false;
+        modal.close();
+        location.hash = `/jizda/${encodeURIComponent(o.id)}`;
+        toast(L('Rezervace uložena lokálně. Spusť backend, aby ji dispečink uviděl a začalo sledování polohy.', 'Booking saved locally. Start the backend so dispatch sees it and live tracking begins.'));
+      } catch (e) {
+        coErr(e.name === 'TimeoutError' ? L('Server neodpověděl včas. Zkuste to prosím znovu.', 'The server did not respond in time. Please try again.') : e.message);
+      } finally {
+        busy = false;
+        if (btn.isConnected) { btn.disabled = false; btn.innerHTML = `${L('Odeslat rezervaci', 'Send booking')} ${icon('arrow')}`; }
+      }
+    }
+
+    function gallery(k, inside = false) {
+      if (!FLEET[k]) return;
+      gCar = k; gIdx = inside && FLEET[k].inside ? 1 : 0; kind = 'gal'; renderGallery(); open();
+    }
+    function renderGallery() {
+      const c = FLEET[gCar], src = gIdx ? c.inside : c.img, two = Boolean(c.inside);
+      mbody.innerHTML = dHead(L('Vozový park', 'Fleet') + ' / ' + c.label, c.model[lang] || c.model.cs, `${L('Cena letiště – Praha', 'Airport – Prague price')}: ${money(c.base)} · ${L('max', 'max')} ${c.pax} ${L('osob', 'people')} · ${c.bags} ${L('zavazadel', 'bags')} · ${c.seats} ${L('autosedaček', 'child seats')}`)
+        + `<img class="gallery-img" src="${src}" alt="${esc(c.label)}"><div class="g-ctrl"><span>${gIdx ? L('Interiér', 'Interior') : L('Exteriér', 'Exterior')} · ${gIdx + 1}/${two ? 2 : 1}</span><div class="g-arrows"><button class="icon-btn" type="button" data-a="g-prev" ${two ? '' : 'disabled'} aria-label="←">${icon('arrow')}</button><button class="icon-btn" type="button" data-a="g-next" ${two ? '' : 'disabled'} aria-label="→">${icon('arrow')}</button></div></div>
+        <p class="fine">${L('Fotografie ilustrují třídu vozu, konkrétní vůz potvrzuje dispečink.', 'Photos illustrate the class; the exact car is confirmed by dispatch.')}</p>
+        <button class="btn btn-solid wide" type="button" data-a="pick-car" data-v="${gCar}">${L('Vybrat', 'Choose')} ${c.label} ${icon('arrow')}</button></div>`;
+      const p = $('[data-a="g-prev"] .icon'); if (p) p.style.transform = 'rotate(180deg)';
+    }
+    function again(id) {
+      const o = orders.find(x => x.id === id); if (!o) return;
+      Object.assign(S, { mode: o.ext.mode || 'from', from: o.from, to: o.ext.mode === 'hourly' ? S.to : o.to, date: plusDays(1), time: o.time, pax: o.pax, car: o.car, hours: o.ext.hours || 3, meet: o.ext.meet || 't1', seats: o.ext.seats || 0, seatType: o.ext.seatType || 'mid', bagsBig: o.ext.bagsBig ?? 1, bagsSmall: o.ext.bagsSmall ?? 1, pram: Boolean(o.ext.pram), notes: o.ext.notes || '', flight: '', promo: '', discount: 0, name: '', phone: '', email: '', consent: false });
+      if (path === '/') { renderHome(); anim(app); } else location.hash = '/';
+      toast(L('Trasa načtena. Zkontrolujte prosím datum a čas.', 'Route loaded. Please check the date and time.'));
+    }
+    function advance(id) {
+      const o = orders.find(x => x.id === id);
+      if (!o || o.cancelled || o.stage >= 6) { stopSim(); return; }
+      o.stage++;
+      if (o.stage === 6) stopSim();
+      save(); renderOrder(id); anim(app);
+      if (o.stage === 6) toast(L('Jízda dokončena. Můžete ji ohodnotit.', 'Ride finished. You can rate it now.'));
+    }
+    async function toggleSandboxDrive(id, btn) {
+      if (btn) btn.disabled = true;
+      const action = simId === id ? 'stop' : 'start';
+      try {
+        const r = await fetch(CONFIG.sandboxDriveEndpoint, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ orderId: id, action }), signal: AbortSignal.timeout(6000)
+        });
+        if (!r.ok) throw new Error();
+        const d = await r.json();
+        simId = d.assigned ? id : null;
+        const o = orders.find(x => x.id === id);
+        if (o) { o.liveOnServer = true; o.stage = Math.max(o.stage, d.assigned ? 3 : o.stage); save(); renderOrder(id); anim(app); }
+        toast(d.assigned ? L('Sandbox jízda spuštěná – polohu teď posílá server.', 'Sandbox ride started – the backend is now streaming the position.') : L('Sandbox jízda zastavena.', 'Sandbox ride stopped.'));
+      } catch {
+        toast(L('Backend neběží. Polohu řidiče umí posílat jen server – spusť `node server.js`.', 'Backend is not running. Only the server can stream the driver position – start `node server.js`.'));
+        if (btn) btn.disabled = false;
+      }
+    }
+    function confirmBox(title, desc, action, id = '') {
+      kind = 'confirm';
+      mbody.innerHTML = dHead(L('Potvrzení', 'Confirm'), title, desc) + `<div class="d-actions"><button class="btn btn-ghost" type="button" data-a="close">${L('Zpět', 'Back')}</button><button class="btn btn-solid" type="button" data-a="${action}" data-v="${esc(id)}">${L('Potvrdit', 'Confirm')}</button></div></div>`;
+      open(true);
+    }
+    function privacy() {
+      kind = 'privacy';
+      mbody.innerHTML = dHead(L('Data a ukázka', 'Data and demo'), L('Na rovinu.', 'Straight talk.')) + `<div class="d-desc">
+        <p>${L('Rezervace a hodnocení se ukládají do localStorage tohoto prohlížeče, takže je vidíte i po obnovění stránky. Není to zákaznický účet – ten vede backend.', 'Bookings and reviews are stored in this browser localStorage, so they survive a reload. It is not a customer account – that lives in the backend.')}</p>
+        <p style="margin-top:14px">${L('Pozici řidiče nikdo nerisuje. Buď ji pošve řidičská aplikace do backendu, nebo se na mapě zobrazí jen plánovaná trasa.', 'The driver position is never invented. Either the driver app pushes it to the backend, or the map shows only the planned route.')}</p>
+        <p style="margin-top:14px">${L('Neukládáme celé telefonní číslo, e-mail ani platební údaje. Číslo karty nikde nezadáváte a žádné peníze neodcházejí.', 'We do not store your full phone number, e-mail or payment data. No card number is entered and no money moves.')}</p>
+        <p style="margin-top:14px">${L('Bez spuštěného backendu se objednávka nikam neposílá. S backendem míří na /api/checkout a platba teče přes platební bránu.', 'Without the backend nothing is sent. With it, the booking goes to /api/checkout and payment runs through the gateway.')}</p>
+        <p style="margin-top:14px">${L('Sledování polohy a letů, potvrzovací e-maily a online platba by vyžadovaly serverovou část.', 'Live tracking, flight data, confirmation e-mails and online payments would require a backend.')}</p></div>
+        <a class="btn btn-ghost wide" href="${SITE.home}" target="_blank" rel="noopener">${L('Otevřít provozní web', 'Open operator site')} ↗</a>
+        <button class="btn btn-solid wide" type="button" data-a="close">${L('Rozumím', 'Got it')}</button></div>`;
+      open(true);
+    }
+    async function copy(text) {
+      try { await navigator.clipboard.writeText(text); toast(L('Zkopírováno.', 'Copied.')); }
+      catch {
+        kind = 'copy';
+        mbody.innerHTML = dHead(L('Pozvánka', 'Invitation'), L('Zkopírujte ručně', 'Copy manually')) + `<textarea class="input" readonly rows="3" style="margin-top:16px">${esc(text)}</textarea></div>`;
+        open(true);
+      }
+    }
+    function download(name, body, type = 'text/plain;charset=utf-8') {
+      const url = URL.createObjectURL(new Blob(['\uFEFF', body], { type }));
+      const a = document.createElement('a'); a.href = url; a.download = name; document.body.append(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+    function voucher(id) {
+      const o = orders.find(x => x.id === id); if (!o) return;
+      const m = MEETS[o.ext.meet], dl = cancelDeadline(o);
+      download(`wayro-${o.id}.txt`, [
+        `WAYRO — ${L('VOUCHER / POTVRZENÍ TRANSFERU', 'VOUCHER / TRANSFER CONFIRMATION')}`, '',
+        `${L('Rezervace', 'Booking')}: ${o.id}`,
+        `${L('Stav', 'Status')}: ${o.cancelled ? L('Zrušeno', 'Cancelled') : t('stages')[o.stage]}`,
+        `${L('Trasa', 'Route')}: ${o.from} -> ${o.to}`,
+        `${L('Vyzvednutí', 'Pickup')}: ${dtLbl(o.date, o.time)} (${TZ})`,
+        `${L('Vůz', 'Vehicle')}: ${FLEET[o.car].label} · ${t('pax')(o.pax)}`,
+        o.ext.flight ? `${L('Let', 'Flight')}: ${o.ext.flight}` : '',
+        o.ext.fromAirport && m ? `${L('Místo setkání', 'Meeting point')}: ${m.t} — ${m.s}` : '',
+        o.ext.seats ? `${L('Autosedačky', 'Child seats')}: ${o.ext.seats}× ${SEATS[o.ext.seatType]?.[lang] || ''}` : '',
+        `${L('Zavazadla', 'Luggage')}: ${o.ext.bagsBig}× ${L('velké', 'large')}, ${o.ext.bagsSmall}× ${L('příruční', 'cabin')}`,
+        `${L('Cena', 'Price')}: ${money(o.total)}${o.est ? ` (${L('orientační', 'estimate')})` : ''}`,
+        `${L('Platba', 'Payment')}: ${t('pay')[o.pay] || o.pay}`,
+        `${L('Bezplatné storno do', 'Free cancellation until')}: ${dl.when.toLocaleString('cs-CZ', { timeZone: TZ })} (${dl.hrs} h)`, '',
+        `${L('Označení', 'Mark')}: ${o.demo ? L('lokální záznam – backend rezervaci nedostal', 'local record – backend did not receive it') : L('odesláno na server', 'sent to the server')}`,
+        L('Voucher slouží k domluvě s řidičem. Konečné potvrzení posílá dispečink e-mailem.', 'The voucher is for arranging pickup with the driver. Final confirmation is sent by dispatch via e-mail.'),
+        L('Skutečnou rezervaci vytvoříte na', 'Make a real booking at') + ' ' + SITE.home
+      ].filter(Boolean).join('\n'));
+      toast(L('Voucher stažen. Jde o ukázkový doklad.', 'Voucher downloaded. It is a demo document.'));
+    }
+    function openReview(id) {
+      const o = orders.find(x => x.id === id);
+      if (!o || o.stage !== 6 || reviews.some(r => r.orderId === id)) return;
+      revId = id; rating = 5; kind = 'review';
+      mbody.innerHTML = dHead(L('Po jízdě', 'After the ride'), L('Jak se vám jelo?', 'How was the ride?'), L('Hodnocení se uloží jen ve vašem prohlížeči.', 'The review is stored in your browser only.'))
+        + `<form id="rev-form"><div class="rate" role="group" aria-label="1–5">${[1, 2, 3, 4, 5].map(v => `<button class="on" type="button" data-a="rate" data-v="${v}" aria-pressed="${v === 5}" aria-label="${v}">${icon('star')}</button>`).join('')}</div>
+        <label class="form-field"><span>${L('Vaše zkušenost', 'Your experience')}</span><textarea class="input" name="text" rows="4" minlength="10" maxlength="500" required placeholder="${L('Co se povedlo? Co zlepšit?', 'What went well? What could be better?')}"></textarea></label>
+        <button class="btn btn-solid wide" type="submit">${L('Uložit hodnocení', 'Save review')} ${icon('arrow')}</button></form></div>`;
+      open(true);
+    }
+    function chat() {
+      kind = 'chat';
+      mbody.innerHTML = dHead(L('Průvodce', 'Assistant'), L('S čím pomoci?', 'How can I help?'), L('Lokální nápověda, ne živý dispečink.', 'Local helper, not live dispatch.'))
+        + `<div class="chat-log" id="log" role="log" aria-live="polite"><p class="bubble">${L('Zeptejte se na cenu, zavazadla, autosedačku, let, storno nebo platbu.', 'Ask about price, luggage, child seats, flights, cancellation or payment.')}</p></div>
+        <form class="chat-form" id="chat-form"><input class="input" name="q" maxlength="200" required placeholder="${L('Napište dotaz…', 'Type your question…')}" aria-label="${L('Dotaz', 'Question')}"><button class="btn btn-solid" type="submit" aria-label="→">${icon('arrow')}</button></form></div>`;
+    }
+    function menu(open, back = false) {
+      document.body.classList.toggle('menu-open', open);
+      $('#burger').setAttribute('aria-expanded', String(open));
+      if (open) requestAnimationFrame(() => $('#nav .nav-link')?.focus());
+      if (!open && back) $('#burger').focus();
+    }
+
+    /* ---------- events ---------- */
+    document.addEventListener('click', e => {
+      const el = e.target.closest('[data-a]');
+      if (!el || el.disabled) return;
+      const { a, v } = el.dataset;
+      switch (a) {
+        case 'lang': lang = v; save(); shellChrome(); statsBar(); route(); break;
+        case 'mode': readHome(); setMode(v); renderHome(); anim(app); break;
+        case 'swap': readHome(); [S.from, S.to] = [S.to, S.from]; if (place(S.from)?.g === 'prg') S.mode = 'from'; else if (place(S.to)?.g === 'prg') S.mode = 'to'; else S.mode = 'long'; renderHome(); anim(app); break;
+        case 'quick': {
+          readHome();
+          const presets = { t1: ['from', AIRPORT, 'Praha – centrum'], t2: ['to', 'Praha – centrum', AIRPORT], t3: ['long', AIRPORT, 'Karlovy Vary'], t4: ['long', 'Praha – centrum', 'Vídeň / Vienna'] };
+          const [m, f, to] = presets[v]; S.mode = m; S.from = f; S.to = to;
+          renderHome(); anim(app); break;
+        }
+        case 'promo-open': startBooking(true); break;
+        case 'pick-mode': setMode(v); if (path === '/') { renderHome(); anim(app); } else location.hash = '/'; break;
+        case 'go-business': location.hash = '/firmy'; break;
+        case 'pick-meet': S.meet = v; setMode('from'); location.hash = '/'; toast(`${MEETS[v].t} · ${MEETS[v].s}`); break;
+        case 'from-airport': S.flight = $('#ap-flight').value.trim().toUpperCase(); S.meet = $('#ap-meet').value; setMode('from'); location.hash = '/'; break;
+        case 'fleet-filter': fleetFilter = v; renderFleet(); anim(app); break;
+        case 'gallery': gallery(v); break;
+        case 'g-next': case 'g-prev': gIdx = gIdx ? 0 : 1; renderGallery(); break;
+        case 'pick-car': if (FLEET[v]) { S.car = v; if (modal.open) modal.close(); location.hash = '/'; toast(`${FLEET[v].label} · ${money(FLEET[v].base)} ${L('letiště – Praha', 'airport – Prague')}`); } break;
+        case 'trip-filter': tripFilter = v; renderTrips(); anim(app); break;
+        case 'again': again(v); break;
+        case 'live-toggle': toggleSandboxDrive(v, el); break;
+        case 'live-refresh': { const o = orders.find(x => x.id === v); if (o) { stopLive(); startLive(o); } break; }
+        case 'next': stopSim(); advance(v); break;
+        case 'delay': {
+          const o = orders.find(x => x.id === v);
+          if (!o || !o.demo || o.delayed || o.cancelled || o.stage >= 4) return;
+          const d = stamp(o.date, o.time); d.setUTCMinutes(d.getUTCMinutes() + 30);
+          o.date = dstr(d); o.time = d.toLocaleTimeString('cs-CZ', { timeZone: TZ, hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }); o.delayed = true;
+          save(); renderOrder(v); anim(app);
+          toast(L('Ukázka: let má zpoždění, čekáme zdarma a čas podání se posunul.', 'Demo: the flight is delayed, we wait for free and the pickup shifted.'));
+          break;
+        }
+        case 'cancel': stopSim(); confirmBox(L('Zrušit rezervaci?', 'Cancel the booking?'), L('Jde o ukázku, nic se neúčtovalo. U skutečné rezervace je storno zdarma 2 hodiny předem, u vozů Mercedes a dálkových jízd 12 hodin.', 'This is a demo, nothing was charged. A real booking is free to cancel 2 hours ahead, or 12 hours for Mercedes vehicles and long-distance rides.'), 'cancel-yes', v); break;
+        case 'cancel-yes': { const o = orders.find(x => x.id === v); if (o && o.demo && o.stage < 6) { o.cancelled = true; save(); } modal.close(); renderOrder(v); anim(app); break; }
+        case 'wipe': confirmBox(L('Smazat historii?', 'Delete history?'), L('Odstraní se všechny ukázkové jízdy a hodnocení z tohoto prohlížeče.', 'All demo rides and reviews will be removed from this browser.'), 'wipe-yes'); break;
+        case 'wipe-yes': orders = []; reviews = []; save(); modal.close(); renderTrips(); anim(app); break;
+        case 'export': {
+          const cell = x => `"${String(x).replace(/^\s*[=+@-]/, "'$&").replaceAll('"', '""')}"`;
+          const rows = [[L('Číslo', 'ID'), L('Datum', 'Date'), L('Čas', 'Time'), L('Odkud', 'From'), L('Kam', 'To'), L('Vůz', 'Vehicle'), 'CZK', L('Stav', 'Status')],
+            ...orders.map(o => [o.id, o.date, o.time, o.from, o.to, FLEET[o.car].label, o.total, o.cancelled ? L('Zrušeno', 'Cancelled') : t('stages')[o.stage]])];
+          download('wayro-rides.csv', rows.map(r => r.map(cell).join(';')).join('\r\n'), 'text/csv;charset=utf-8');
+          break;
+        }
+        case 'voucher': voucher(v); break;
+        case 'review': openReview(v); break;
+        case 'rate': rating = Number(v); $$('.rate button').forEach(b => { b.classList.toggle('on', Number(b.dataset.v) <= rating); b.setAttribute('aria-pressed', String(Number(b.dataset.v) === rating)); }); break;
+        case 'copy-code': copy(refCode); break;
+        case 'share': { const u = new URL(location.href); u.hash = `/?ref=${refCode}`; copy(L(`Jezdím s Wayro na letiště – fixní cena a živá poloha auta. S kódem ${refCode} máš 10 % na první jízdě: ${u.href}`, `I ride with Wayro – fixed price and live car tracking. Use ${refCode} for 10 % off your first ride: ${u.href}`)); break; }
+        case 'chat': chat(); open(true); break;
+        case 'privacy': privacy(); break;
+        case 'promo-apply': applyPromo(); break;
+        case 'co-back': readModal(); step = 1; renderBook(); break;
+        case 'close': if (!busy) closeModal(); break;
+        case 'cnt': {
+          readModal();
+          const k = el.dataset.k;
+          if (!['bagsBig', 'bagsSmall', 'seats'].includes(k)) return;
+          const car = FLEET[S.car];
+          const max = k === 'seats' ? Math.min(car.seats, S.pax) : k === 'bagsBig' ? car.bags : 4;
+          S[k] = Math.max(0, Math.min(max, S[k] + Number(el.dataset.d)));
+          if (k === 'seats') { renderBook(); return; }
+          $(`#c-${k}`).value = S[k];
+          $$(`[data-a="cnt"][data-k="${k}"]`).forEach(b => { b.disabled = Number(b.dataset.d) < 0 ? S[k] === 0 : S[k] >= max; });
+          refreshSummary();
+          break;
+        }
+      }
+    });
+    document.addEventListener('input', e => {
+      const el = e.target;
+      if (el.closest('#book-form') && el.matches('input')) { readHome(); syncHome(); }
+      if (el.matches('#biz-n')) bizTotal();
+      if (el.matches('#faq-q')) { const q = el.value.trim().toLocaleLowerCase('cs'); $('#faq-list').innerHTML = faqList(FAQ.filter(f => `${f.q.cs} ${f.q.en} ${f.a.cs} ${f.a.en} ${f.k}`.toLocaleLowerCase('cs').includes(q))); }
+      if (el.closest('#rev-form')) el.setCustomValidity?.('');
+    });
+    document.addEventListener('change', e => {
+      const el = e.target;
+      if (el.closest('#book-form')) { readHome(); fitVehicle(); if (el.id === 'rt' || el.id === 'car' || el.id === 'pax') { renderHome(); anim(app); } else syncHome(); }
+      if (el.matches('[name="car"]')) { readModal(); S.car = el.value; fitVehicle(); S.seats = Math.min(S.seats, FLEET[S.car].seats); S.bagsBig = Math.min(S.bagsBig, FLEET[S.car].bags); renderBook(); }
+      if (el.matches('[name="meet"]')) { S.meet = el.value; refreshSummary(); }
+      if (el.matches('[name="pay"]')) { readModal(); renderBook(); }
+      if (el.matches('[name="pram"], [name="seatType"]')) readModal();
+      if (el.matches('#biz-car')) bizTotal();
+    });
+    document.addEventListener('submit', e => {
+      const f = e.target;
+      if (!['book-form', 'co-form', 'rev-form', 'biz-form', 'biz-send', 'chat-form'].includes(f.id)) return;
+      e.preventDefault();
+      if (f.id === 'book-form') { startBooking(); return; }
+      if (f.id === 'co-form') {
+        readModal();
+        if (step === 1) { const err = validateDetails(); if (err) { coErr(err); return; } step = 2; renderBook(); $('[name="name"]')?.focus(); }
+        else sendBooking();
+        return;
+      }
+      if (f.id === 'rev-form') {
+        const txt = String(new FormData(f).get('text') || '').trim();
+        const field = $('[name="text"]', f);
+        if (txt.length < 10) { field.setCustomValidity(L('Napište prosím alespoň 10 znaků.', 'Please write at least 10 characters.')); field.reportValidity(); return; }
+        const o = orders.find(x => x.id === revId);
+        if (!o || o.stage !== 6 || reviews.some(r => r.orderId === revId)) return;
+        reviews.unshift({ orderId: revId, rating, text: txt, name: o.name || '', at: new Date().toISOString() });
+        save(); modal.close(); location.hash = '/hodnoceni';
+        toast(L('Děkujeme! Hodnocení je uložené ve vašem prohlížeči.', 'Thank you! The review is stored in your browser.'));
+        return;
+      }
+      if (f.id === 'biz-form') {
+        const b = bizQuote(); kind = 'biz';
+        mbody.innerHTML = dHead(L('Pro firmy', 'For business'), L('Podklad pro poptávku', 'Request document'), L('Soubor si stáhnete, automaticky se nikam neodesílá.', 'You download the file; nothing is sent automatically.'))
+          + `<form id="biz-send" data-n="${b.n}" data-c="${b.c}" data-t="${b.total}"><label class="form-field" style="margin-top:18px"><span>${L('Firma', 'Company')}</span><input class="input" name="co" maxlength="100" required></label>
+          <label class="form-field"><span>${L('Kontaktní e-mail', 'Contact e-mail')}</span><input class="input" name="mail" type="email" maxlength="120" required></label>
+          <div class="total-row"><span>${b.n}× ${FLEET[b.c].label}</span><strong>${money(b.total)}</strong></div>
+          <button class="btn btn-solid wide" type="submit">${icon('download')}${L('Stáhnout podklad', 'Download')}</button></form></div>`;
+        open(true); return;
+      }
+      if (f.id === 'biz-send') {
+        const d = new FormData(f);
+        download('wayro-firemni-poptavka.txt', `WAYRO — ${L('PŘEDBĚŽNÁ POPTÁVKA', 'PRELIMINARY REQUEST')}\n\n${L('Firma', 'Company')}: ${d.get('co')}\nE-mail: ${d.get('mail')}\n${L('Jízd měsíčně', 'Rides per month')}: ${f.dataset.n}\n${L('Vůz', 'Vehicle')}: ${FLEET[f.dataset.c].label}\n${L('Vzorová trasa', 'Sample route')}: ${AIRPORT} – Praha\n${L('Orientační rozpočet', 'Estimated budget')}: ${money(Number(f.dataset.t))}\n\n${L('Nezávazný odhad, nejde o nabídku ani smlouvu. Poptávka nebyla odeslána.', 'Non-binding estimate, not an offer or contract. The request was not sent.')}\n`);
+        modal.close(); toast(L('Podklad stažen. Odeslání dispečinku není v ukázce připojené.', 'File downloaded. Sending to dispatch is not connected in this demo.'));
+        return;
+      }
+      if (f.id === 'chat-form') {
+        const input = $('[name="q"]', f), msg = input.value.trim();
+        if (!msg) return;
+        const log = $('#log');
+        const me = document.createElement('p'); me.className = 'bubble me'; me.textContent = msg; log.append(me); input.value = '';
+        const words = msg.toLocaleLowerCase('cs').split(/\s+/).filter(w => w.length > 3);
+        const best = FAQ.map(x => ({ x, s: words.reduce((n, w) => n + (`${x.q.cs} ${x.q.en} ${x.k}`.toLocaleLowerCase('cs').includes(w.slice(0, 5)) ? 1 : 0), 0) })).sort((a, b) => b.s - a.s)[0];
+        const bot = document.createElement('p'); bot.className = 'bubble';
+        bot.textContent = best?.s ? (best.x.a[lang] || best.x.a.cs) : L('Zkuste se zeptat na cenu, zavazadla, autosedačku, let, storno nebo platbu. Jsem lokální nápověda, zprávy se neodesílají dispečinku.', 'Try asking about price, luggage, child seats, flights, cancellation or payment. I am a local helper; messages are not sent to dispatch.');
+        log.append(bot); log.scrollTop = log.scrollHeight; input.focus();
+      }
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && document.body.classList.contains('menu-open')) menu(false, true);
+      if (e.key === 'Enter' && e.target.id === 'promo') { e.preventDefault(); applyPromo(); }
+      if (e.key === 'Tab' && document.body.classList.contains('menu-open')) {
+        const items = $$('.logo, #nav a, .header-cta, #burger').filter(x => x.getClientRects().length);
+        const first = items[0], last = items[items.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    });
+    document.addEventListener('error', e => {
+      const img = e.target;
+      if (img instanceof HTMLImageElement && !img.dataset.failed) {
+        img.dataset.failed = '1';
+        img.style.opacity = '0';
+      }
+    }, true);
+    $('#burger').addEventListener('click', () => menu(!document.body.classList.contains('menu-open')));
+    $('#backdrop').addEventListener('click', () => menu(false, true));
+    $('#nav').addEventListener('click', e => { if (e.target.closest('a')) menu(false); });
+    const wide = matchMedia('(min-width: 901px)');
+    const onWide = () => { if (wide.matches) menu(false); };
+    wide.addEventListener ? wide.addEventListener('change', onWide) : wide.addListener(onWide);
+    window.addEventListener('hashchange', route);
+    window.addEventListener('pagehide', stopSim);
+    window.addEventListener('storage', ev => {
+      if (ev.key !== KEY) return;
+      try {
+        const d = JSON.parse(ev.newValue || '{}');
+        orders = Array.isArray(d.orders) ? d.orders.filter(okOrder) : [];
+        reviews = Array.isArray(d.reviews) ? d.reviews.filter(r => r && typeof r.text === 'string' && Number.isInteger(r.rating)) : [];
+        count();
+        if (['/jizdy', '/hodnoceni'].includes(path) || path.startsWith('/jizda/')) { route(); }
+      } catch { /* ignore unrelated storage writes */ }
+    });
+
+    shellChrome();
+    statsBar();
+    if (store.ref !== refCode || store.lang !== lang) save();
+    count();
+    route();
+    anim(document);
+    if (!storageOk) toast(L('Úložiště prohlížeče není dostupné, rezervace se neuloží.', 'Browser storage is unavailable; bookings will not be saved.'));
+  })();
+  </script>
+</body>
+</html>

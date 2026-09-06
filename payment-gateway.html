@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Platební brána | Secure 3D Payment</title>
+  <style>
+    body {
+      background: #0d0f12;
+      color: #e6ebf1;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .card {
+      background: #181c24;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      max-width: 420px;
+      width: 100%;
+      padding: 32px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    }
+    .logo {
+      font-size: 20px;
+      font-weight: 700;
+      color: #f5c66b;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .amount-box {
+      background: #212631;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 24px;
+      text-align: center;
+    }
+    .amount {
+      font-size: 32px;
+      font-weight: 700;
+      color: #fff;
+    }
+    .field {
+      margin-bottom: 16px;
+    }
+    label {
+      display: block;
+      font-size: 12px;
+      color: #8c9ba5;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    input {
+      width: 100%;
+      background: #11141a;
+      border: 1px solid #2d3542;
+      border-radius: 6px;
+      padding: 12px;
+      color: #fff;
+      font-size: 14px;
+      box-sizing: border-box;
+      outline: none;
+    }
+    input:focus {
+      border-color: #f5c66b;
+    }
+    .row {
+      display: flex;
+      gap: 12px;
+    }
+    .btn {
+      width: 100%;
+      background: #f5c66b;
+      color: #12151a;
+      border: none;
+      border-radius: 6px;
+      padding: 14px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 12px;
+      transition: background 0.2s;
+    }
+    .btn:hover {
+      background: #ffd88f;
+    }
+    .security {
+      text-align: center;
+      font-size: 11px;
+      color: #637282;
+      margin-top: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo">
+      <span>🔒 PHCars Secure Pay</span>
+    </div>
+
+    <div class="amount-box">
+      <div style="font-size: 12px; color: #8c9ba5; margin-bottom: 4px;">Částka k úhradě</div>
+      <div class="amount" id="amt">0 CZK</div>
+      <div style="font-size: 11px; color: #a4977a; margin-top: 4px;" id="ord">Objednávka: -</div>
+    </div>
+
+    <form id="payForm">
+      <div class="field">
+        <label>Číslo karty (testovací)</label>
+        <input type="text" placeholder="4242 •••• •••• 4242" value="4242 4242 4242 4242" required>
+      </div>
+      <div class="row">
+        <div class="field" style="flex: 1;">
+          <label>Platnost</label>
+          <input type="text" placeholder="MM/YY" value="12/28" required>
+        </div>
+        <div class="field" style="flex: 1;">
+          <label>CVC / CVV</label>
+          <input type="password" placeholder="•••" value="123" maxlength="3" required>
+        </div>
+      </div>
+      <button class="btn" type="submit" id="btnSubmit">Zaplatit kartou</button>
+    </form>
+
+    <div class="security">
+      256-bit SSL šifrování · 3D Secure ověření
+    </div>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const amount = params.get('amount') || '850';
+    const currency = params.get('currency') || 'CZK';
+    const orderId = params.get('orderId') || 'PH-TEST';
+    const returnUrl = params.get('returnUrl') || '/#/jizdy';
+
+    document.getElementById('amt').textContent = `${amount} ${currency}`;
+    document.getElementById('ord').textContent = `Objednávka: ${orderId}`;
+
+    document.getElementById('payForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('btnSubmit');
+      btn.disabled = true;
+      btn.textContent = 'Zpracovávám platbu v bance...';
+
+      setTimeout(async () => {
+        try {
+          await fetch('/api/sandbox-confirm', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ orderId })
+          });
+        } catch (error) {
+          console.warn('Sandbox confirmation failed:', error);
+        }
+        // Успешный редирект обратно в приложение
+        const target = new URL(returnUrl, window.location.origin);
+        target.searchParams.set('orderId', orderId);
+        target.searchParams.set('payment', 'success');
+        window.location.href = target.href;
+      }, 1500);
+    });
+  </script>
+</body>
+</html>
