@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Wayro — Налаштування Stripe Webhook</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: system-ui, -apple-system, sans-serif; background: #0d0c08; color: #e9e2d2; min-height: 100vh; padding: 32px 20px; }
+    .wrap { max-width: 680px; margin: 0 auto; }
+    h1 { color: #f5c66b; font-size: 26px; margin-bottom: 8px; }
+    .sub { color: #9c9585; font-size: 14px; line-height: 1.6; margin-bottom: 28px; }
+    .card { background: #141209; border: 1px solid #2c2819; border-radius: 12px; padding: 22px; margin-bottom: 16px; }
+    .card h2 { font-size: 16px; color: #ddd5c4; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+    .step-num { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: #f5c66b; color: #171204; font-size: 13px; font-weight: 700; flex-shrink: 0; }
+    .card p { color: #9c9585; font-size: 13px; line-height: 1.7; }
+    .url-box { display: flex; gap: 8px; margin-top: 12px; }
+    .url-box code { flex: 1; background: #1a1710; border: 1px solid #2c2819; border-radius: 6px; padding: 11px 12px; font-family: ui-monospace, monospace; font-size: 13px; color: #ffd88f; word-break: break-all; }
+    button { background: #f5c66b; color: #171204; border: none; border-radius: 6px; padding: 11px 16px; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+    button:hover { background: #ffd88f; }
+    button.ghost { background: transparent; border: 1px solid #2c2819; color: #ddd5c4; }
+    button.ghost:hover { border-color: #f5c66b; color: #ffd88f; background: transparent; }
+    .status-line { margin-top: 12px; padding: 10px 12px; border-radius: 6px; font-size: 12px; display: none; }
+    .status-line.ok { display: block; background: rgba(74,222,128,.1); border: 1px solid rgba(74,222,128,.3); color: #4ade80; }
+    .status-line.err { display: block; background: rgba(239,68,68,.1); border: 1px solid rgba(239,68,68,.3); color: #ef4444; }
+    code.inline { background: #1a1710; border-radius: 4px; padding: 2px 6px; font-family: ui-monospace, monospace; font-size: 12px; color: #ffd88f; }
+    .note { margin-top: 12px; padding: 10px 12px; background: rgba(245,198,107,.07); border-left: 2px solid #f5c66b; border-radius: 0 6px 6px 0; color: #b3ac9c; font-size: 12px; line-height: 1.6; }
+    .back { display: inline-block; margin-top: 10px; color: #8a8474; font-size: 12px; }
+    .back:hover { color: #f5c66b; }
+    ul { margin: 10px 0 0 18px; color: #9c9585; font-size: 13px; line-height: 1.9; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>🪝 Stripe Webhook — налаштування</h1>
+    <p class="sub">Робиться <b>один раз після деплою</b> сайту на домен. Весь час займає ~5 хвилин.
+    Навіть без вебхука оплата працює (сервер сам запитує статус у Stripe), але вебхук робить підтвердження миттєвим і надійним.</p>
+
+    <div class="card">
+      <h2><span class="step-num">1</span> Скопіюйте URL вебхука</h2>
+      <p>Це адреса вашого запущеного сервера — підставте її у Stripe:</p>
+      <div class="url-box">
+        <code id="hook-url">…</code>
+        <button class="ghost" id="copy-url">Копіювати</button>
+      </div>
+      <div class="status-line" id="ping-status"></div>
+      <button class="ghost" id="ping-btn" style="margin-top:10px">Проверить, що endpoint живий</button>
+    </div>
+
+    <div class="card">
+      <h2><span class="step-num">2</span> Додайте endpoint у Stripe</h2>
+      <ul>
+        <li>Відкрийте <code class="inline">dashboard.stripe.com</code> → <b>Developers</b> → <b>Webhooks</b></li>
+        <li>Кнопка <b>Add endpoint</b></li>
+        <li>URL: вставте адресу з кроку 1</li>
+        <li>Events: <code class="inline">checkout.session.completed</code> та <code class="inline">checkout.session.async_payment_succeeded</code></li>
+        <li>Натисніть <b>Connect</b></li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2><span class="step-num">3</span> Збережіть signing secret</h2>
+      <p>Після створення endpoint відкрийте його → <b>Signing secret</b> → скопіюйте і вставте у <code class="inline">.env</code>:</p>
+      <div class="url-box"><code>STRIPE_WEBHOOK_SECRET=whsec_...</code></div>
+      <p style="margin-top:10px">Після зміни <code class="inline">.env</code> перезавантажте сервер (<code class="inline">pm2 restart all</code> або <code class="inline">node server.js</code>).</p>
+    </div>
+
+    <div class="card">
+      <h2><span class="step-num">4</span> Протестуйте</h2>
+      <ul>
+        <li>У Stripe на сторінці endpoint натисніть <b>Send test event</b> — серwer має відповісти <code class="inline">200</code></li>
+        <li>Зробіть тестову оплату з сайту картою <code class="inline">4242 4242 4242 4242</code></li>
+        <li>Статус замовлення зміниться на «Оплачено», клієнту прийде email</li>
+      </ul>
+      <div class="note">Якщо Stripe показує помилку — перевірте: (1) сайт доступний по HTTPS з зовнішнього інтернету, (2) firewall прокидає порт, (3) <code class="inline">STRIPE_WEBHOOK_SECRET</code> скопійований без пробілів.</div>
+    </div>
+
+    <a class="back" href="/">← Повернутися на сайт</a>
+  </div>
+
+  <script>
+    const hookUrl = window.location.origin.replace(/\/+$/, '') + '/api/webhook';
+    document.getElementById('hook-url').textContent = hookUrl;
+
+    document.getElementById('copy-url').addEventListener('click', async () => {
+      try { await navigator.clipboard.writeText(hookUrl); document.getElementById('copy-url').textContent = '✓ Скопійовано'; }
+      catch { document.getElementById('copy-url').textContent = hookUrl; }
+    });
+
+    document.getElementById('ping-btn').addEventListener('click', async () => {
+      const box = document.getElementById('ping-status');
+      box.className = 'status-line'; box.textContent = 'Перевірка…'; box.style.display = 'block';
+      try {
+        const r = await fetch('/api/webhook/ping');
+        const d = await r.json();
+        if (d.ok) {
+          box.className = 'status-line ok';
+          box.textContent = `✓ Endpoint живий. Stripe: ${d.stripe ? 'підключений' : 'НЕ підключений (STRIPE_SECRET_KEY)'}. Webhook secret: ${d.webhookSecretSet ? 'встановлений' : 'НЕ встановлений'}. Email: ${d.emailConfigured ? 'ок' : 'не налаштовано'}.`;
+        } else throw new Error('bad response');
+      } catch (err) {
+        box.className = 'status-line err';
+        box.textContent = '✗ Сервер не відповів. Перевірте, що backend запущений і доступний по HTTPS.';
+      }
+    });
+  </script>
+</body>
+</html>

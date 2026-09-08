@@ -26,3 +26,7 @@ Thumbs.db
 # Build
 dist/
 build/
+
+# Local order data
+data.json
+data.json.tmp
