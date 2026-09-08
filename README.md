@@ -233,4 +233,5 @@ npm install --production
 pm2 start server.js --name wayro
 ```
 #   w a y r o  
+ #   w a y r o . c z  
  
