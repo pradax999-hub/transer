@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#000000">
   <meta name="color-scheme" content="dark">
-  <meta name="description" content="Wayro – taxi na letiště Václava Havla Praha a zpět. Fixní cena, živá pozice řidiče na mapě, sledování letu, autosedačka zdarma, platba u řidiče.">
-  <title>Wayro | Taxi na letiště Praha</title>
+  <meta name="description" content="Transfer by Van – letištní, městské a dálkové transfery. Fixní cena, živá poloha řidiče, sledování letu a platba u řidiče.">
+  <title>Transfer by Van | Taxi a transfery Praha</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23f5c66b'%3E%3Cpath d='M4 10 6 4h12l2 6v9h-3v-2H7v2H4v-9Zm3.2 5h9.6M7 13.5h2m6 0h2'/%3E%3Cpath d='M4.6 10.4h14.8v7.2H4.6z'/%3E%3C/svg%3E">
   <style>
     html, body { background: #000000 !important; color: #ffffff; }
@@ -52,7 +52,7 @@
     .page { position: relative; z-index: 1; display: flex; flex-direction: column; min-height: 100vh; min-height: 100dvh; }
     .header { position: relative; z-index: 50; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 22px; min-height: 88px; padding: 19px var(--gutter); }
     .header::after { position: absolute; content: ""; bottom: 0; left: var(--gutter); right: var(--gutter); height: 1px; background: rgba(255,255,255,.1); }
-    .logo { display: inline-flex; align-items: center; gap: 10px; justify-self: start; font-size: 25px; line-height: 1; font-weight: 700; letter-spacing: -.055em; }
+    .logo { display: inline-flex; align-items: center; gap: 10px; justify-self: start; font-size: 22px; line-height: 1; font-weight: 700; letter-spacing: -.045em; white-space: nowrap; }
     .logo-mark { display: grid; place-items: center; width: 33px; height: 33px; border-radius: 8px; background: linear-gradient(150deg,var(--accent),#c9963c); color: #1a1204; }
     .logo-mark .icon { width: 19px; height: 19px; stroke-width: 1.8; }
     .logo em { font-family: "Instrument Serif","Times New Roman",serif; font-style: italic; font-weight: 400; color: var(--accent); letter-spacing: -.02em; }
@@ -284,6 +284,18 @@
     .app-band h2 { font-size: clamp(26px,3vw,42px); font-weight: 500; letter-spacing: -.05em; line-height: 1.15; }
     .app-band p { max-width: 570px; color: #9d9585; font-size: 13px; line-height: 1.75; margin-top: 12px; }
     .app-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+    .contact-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 14px; margin-top: 28px; }
+    .contact-line { display: flex; align-items: flex-start; gap: 14px; padding: 20px 0; border-top: 1px solid var(--line-soft); }
+    .contact-line .icon { width: 18px; height: 18px; color: var(--accent); margin-top: 2px; }
+    .contact-line small { display: block; color: #8d8577; font-size: 10px; margin-bottom: 6px; text-transform: uppercase; letter-spacing: .08em; }
+    .contact-line strong { display: block; color: #eee8db; font-size: 14px; font-weight: 500; line-height: 1.55; overflow-wrap: anywhere; }
+    .bank-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 26px; }
+    .bank-account { border: 1px solid var(--line-soft); border-radius: 12px; padding: 22px; background: linear-gradient(150deg,rgba(245,198,107,.06),transparent); }
+    .bank-account span { color: #998f7e; font-size: 10px; text-transform: uppercase; letter-spacing: .1em; }
+    .bank-account strong { display: block; margin: 12px 0 16px; color: var(--accent); font-size: clamp(20px,2.4vw,30px); letter-spacing: -.035em; overflow-wrap: anywhere; }
+    .legal-list { list-style: none; margin-top: 24px; }
+    .legal-list li { display: flex; justify-content: space-between; gap: 22px; padding: 15px 0; border-bottom: 1px solid var(--line-soft); color: #9f9789; font-size: 12px; line-height: 1.7; }
+    .legal-list strong { color: #e4dccd; font-weight: 500; text-align: right; }
     .mini-phone { width: 172px; height: 240px; border: 1px solid rgba(245,198,107,.35); border-radius: 26px; padding: 14px; background: #090806; box-shadow: inset 0 0 0 5px #14110a; }
     .mini-screen { height: 100%; border-radius: 18px; background: linear-gradient(180deg,#20190b,#0e0d09); padding: 18px 13px; }
     .mini-screen .bar { height: 7px; border-radius: 20px; background: rgba(245,198,107,.28); margin-bottom: 14px; }
@@ -560,7 +572,7 @@
     @media (min-width: 1600px) {
       :root { --gutter: 78px; }
       .header { min-height: 100px; }
-      .logo { font-size: 28px; }
+      .logo { font-size: 24px; }
       .nav-link { font-size: 14px; }
       h1 { font-size: min(96px,13vh); }
       .lede { font-size: 16.5px; max-width: 470px; }
@@ -653,6 +665,7 @@
       .terminal { min-height: 230px; }
       .review-grid { grid-template-columns: 1fr; }
       .app-band { grid-template-columns: 1fr; }
+      .contact-grid { grid-template-columns: 1fr 1fr; }
       .mini-phone { display: none; }
       .faq-preview { grid-template-columns: 1fr; gap: 0; }
       .fleet-grid, .meet-grid, .steps { grid-template-columns: 1fr 1fr; }
@@ -698,6 +711,7 @@
       .route-card { grid-template-columns: 1fr; }
       .route-price small { text-align: left; }
       .app-band { padding: 22px; }
+      .contact-grid, .bank-grid { grid-template-columns: 1fr; }
       .subpage { padding-top: 24px; padding-bottom: 52px; }
       .page-heading { font-size: 36px; }
       .page-desc { font-size: 13px; }
@@ -792,9 +806,9 @@
   <div class="page">
     <div class="menu-backdrop" id="backdrop"></div>
     <header class="header">
-      <a class="logo appear a-scale" href="#/" aria-label="Wayro" style="--d:.08s">
+      <a class="logo appear a-scale" href="#/" aria-label="Transfer by Van" style="--d:.08s">
         <span class="logo-mark"><svg class="icon" aria-hidden="true"><use href="#i-car"/></svg></span>
-        <span>Way<em>ro</em></span>
+        <span>Transfer <em>by Van</em></span>
       </a>
       <nav class="site-nav" id="nav" aria-label="Hlavní navigace"></nav>
       <div class="header-actions">
@@ -831,7 +845,12 @@
       trackPollMs: 5000,
       paymentHosts: ['checkout.stripe.com', 'checkout.stripe.dev']
     });
-    const SITE = Object.freeze({ faq: 'https://www.phcars.cz/faq/', app: 'https://letiste-praha.taxi/aplikace/', admin: 'https://book.letiste-praha.taxi/bookings', home: 'https://www.phcars.cz/' });
+    const CONTACT = Object.freeze({
+      operator: 'Serhii Boliak', ico: '08865931', since: '22. 2. 2020',
+      phone: '+420 774 571 747', phoneDigits: '420774571747', email: 'cztransfertaxi@gmail.com',
+      czk: '4160775073/0800', eur: '2209598233/0800',
+      registry: 'https://www.podnikatel.cz/rejstrik/serhii-boliak-08865931/'
+    });
     const PRIVATE_DATA_PATH = '/wry-ops-8f3c9a71d6e24b50';
 
     const $ = (s, r = document) => r.querySelector(s);
@@ -842,14 +861,14 @@
     const esc = v => { const n = document.createElement('span'); n.textContent = String(v ?? ''); return n.innerHTML.replaceAll('"', '&#34;').replaceAll("'", '&#39;'); };
     const icon = (n, c = '') => `<svg class="icon ${c}" aria-hidden="true"><use href="#i-${n}"/></svg>`;
     const uid = () => globalThis.crypto?.randomUUID ? crypto.randomUUID() : `${Date.now().toString(36)}${Math.random().toString(36).slice(2, 10)}`;
-    const KEY = 'wayro.app.v2';
+    const KEY = 'transfer-by-van.app.v1';
     const TZ = 'Europe/Prague';
     const dstr = d => { const p = new Intl.DateTimeFormat('en-CA', { timeZone: TZ, year: 'numeric', month: '2-digit', day: '2-digit' }).formatToParts(d); const g = k => p.find(x => x.type === k).value; return `${g('year')}-${g('month')}-${g('day')}`; };
     const plusDays = n => { const d = new Date(`${dstr(new Date())}T12:00:00+01:00`); d.setUTCDate(d.getUTCDate() + n); return dstr(d); };
     const stamp = (date, time) => new Date(`${date}T${time}:00${offset(date)}`);
     function offset(date) { const probe = new Date(`${date}T12:00:00Z`); const s = new Intl.DateTimeFormat('en-US', { timeZone: TZ, timeZoneName: 'longOffset' }).formatToParts(probe).find(p => p.type === 'timeZoneName').value; return s.replace('GMT', '') || '+01:00'; }
 
-    /* ---------- Fleet & prices: actual Wayro tariff (airport <-> Prague fixed, long = per km) ---------- */
+    /* ---------- Fleet & prices: Transfer by Van tariff ---------- */
     const FLEET = {
       sedan:   { label: 'Sedan',       base: 850,  pax: 4, bags: 3, seats: 1, rate: 34, city: 390, hour: 690,  ico: 'car',
                  model: { cs: 'Škoda Superb nebo obdobný vůz', en: 'Škoda Superb or similar' },
@@ -890,18 +909,18 @@
     ];
     const SEATS = { egg: { cs: 'Vajíčko (0–1 rok)', en: 'Infant seat (0–1 y)' }, mid: { cs: 'Střední sedačka (1–4 roky)', en: 'Child seat (1–4 y)' }, boost: { cs: 'Podsedák (4–12 let)', en: 'Booster (4–12 y)' } };
     const MEETS = {
-      t1: { t: 'Terminál 1', s: 'Mattoni Bar', lat: 50.1028, lng: 14.2580, d: { cs: 'Řidič čeká v příletové hale terminálu 1 před Mattoni Barem s cedulkou se jménem.', en: 'Your driver waits in Terminal 1 arrivals in front of the Mattoni Bar with a name sign.' }, img: 'https://images.pexels.com/photos/16453351/pexels-photo-16453351.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200' },
-      t2: { t: 'Terminál 2', s: 'Visitor Centre', lat: 50.1069, lng: 14.2647, d: { cs: 'Řidič čeká v příletové hale terminálu 2 před Visitor Centrem s cedulkou se jménem.', en: 'Your driver waits in Terminal 2 arrivals in front of the Visitor Centre with a name sign.' }, img: 'https://images.pexels.com/photos/6544060/pexels-photo-6544060.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200' },
-      hn: { t: 'Praha Hlavní nádraží', s: 'Burger King', lat: 50.0831, lng: 14.4360, d: { cs: 'Řidič čeká uvnitř haly před restaurací Burger King s cedulkou se jménem.', en: 'Your driver waits inside the hall in front of Burger King with a name sign.' }, img: 'https://images.pexels.com/photos/12940671/pexels-photo-12940671.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=627&w=1200' }
+      t1: { t: 'Terminál 1', s: 'Mattoni Bar', lat: 50.1028, lng: 14.2580, d: { cs: 'Po přistání si zapněte telefon. Řidič vás kontaktuje telefonicky nebo přes WhatsApp a bude čekat v příletové hale terminálu 1 před Mattoni Barem s cedulkou se jménem.', en: 'Turn on your phone after landing. The driver will contact you by phone or WhatsApp and wait in the Terminal 1 arrivals hall in front of Mattoni Bar with a name sign.' }, img: 'https://www.phcars.cz/wp-content/uploads/2026/02/Matoni-bar.webp' },
+      t2: { t: 'Terminál 2', s: 'Visitor Centre', lat: 50.1069, lng: 14.2647, d: { cs: 'Po přistání si zapněte telefon. Řidič vás kontaktuje telefonicky nebo přes WhatsApp a bude čekat v příletové hale terminálu 2 před Visitor Centrem s cedulkou se jménem.', en: 'Turn on your phone after landing. The driver will contact you by phone or WhatsApp and wait in the Terminal 2 arrivals hall in front of the Visitor Centre with a name sign.' }, img: 'https://www.phcars.cz/wp-content/uploads/2026/02/Visitor-centrum.webp' },
+      hn: { t: 'Praha Hlavní nádraží', s: 'Burger King', lat: 50.0831, lng: 14.4360, d: { cs: 'Řidič vás bude čekat uvnitř haly před restaurací Burger King s cedulkou se jménem.', en: 'The driver will wait inside the station hall in front of Burger King with a name sign.' }, img: 'https://www.phcars.cz/wp-content/uploads/2026/02/Burger-king-hlavak.webp' }
     };
 
     /* ---------- i18n ---------- */
     const D = {
       cs: {
-        nav: { services: 'Služby', fleet: 'Vozy a ceny', airport: 'Letiště', business: 'Pro firmy', help: 'Nápověda', trips: 'Moje jízdy' },
+        nav: { services: 'Služby', fleet: 'Vozy a ceny', airport: 'Letiště', business: 'Pro firmy', contact: 'Kontakt', help: 'Nápověda', trips: 'Moje jízdy' },
         hero: { eyebrow: 'Praha · Letiště Václava Havla (PRG) · nonstop 24/7', l1: 'Taxi na letiště.', l2a: 'Bez ', l2em: 'stresu.', lede: 'Fixní cenu znáte předem. Řidič sleduje váš let, čeká s cedulkou a jeho auto vidíte na mapě. Platíte až po jízdě.', p1: 'Letiště – Praha od 850 Kč', p2: 'Autosedačka zdarma', p3: 'Sledujeme váš let', p4: 'Platba u řidiče', p5: 'Živá poloha auta' },
         modes: { to: 'Na letiště', from: 'Z letiště', long: 'Jiná trasa', hourly: 'Hodinová dispozice' },
-        f: { from: 'Odkud', to: 'Kam', when: 'Datum a čas (SEČ)', pax: 'Osoby', car: 'Vůz', hours: 'Počet hodin', cta: 'Vybrat vůz', promo: 'Máte slevový kód?', fixed: 'Fixní cena. Bez skrytých poplatků.', est: 'Orientační cena – potvrdí dispečer.', hourNote: 'Hodinová sazba, minimálně 2 hodiny.', demo: 'Cena dle ceníku Wayro · odsouhlasí backend', ret: 'Zpáteční jízda', retNote: 'Účtuje se cena za každý směr.', quick: 'Oblíbené trasy:' },
+        f: { from: 'Odkud', to: 'Kam', when: 'Datum a čas (SEČ)', pax: 'Osoby', car: 'Vůz', hours: 'Počet hodin', cta: 'Vybrat vůz', promo: 'Máte slevový kód?', fixed: 'Fixní cena. Bez skrytých poplatků.', est: 'Orientační cena – potvrdí dispečer.', hourNote: 'Hodinová sazba, minimálně 2 hodiny.', demo: 'Cena dle ceníku Transfer by Van · odsouhlasí backend', ret: 'Zpáteční jízda', retNote: 'Účtuje se cena za každý směr.', quick: 'Oblíbené trasy:' },
         stats: { s1: 'Fixní cena předem', s1s: 'Bez příplatků za provoz a zavazadla', s2: 'Sledujeme váš let', s2s: 'Zpoždění letu čekáme zdarma', s3: 'Autosedačka zdarma', s3s: 'Vajíčko, sedačka i podsedák', s4: 'Platba u řidiče', s4s: 'Hotově nebo kartou po jízdě' },
         pax: n => n === 1 ? '1 osoba' : n < 5 ? `${n} osoby` : `${n} osob`,
         hrs: n => n === 1 ? '1 hodina' : n < 5 ? `${n} hodiny` : `${n} hodin`,
@@ -910,10 +929,10 @@
         back: 'Zpět na hlavní stranu', more: 'Více'
       },
       en: {
-        nav: { services: 'Services', fleet: 'Fleet & prices', airport: 'Airport', business: 'Business', help: 'Help', trips: 'My rides' },
+        nav: { services: 'Services', fleet: 'Fleet & prices', airport: 'Airport', business: 'Business', contact: 'Contact', help: 'Help', trips: 'My rides' },
         hero: { eyebrow: 'Prague · Václav Havel Airport (PRG) · 24/7', l1: 'Airport taxi.', l2a: 'Zero ', l2em: 'stress.', lede: 'A fixed price upfront. Your driver tracks the flight, waits with a name sign and you can watch the car on a live map. Pay after the ride.', p1: 'Airport – Prague from 850 CZK', p2: 'Free child seat', p3: 'Flight tracking', p4: 'Pay the driver', p5: 'Live car position' },
         modes: { to: 'To airport', from: 'From airport', long: 'Other route', hourly: 'Hourly hire' },
-        f: { from: 'From', to: 'To', when: 'Date and time (CET)', pax: 'People', car: 'Vehicle', hours: 'Hours', cta: 'Choose vehicle', promo: 'Have a promo code?', fixed: 'Fixed price. No hidden fees.', est: 'Estimate – confirmed by the dispatcher.', hourNote: 'Hourly rate, minimum 2 hours.', demo: 'Priced from the Wayro rate list · confirmed by the backend', ret: 'Return ride', retNote: 'Each direction is charged separately.', quick: 'Popular routes:' },
+        f: { from: 'From', to: 'To', when: 'Date and time (CET)', pax: 'People', car: 'Vehicle', hours: 'Hours', cta: 'Choose vehicle', promo: 'Have a promo code?', fixed: 'Fixed price. No hidden fees.', est: 'Estimate – confirmed by the dispatcher.', hourNote: 'Hourly rate, minimum 2 hours.', demo: 'Priced from the Transfer by Van rate list · confirmed by the backend', ret: 'Return ride', retNote: 'Each direction is charged separately.', quick: 'Popular routes:' },
         stats: { s1: 'Fixed price upfront', s1s: 'No traffic or luggage surcharges', s2: 'We track your flight', s2s: 'Delayed flight? We wait for free', s3: 'Free child seat', s3s: 'Infant, child and booster seats', s4: 'Pay the driver', s4s: 'Cash or card after the ride' },
         pax: n => n === 1 ? '1 person' : `${n} people`,
         hrs: n => n === 1 ? '1 hour' : `${n} hours`,
@@ -941,7 +960,7 @@
     const okOrder = o => o && typeof o.id === 'string' && o.id.length < 80 && typeof o.from === 'string' && typeof o.to === 'string' && Object.hasOwn(FLEET, o.car) && Number.isFinite(o.total) && Number.isInteger(o.stage) && o.stage >= 0 && o.stage <= 6 && typeof o.date === 'string' && typeof o.time === 'string' && o.ext && typeof o.ext === 'object';
     let orders = Array.isArray(store.orders) ? store.orders.filter(okOrder) : [];
     let reviews = Array.isArray(store.reviews) ? store.reviews.filter(r => r && typeof r.text === 'string' && typeof r.orderId === 'string' && Number.isInteger(r.rating) && r.rating > 0 && r.rating < 6) : [];
-    const refCode = typeof store.ref === 'string' && /^WY-[A-Z0-9]{6}$/.test(store.ref) ? store.ref : `WY-${uid().replaceAll('-', '').slice(0, 6).toUpperCase()}`;
+    const refCode = typeof store.ref === 'string' && /^TV-[A-Z0-9]{6}$/.test(store.ref) ? store.ref : `TV-${uid().replaceAll('-', '').slice(0, 6).toUpperCase()}`;
     let lang = ['cs', 'en'].includes(store.lang) ? store.lang : (navigator.language || 'cs').toLowerCase().startsWith('cs') ? 'cs' : 'en';
 
     const S = {
@@ -957,7 +976,7 @@
     const dataSession = { key: '', authorized: false, items: [], selected: null, page: 1, pages: 1, total: 0, query: '', state: 'all', dateFrom: '', dateTo: '', controller: null, detailController: null, sequence: 0, timer: null, expiresAt: 0, loading: false };
 
     /* Public settings from the backend (driver contacts, flight data, etc.) */
-    const PUB = { whatsapp: null, phone: null, supportEmail: null, flightProvider: null, loaded: false };
+    const PUB = { whatsapp: CONTACT.phoneDigits, phone: CONTACT.phone, supportEmail: CONTACT.email, flightProvider: null, loaded: false };
     fetch(CONFIG.configEndpoint).then(r => r.ok ? r.json() : null).then(d => { if (d) { Object.assign(PUB, d, { loaded: true }); if (path === '/nastaveni') renderSetup(); } }).catch(() => {});
 
     /* Serverový výpočet trasy: skutečné kilometry po silnici + cena za každý vůz.
@@ -1105,7 +1124,7 @@
     /* ---------- shell ---------- */
     function shellChrome() {
       $('#nav').innerHTML = [
-        ['services', '#/sluzby'], ['fleet', '#/vozy'], ['airport', '#/letiste'], ['business', '#/firmy']
+        ['services', '#/sluzby'], ['fleet', '#/vozy'], ['airport', '#/letiste'], ['business', '#/firmy'], ['contact', '#/kontakt']
       ].map(([k, href], i) => `<a class="nav-link appear ${i % 2 ? 'a-soft' : 'a-scale'}" href="${href}" data-p="${k}" style="--d:${.16 + i * .12}s">${t('nav.' + k)}</a>`).join('')
         + `<a class="nav-link mobile-only" href="#/napoveda" data-p="help">${t('nav.help')}</a>`
         + `<a class="nav-link mobile-only" href="#/jizdy" data-p="trips">${t('nav.trips')}</a>`;
@@ -1141,8 +1160,8 @@
       const routeDeals = [
         ['PRG → Praha centrum', L('Fixní cena letištního transferu', 'Fixed airport transfer price'), FLEET.sedan.base, 't1'],
         ['Praha → PRG', L('Včasný odvoz na odlet', 'On-time departure pickup'), FLEET.sedan.base, 't2'],
-        ['PRG → Karlovy Vary', L('Dálková jízda bez přestupů', 'Long-distance ride with no transfers'), Math.round((130 * FLEET.sedan.rate + FLEET.sedan.base * .4) / 10) * 10, 't3'],
-        ['Praha → Vídeň', L('Soukromý transfer do Rakouska', 'Private transfer to Austria'), Math.round((335 * FLEET.sedan.rate + FLEET.sedan.base * .4) / 10) * 10, 't4']
+        ['PRG → Karlovy Vary', L('Orientačně podle sazby 34 Kč/km', 'Estimate at 34 CZK/km'), Math.round((130 * FLEET.sedan.rate) / 10) * 10, 't3'],
+        ['Praha → Vídeň', L('Orientačně podle sazby 34 Kč/km', 'Estimate at 34 CZK/km'), Math.round((335 * FLEET.sedan.rate) / 10) * 10, 't4']
       ];
       const process = [
         [L('Vyplníte trasu', 'Enter the route'), L('Zvolíte směr, čas, počet osob a vůz. Cena se přepočítá okamžitě.', 'Choose direction, time, people and car. The price updates instantly.')],
@@ -1204,9 +1223,9 @@
       </section>
       <div class="home-rich">
         <section class="home-section appear a-soft" style="--d:.06s">
-          <p class="section-kicker">${L('Proč Wayro', 'Why Wayro')}</p>
+          <p class="section-kicker">${L('Proč Transfer by Van', 'Why Transfer by Van')}</p>
           <h2 class="home-title">${L('Letištní transfer, který je jasný ještě před nástupem.', 'An airport transfer that is clear before you get in.')}</h2>
-          <p class="home-lede">${L('Wayro staví službu na přesné ceně, jednoduchém vyzvednutí a lidské komunikaci. Víte, kde se potkáte s řidičem, kolik zaplatíte, co je v ceně a kde zrovna jede auto.', 'Wayro is built around exact pricing, simple pickup and human communication. You know where you meet the driver, what you pay, what is included and where the car is right now.')}</p>
+          <p class="home-lede">${L('Transfer by Van staví službu na přesné ceně, jednoduchém vyzvednutí a lidské komunikaci. Víte, kde se potkáte s řidičem, kolik zaplatíte, co je v ceně a kde zrovna jede auto.', 'Transfer by Van is built around exact pricing, simple pickup and human communication. You know where you meet the driver, what you pay, what is included and where the car is right now.')}</p>
           <div class="feature-grid">${featureItems.map(([ic, title, text]) => `<article class="feature">${icon(ic)}<h3>${title}</h3><p>${text}</p></article>`).join('')}</div>
         </section>
 
@@ -1242,8 +1261,8 @@
 
         <section class="home-section">
           <div class="app-band">
-            <div><p class="section-kicker">${L('Mobilní aplikace', 'Mobile app')}</p><h2>${L('Mějte rezervaci, řidiče i příjezd pod kontrolou.', 'Keep your booking, driver and arrival under control.')}</h2><p>${L('Pro klienty, kteří cestují častěji, je aplikace nejrychlejší cesta k nové objednávce, opakování trasy a přehledu jízd.', 'For frequent travellers, the app is the fastest way to make a new booking, repeat a route and see ride history.')}</p><div class="app-actions"><a class="btn btn-solid" href="${SITE.app}" target="_blank" rel="noopener">${L('Stáhnout aplikaci', 'Download app')} ${icon('arrow')}</a><a class="btn btn-ghost" href="#/jizdy">${t('nav.trips')}</a></div></div>
-            <div class="mini-phone" aria-hidden="true"><div class="mini-screen"><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="mapline"></div></div></div>
+            <div><p class="section-kicker">${L('Přímý kontakt', 'Direct contact')}</p><h2>${L('Domluvte transfer přímo s provozovatelem.', 'Arrange your transfer directly with the operator.')}</h2><p>${L('Serhii Boliak · IČO 08865931. Zavolejte, napište na WhatsApp nebo e-mail. Bankovní převod používejte až po potvrzení rezervace.', 'Serhii Boliak · Company ID 08865931. Call, use WhatsApp or e-mail. Make a bank transfer only after the booking is confirmed.')}</p><div class="app-actions"><a class="btn btn-solid" href="tel:+420774571747">${icon('headset')}${CONTACT.phone}</a><a class="btn btn-ghost" href="https://wa.me/${CONTACT.phoneDigits}" target="_blank" rel="noopener">WhatsApp</a><a class="btn btn-ghost" href="#/kontakt">${L('Kontakty a platba', 'Contacts and payment')}${icon('arrow')}</a></div></div>
+            <div class="bank-account"><span>${L('Příjemce', 'Account holder')}</span><strong style="font-size:22px">${CONTACT.operator}</strong><p class="note">${CONTACT.email}<br>IČO ${CONTACT.ico}</p></div>
           </div>
         </section>
 
@@ -1421,7 +1440,7 @@
       if (seq !== acSeq || !box.isConnected || input.value.trim() !== term || document.activeElement !== input || !box.classList.contains('on')) return;
       if (!results.length) {
         results = PLACES.filter(p => p.n.toLocaleLowerCase('cs').includes(term.toLocaleLowerCase('cs')))
-          .map(p => ({ label: p.n, full: p.n, address: L('Bod ze seznamu Wayro', 'Wayro pickup point'), lat: p.lat, lng: p.lng, known: true }));
+          .map(p => ({ label: p.n, full: p.n, address: L('Bod ze seznamu Transfer by Van', 'Transfer by Van pickup point'), lat: p.lat, lng: p.lng, known: true }));
       }
       const warningText = warning === 'places_not_configured' ? L('Vyhledávání hotelů ještě není připojeno. Je nutné nastavit GEOAPIFY_API_KEY na serveru.', 'Hotel search is not connected yet. GEOAPIFY_API_KEY must be set on the server.') : warning ? L('Hledání je dočasně nedostupné. Zkuste to znovu.', 'Place search is temporarily unavailable. Please retry.') : '';
       if (!results.length) {
@@ -1435,7 +1454,7 @@
         const showKm = validGeo(opp) && Number.isFinite(localKm) && localKm >= 0.1 && oppWhich && S[oppWhich];
         const addr = x.address && x.address !== x.label ? x.address : x.full;
         return `<button type="button" role="option" aria-selected="false" tabindex="-1" id="option-${which}-${i}" data-pick="${which}" data-i="${i}" title="${esc(x.full)}">${icon(x.kind === 'hotel' ? 'building' : 'pin')}<span><b>${matchText(x.label, term)}</b><small>${esc(addr)}${showKm ? `<span style="color:var(--accent)"> · ≈ ${esc(fmtKm(localKm))} ${L('vzdušně', 'straight line')}</span>` : ''}</small></span></button>`;
-      }).join('') + `<div class="ac-meta" role="presentation">${provider === 'geoapify' ? '<a href="https://www.geoapify.com/" target="_blank" rel="noopener">Geoapify</a> · <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>' : L('Body Wayro', 'Wayro locations')}${warningText ? `<br>${warningText}` : ''}<br>${L('Přesné km po silnici ukážeme po výběru obou míst.', 'Exact road km appear after you pick both places.')}</div>`;
+      }).join('') + `<div class="ac-meta" role="presentation">${provider === 'geoapify' ? '<a href="https://www.geoapify.com/" target="_blank" rel="noopener">Geoapify</a> · <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>' : L('Body Transfer by Van', 'Transfer by Van locations')}${warningText ? `<br>${warningText}` : ''}<br>${L('Přesné km po silnici ukážeme po výběru obou míst.', 'Exact road km appear after you pick both places.')}</div>`;
     }
     function readHome() {
       if (!$('#book-form')) return;
@@ -1505,7 +1524,7 @@
           [L('Příjezd řidiče', 'Driver arrives'), L('Řidič přijede včas, na letišti čeká s cedulkou a pomůže se zavazadly.', 'The driver arrives on time, waits with a name sign at the airport and helps with the luggage.')],
           [L('Platba', 'Payment'), L('Zaplatíte po jízdě hotově nebo kartou u řidiče a dostanete doklad.', 'You pay after the ride in cash or by card and receive a receipt.')]
         ].map(([ttl, txt], i) => `<div class="step"><span class="step-num">0${i + 1}</span><h3>${ttl}</h3><p>${txt}</p></div>`).join('')}</div>`
-        + `<div class="banner">${icon('info')}<p>${L('Ceny letiště – Praha odpovídají ceníku Wayro a jsou pevné. Dálkové a hodinové kalkulace jsou orientační, finální cenu potvrzuje dispečink.', 'Airport – Prague prices follow the Wayro price list and are fixed. Long-distance and hourly calculations are estimates; dispatch confirms the final price.')}</p></div></section>`;
+        + `<div class="banner">${icon('info')}<p>${L('Ceny letiště – Praha odpovídají ceníku Transfer by Van a jsou pevné. Dálkové a hodinové kalkulace jsou orientační, finální cenu potvrzuje provozovatel.', 'Airport – Prague prices follow the Transfer by Van price list and are fixed. Long-distance and hourly calculations are estimates; the operator confirms the final price.')}</p></div></section>`;
     }
     function renderFleet() {
       const items = Object.entries(FLEET).filter(([k]) => fleetFilter === 'all' || fleetFilter === k);
@@ -1550,7 +1569,7 @@
         </div></section>`;
     }
     function renderBusiness() {
-      app.innerHTML = head(L('Wayro pro firmy', 'Wayro for business'), L('Vaši klienti.<br>Naše <em>starost.</em>', 'Your clients.<br>Our <em>care.</em>'), L('Přeprava partnerů, klientů i týmu s jedním standardem a přehledem nákladů.', 'Transport for partners, clients and your team with one standard and a clear cost overview.'))
+      app.innerHTML = head(L('Transfer by Van pro firmy', 'Transfer by Van for business'), L('Vaši klienti.<br>Naše <em>starost.</em>', 'Your clients.<br>Our <em>care.</em>'), L('Přeprava partnerů, klientů i týmu s jedním standardem a přehledem nákladů.', 'Transport for partners, clients and your team with one standard and a clear cost overview.'))
         + `<div class="split"><div><ul class="list">
           ${[L('Transfery klientů a delegací na letiště i na jednání', 'Client and delegation transfers to the airport and meetings'),
              L('Pravidelné jízdy zaměstnanců podle firemní politiky', 'Recurring staff rides following your travel policy'),
@@ -1561,12 +1580,24 @@
           <label class="form-field"><span>${L('Počet jízd měsíčně', 'Rides per month')}</span><input class="input" id="biz-n" type="number" min="1" max="999" value="20" required></label>
           <label class="form-field"><span>${L('Vůz', 'Vehicle')}</span><select class="input" id="biz-car">${Object.entries(FLEET).map(([k, c]) => `<option value="${k}" ${k === 'sedan' ? 'selected' : ''}>${c.label}</option>`).join('')}</select></label>
           <p class="note">${L('Vzorová trasa letiště – Praha. Od 20 jízd −8 %, od 60 jízd −15 % (ukázková sazba).', 'Sample route airport – Prague. From 20 rides −8 %, from 60 rides −15 % (demo rate).')}</p>
-          <div class="total-row"><span>${L('Měsíčně přibližně', 'Approx. per month')}</span><strong id="biz-total">${money(20 * 690 * .92)}</strong></div>
+          <div class="total-row"><span>${L('Měsíčně přibližně', 'Approx. per month')}</span><strong id="biz-total">${money(20 * FLEET.sedan.base * .92)}</strong></div>
           <button class="btn btn-solid wide" type="submit">${L('Připravit poptávku', 'Prepare request')} ${icon('arrow')}</button></form></div></section>`;
       bizTotal();
     }
     const bizQuote = () => { const n = Math.max(1, Math.min(999, Number($('#biz-n')?.value) || 1)); const c = $('#biz-car')?.value || 'sedan'; const d = n >= 60 ? .15 : n >= 20 ? .08 : 0; return { n, c, d, total: Math.round(n * FLEET[c].base * (1 - d)) }; };
     const bizTotal = () => { if ($('#biz-total')) $('#biz-total').textContent = money(bizQuote().total); };
+
+    function renderContact() {
+      app.innerHTML = head(L('Kontakt a platba', 'Contact and payment'), L('Jedna cesta.<br><em>Jeden kontakt.</em>', 'One journey.<br><em>One contact.</em>'), L('Rezervace, změny trasy, vyzvednutí i platba přímo s provozovatelem Transfer by Van.', 'Bookings, route changes, pickup and payment directly with the Transfer by Van operator.')) + `
+        <div class="contact-grid">
+          <a class="contact-line" href="tel:+${CONTACT.phoneDigits}">${icon('headset')}<span><small>${L('Telefon', 'Phone')}</small><strong>${CONTACT.phone}</strong></span></a>
+          <a class="contact-line" href="https://wa.me/${CONTACT.phoneDigits}" target="_blank" rel="noopener">${icon('msg')}<span><small>WhatsApp</small><strong>${CONTACT.phone}</strong></span></a>
+          <a class="contact-line" href="mailto:${CONTACT.email}">${icon('globe')}<span><small>E-mail</small><strong>${CONTACT.email}</strong></span></a>
+        </div>
+        <div class="split" style="margin-top:48px"><section><p class="section-kicker">${L('Provozovatel', 'Operator')}</p><h2 class="section-h">${CONTACT.operator}</h2><ul class="legal-list"><li><span>IČO</span><strong>${CONTACT.ico}</strong></li><li><span>${L('Právní forma', 'Legal form')}</span><strong>${L('Fyzická osoba podnikající dle živnostenského zákona', 'Sole trader under the Czech Trade Licensing Act')}</strong></li><li><span>${L('Datum vzniku', 'Established')}</span><strong>${CONTACT.since}</strong></li><li><span>${L('Činnost', 'Activity')}</span><strong>${L('Ostatní pozemní osobní doprava (CZ-NACE 493)', 'Other passenger land transport (CZ-NACE 493)')}</strong></li><li><span>${L('Koncese', 'Licence')}</span><strong>${L('Silniční motorová doprava osob do 9 osob včetně řidiče', 'Road passenger transport up to 9 people including driver')}</strong></li></ul><a class="btn btn-ghost" href="${CONTACT.registry}" target="_blank" rel="noopener" style="margin-top:24px">${L('Ověřit ve veřejném rejstříku', 'Verify in the public registry')} ↗</a><p class="fine">${L('Údaje o IČO, právní formě, datu vzniku a činnosti jsou převzaté z veřejného rejstříku. Provozovatel odpovídá za jejich aktuálnost na tomto webu.', 'Company ID, legal form, establishment date and activity are taken from the public registry. The operator is responsible for keeping them current on this website.')}</p></section>
+        <section><p class="section-kicker">${L('Bankovní převod', 'Bank transfer')}</p><h2 class="section-h">${L('Účty v CZK a EUR', 'CZK and EUR accounts')}</h2><div class="bank-grid"><article class="bank-account"><span>${L('Účet CZK', 'CZK account')}</span><strong>${CONTACT.czk}</strong><button class="btn btn-ghost btn-small" type="button" data-a="copy-value" data-v="${CONTACT.czk}">${icon('copy')}${L('Kopírovat', 'Copy')}</button></article><article class="bank-account"><span>${L('Účet EUR', 'EUR account')}</span><strong>${CONTACT.eur}</strong><button class="btn btn-ghost btn-small" type="button" data-a="copy-value" data-v="${CONTACT.eur}">${icon('copy')}${L('Kopírovat', 'Copy')}</button></article></div><div class="banner">${icon('info')}<p>${L('Příjemce: Serhii Boliak. Převod proveďte pouze po domluvě a potvrzení rezervace. Do zprávy pro příjemce napište celé číslo rezervace. Odeslání převodu samo nepotvrzuje přijetí platby ani přidělení vozidla; vyčkejte na potvrzení provozovatele.', 'Account holder: Serhii Boliak. Transfer funds only after the booking has been agreed and confirmed. Include the full booking number in the payment message. Sending a transfer does not by itself confirm payment receipt or vehicle assignment; wait for operator confirmation.')}</p></div></section></div>
+        <section class="home-section" style="margin-top:56px"><p class="section-kicker">${L('Kdy se ozvat', 'When to contact us')}</p><div class="feature-grid"><article class="feature">${icon('calendar')}<h3>${L('Změna rezervace', 'Booking changes')}</h3><p>${L('Změna času, trasy, zastávky, letu nebo počtu cestujících.', 'Changes to time, route, stopover, flight or passenger count.')}</p></article><article class="feature">${icon('case')}<h3>${L('Speciální zavazadla', 'Special luggage')}</h3><p>${L('Kočárek, kolo, lyže nebo více velkých zavazadel ověřte před jízdou.', 'Confirm a pram, bike, skis or multiple large bags before the ride.')}</p></article><article class="feature">${icon('sign')}<h3>${L('Místo setkání', 'Meeting point')}</h3><p>${L('Pomůžeme najít Mattoni Bar, Visitor Centre nebo Burger King.', 'We can help you find Mattoni Bar, the Visitor Centre or Burger King.')}</p></article><article class="feature">${icon('card')}<h3>${L('Platba', 'Payment')}</h3><p>${L('Před bankovním převodem nebo při nejasném stavu platby kontaktujte provozovatele.', 'Contact the operator before a bank transfer or when payment status is unclear.')}</p></article></div></section></section>`;
+    }
 
     function renderTrips() {
       const list = orders.filter(o => tripFilter === 'all' || (tripFilter === 'next' ? !o.cancelled && o.stage < 6 : o.cancelled || o.stage === 6));
@@ -1730,7 +1761,7 @@
         <aside class="aside"><h2>${L('Nenašli jste odpověď?', 'Still stuck?')}</h2><p>${L('Průvodce vám poradí s rezervací, zavazadly nebo autosedačkou přímo tady v prohlížeči.', 'The assistant helps with bookings, luggage or child seats right here in your browser.')}</p>
         <button class="btn btn-ghost" type="button" data-a="chat">${icon('msg')}${L('Zeptat se průvodce', 'Ask the assistant')}</button>
         <p class="fine">${L('Jde o lokální nápovědu, ne o živý dispečink. Zprávy se nikam neodesílají.', 'This is a local helper, not live dispatch. Messages are not sent anywhere.')}</p>
-        <div class="links">${PUB.whatsapp ? `<a class="text-link" href="https://wa.me/${esc(String(PUB.whatsapp).replace(/\D/g, ''))}" target="_blank" rel="noopener">WhatsApp 24/7 · ${esc(PUB.whatsapp)} ↗</a>` : ''}${PUB.phone ? `<a class="text-link" href="tel:${esc(String(PUB.phone).replace(/\D/g, ''))}">${L('Telefon 24/7', 'Phone 24/7')} · ${esc(PUB.phone)} ↗</a>` : ''}<a class="text-link" href="${SITE.admin}" target="_blank" rel="noopener">${L('Správa skutečných rezervací', 'Manage real bookings')} ↗</a><a class="text-link" href="${SITE.app}" target="_blank" rel="noopener">${L('Mobilní aplikace', 'Mobile app')} ↗</a><a class="text-link" href="/webhook-setup" target="_blank" rel="noopener">${L('Nastavení plateb (webhook) – jen pro provozovatele', 'Payment setup (webhook) – owner only')} ↗</a><button class="text-link" type="button" data-a="privacy">${L('O ukázce a datech', 'About the demo and data')}</button></div></aside></div></section>`;
+        <div class="links"><a class="text-link" href="https://wa.me/${CONTACT.phoneDigits}" target="_blank" rel="noopener">WhatsApp · ${CONTACT.phone} ↗</a><a class="text-link" href="tel:+${CONTACT.phoneDigits}">${L('Telefon', 'Phone')} · ${CONTACT.phone}</a><a class="text-link" href="mailto:${CONTACT.email}">${CONTACT.email}</a><a class="text-link" href="#/kontakt">${L('Kontakty, provozovatel a bankovní účty', 'Contact, operator and bank accounts')} →</a><a class="text-link" href="${CONTACT.registry}" target="_blank" rel="noopener">${L('Veřejný rejstřík · IČO', 'Public registry · Company ID')} ${CONTACT.ico} ↗</a><a class="text-link" href="/webhook-setup" target="_blank" rel="noopener">${L('Nastavení plateb – provozovatel', 'Payment setup – operator')} ↗</a><button class="text-link" type="button" data-a="privacy">${L('O datech a soukromí', 'About data and privacy')}</button></div></aside></div></section>`;
     }
     function renderRef() {
       app.innerHTML = head(L('Doporučení', 'Referrals'), L('Sdílejte.<br>Jezděte <em>výhodněji.</em>', 'Share it.<br>Ride for <em>less.</em>'), L('Váš kód dá kamarádovi slevu na první jízdu.', 'Your code gives a friend a discount on their first ride.'))
@@ -1740,16 +1771,16 @@
         <ol class="steps-ol"><li>${L('Pošlete kamarádovi kód nebo odkaz.', 'Send your friend the code or link.')}</li><li>${L('Zadá ho v detailech první rezervace.', 'They enter it in the details of their first booking.')}</li><li>${L('Kalkulačka sníží cenu o 10 %. Kódy se nesčítají.', 'The calculator lowers the price by 10 %. Codes do not stack.')}</li></ol></div></section>`;
     }
     function renderMissing() {
-      app.innerHTML = head('Wayro', L('Tady <em>nic není.</em>', 'Nothing <em>here.</em>'), L('Tato stránka neexistuje. Vraťme se tam, kde začíná cesta.', 'This page does not exist. Let us head back to the start.')) + `<a class="btn btn-solid" href="#/" style="margin-top:26px">${L('Na hlavní stranu', 'Go home')} ${icon('arrow')}</a></section>`;
+      app.innerHTML = head('Transfer by Van', L('Tady <em>nic není.</em>', 'Nothing <em>here.</em>'), L('Tato stránka neexistuje. Vraťme se tam, kde začíná cesta.', 'This page does not exist. Let us head back to the start.')) + `<a class="btn btn-solid" href="#/" style="margin-top:26px">${L('Na hlavní stranu', 'Go home')} ${icon('arrow')}</a></section>`;
     }
 
     function renderDriver() {
-      app.innerHTML = head('Wayro / GPS', L('Vaše poloha.<br><em>Jen pro vaši jízdu.</em>', 'Your location.<br><em>Only for your ride.</em>'), L('Sdílení spustíte sami. Potřebujete zabezpečenou stránku, internet a odkaz od dispečera.', 'You control when sharing starts. A secure page, internet and a dispatcher link are required.')) + `
+      app.innerHTML = head('Transfer by Van / GPS', L('Vaše poloha.<br><em>Jen pro vaši jízdu.</em>', 'Your location.<br><em>Only for your ride.</em>'), L('Sdílení spustíte sami. Potřebujete zabezpečenou stránku, internet a odkaz od dispečera.', 'You control when sharing starts. A secure page, internet and a dispatcher link are required.')) + `
         <div class="driver-layout"><form class="driver-console" id="driver-form">
           ${icon('satellite', 'gps-symbol')}<h2>${L('Sdílení z telefonu řidiče', 'Share from the driver phone')}</h2>
           <p class="gps-message" id="driver-message" role="status">${L('Zatím nesdílíte svou polohu.', 'Your location is not being shared.')}</p>
           <div class="summary-itinerary" id="driver-itinerary" hidden style="margin-bottom:22px"></div>
-          <label class="form-field"><span>${L('Číslo rezervace', 'Booking number')}</span><input class="input" id="driver-order" value="${esc(driverSession.orderId)}" placeholder="WY-..." maxlength="80" autocomplete="off" required></label>
+          <label class="form-field"><span>${L('Číslo rezervace', 'Booking number')}</span><input class="input" id="driver-order" value="${esc(driverSession.orderId)}" placeholder="TV-..." maxlength="80" autocomplete="off" required></label>
           <label class="form-field"><span>${L('Klíč z odkazu dispečera', 'Key from the dispatcher link')}</span><input class="input" id="driver-key" type="password" value="${esc(driverSession.token)}" autocomplete="off" maxlength="120" required></label>
           <label class="check"><input type="checkbox" id="driver-consent" required><span>${L('Souhlasím se sdílením GPS pro tuto jízdu. Sdílení mohu kdykoli zastavit.', 'I agree to share my GPS for this ride. I can stop sharing at any time.')}</span></label>
           <div class="d-actions"><button class="btn btn-solid" id="driver-start" type="submit">${icon('navigation')}${L('Zapnout GPS', 'Enable GPS')}</button><button class="btn btn-ghost" id="driver-stop" data-a="driver-stop" type="button" disabled>${L('Zastavit', 'Stop')}</button></div>
@@ -1871,7 +1902,7 @@
     }
     function renderDataPage(message = '') {
       const allowed = dataSession.authorized && dataSession.key && dataSession.expiresAt > Date.now();
-      const intro = head('Wayro / Operations', L('Rezervace.<br><em>Přesně tak, jak přišly.</em>', 'Reservations.<br><em>Exactly as submitted.</em>'), L('Soukromý přehled skutečných záznamů ze serveru. Místa, adresy a kontakty z rezervací.', 'A private view of actual server records. Selected locations, addresses and booking contacts.'));
+      const intro = head('Transfer by Van / Operations', L('Rezervace.<br><em>Přesně tak, jak přišly.</em>', 'Reservations.<br><em>Exactly as submitted.</em>'), L('Soukromý přehled skutečných záznamů ze serveru. Místa, adresy a kontakty z rezervací.', 'A private view of actual server records. Selected locations, addresses and booking contacts.'));
       if (!allowed) {
         app.innerHTML = intro + `<form class="data-login" id="data-login-form"><label class="form-field"><span>${L('Přístupový klíč dispečinku', 'Dispatcher access key')}</span><input class="input" name="operatorKey" type="password" autocomplete="off" minlength="32" maxlength="512" required ${dataSession.loading ? 'disabled' : ''}></label><button class="btn btn-solid wide" type="submit" ${dataSession.loading ? 'disabled' : ''}>${icon('shield')}${dataSession.loading ? L('Ověřuji přístup…', 'Verifying access…') : L('Otevřít rezervace', 'Open reservations')}</button><p class="data-message" id="data-message" role="status">${esc(message || '')}</p><p class="note">${L('Používá se již existující klíč dispečinku. V URL ani v úložišti prohlížeče jej neuchováváme. Samotný název stránky není zabezpečení.', 'This uses the existing dispatcher key. It is not saved in the URL or browser storage. An obscure page name is not authentication.')}</p></form></section>`;
         app.firstElementChild?.classList.add('is-in');
@@ -1883,7 +1914,7 @@
         <form class="data-filters" id="data-filter-form"><label class="form-field data-search"><span>${L('Hledat rezervaci', 'Search reservations')}</span><input class="input" type="search" name="query" maxlength="160" value="${esc(s.query)}" placeholder="${L('Číslo, jméno, hotel, adresa…', 'Number, name, hotel, address…')}"></label><label class="form-field"><span>${L('Stav jízdy', 'Ride status')}</span><select class="input" name="state">${[['all',L('Všechny', 'All')],['pending',L('Nové žádosti', 'New requests')],['active',L('Přidělené / na cestě', 'Assigned / en route')],['completed',L('Dokončené', 'Completed')],['cancelled',L('Zrušené', 'Cancelled')]].map(([value, label]) => `<option value="${value}" ${value === s.state ? 'selected' : ''}>${label}</option>`).join('')}</select></label><label class="form-field"><span>${L('Datum jízdy od', 'Ride date from')}</span><input class="input" type="date" name="dateFrom" value="${esc(s.dateFrom)}"></label><label class="form-field"><span>${L('Datum jízdy do', 'Ride date to')}</span><input class="input" type="date" name="dateTo" value="${esc(s.dateTo)}"></label><button class="btn btn-solid" type="submit" ${s.loading ? 'disabled' : ''}>${icon('search')}${L('Hledat', 'Search')}</button></form>
         <p class="data-message" id="data-message" role="status">${esc(message || (s.loading ? L('Načítáme rezervace ze serveru…', 'Loading server reservations…') : s.error || L(`Nalezeno ${s.total} rezervací.`, `${s.total} reservations found.`)))}</p>
         <div id="data-results" tabindex="-1" aria-busy="${s.loading}">${s.loading ? `<p class="data-empty">${L('Čekejte prosím. Nezobrazujeme lokální ani ukázkové rezervace.', 'Please wait. This view does not substitute local or sample bookings.')}</p>` : s.error ? `<p class="data-empty">${L('Data se nepodařilo načíst. Zkuste je obnovit.', 'Could not load data. Try refreshing.')}</p>` : s.items.length ? `
-        <div class="data-scroll"><table class="data-table"><caption class="sr-only">${L('Rezervace na serveru Wayro', 'Reservations on the Wayro server')}</caption><thead><tr><th scope="col">${L('Rezervace / klient', 'Booking / client')}</th><th scope="col">${L('Skutečně zvolená místa', 'Selected locations')}</th><th scope="col">${L('Cena / platba', 'Price / payment')}</th><th scope="col">${L('Stav', 'Status')}</th><th scope="col">${L('Detail', 'Details')}</th></tr></thead><tbody>${s.items.map(r => `<tr><td><span class="data-client">${esc(r.customerName || L('Jméno neuvedeno', 'No name recorded'))}</span><span class="data-id">${esc(r.id)}</span>${esc(dtLbl(r.date, r.time))}<br><span class="note">${esc(FLEET[r.car]?.label || r.car)} · ${Number(r.passengers) || 0} ${L('os.', 'pax')}</span></td><td>${placeMarkup(r.locations.pickup, L('Vyzvednutí', 'Pickup'))}<span class="data-route-divider" aria-hidden="true">↓</span>${r.locations.destination ? placeMarkup(r.locations.destination, L('Cíl', 'Destination')) : `<span class="note">${L('Hodinová dispozice', 'Hourly hire')} · ${Number(r.hours) || 0} h</span>`}${r.locations.stopover ? `<span class="note">${L('Se zastávkou', 'Includes a stop')}</span>` : ''}</td><td><span class="data-money">${Number.isFinite(r.amount) ? money(r.amount) : '-'}</span><br>${paymentStateName(r.paymentStatus, r.testPayment)}</td><td><span class="status ${r.cancelled ? 'off' : ''}">${r.cancelled ? L('Zrušena', 'Cancelled') : t('stages')[r.stage] || L('Neznámý', 'Unknown')}</span><br><span class="note">${emailStateName(r.emailStatus)}</span></td><td><button class="btn btn-ghost btn-small" type="button" data-a="data-detail" data-v="${esc(r.id)}" aria-label="${esc(L('Otevřít rezervaci ', 'Open booking ') + r.id)}">${L('Otevřít', 'Open')}${icon('arrow')}</button></td></tr>`).join('')}</tbody></table></div>` : `<p class="data-empty">${L('Žádné rezervace neodpovídají filtru. Zkontrolujte datum nebo hledaný text.', 'No reservations match the filters. Check the dates or search text.')}</p>`}</div>
+        <div class="data-scroll"><table class="data-table"><caption class="sr-only">${L('Rezervace na serveru Transfer by Van', 'Reservations on the Transfer by Van server')}</caption><thead><tr><th scope="col">${L('Rezervace / klient', 'Booking / client')}</th><th scope="col">${L('Skutečně zvolená místa', 'Selected locations')}</th><th scope="col">${L('Cena / platba', 'Price / payment')}</th><th scope="col">${L('Stav', 'Status')}</th><th scope="col">${L('Detail', 'Details')}</th></tr></thead><tbody>${s.items.map(r => `<tr><td><span class="data-client">${esc(r.customerName || L('Jméno neuvedeno', 'No name recorded'))}</span><span class="data-id">${esc(r.id)}</span>${esc(dtLbl(r.date, r.time))}<br><span class="note">${esc(FLEET[r.car]?.label || r.car)} · ${Number(r.passengers) || 0} ${L('os.', 'pax')}</span></td><td>${placeMarkup(r.locations.pickup, L('Vyzvednutí', 'Pickup'))}<span class="data-route-divider" aria-hidden="true">↓</span>${r.locations.destination ? placeMarkup(r.locations.destination, L('Cíl', 'Destination')) : `<span class="note">${L('Hodinová dispozice', 'Hourly hire')} · ${Number(r.hours) || 0} h</span>`}${r.locations.stopover ? `<span class="note">${L('Se zastávkou', 'Includes a stop')}</span>` : ''}</td><td><span class="data-money">${Number.isFinite(r.amount) ? money(r.amount) : '-'}</span><br>${paymentStateName(r.paymentStatus, r.testPayment)}</td><td><span class="status ${r.cancelled ? 'off' : ''}">${r.cancelled ? L('Zrušena', 'Cancelled') : t('stages')[r.stage] || L('Neznámý', 'Unknown')}</span><br><span class="note">${emailStateName(r.emailStatus)}</span></td><td><button class="btn btn-ghost btn-small" type="button" data-a="data-detail" data-v="${esc(r.id)}" aria-label="${esc(L('Otevřít rezervaci ', 'Open booking ') + r.id)}">${L('Otevřít', 'Open')}${icon('arrow')}</button></td></tr>`).join('')}</tbody></table></div>` : `<p class="data-empty">${L('Žádné rezervace neodpovídají filtru. Zkontrolujte datum nebo hledaný text.', 'No reservations match the filters. Check the dates or search text.')}</p>`}</div>
         <div class="data-pagination"><span>${L('Stránka', 'Page')} ${s.page} / ${s.pages}</span><div class="data-actions"><button class="btn btn-ghost btn-small" type="button" data-a="data-prev" ${s.loading || s.page <= 1 ? 'disabled' : ''}>${L('Předchozí', 'Previous')}</button><button class="btn btn-ghost btn-small" type="button" data-a="data-next" ${s.loading || s.page >= s.pages ? 'disabled' : ''}>${L('Další', 'Next')}</button></div></div><p class="fine">${L('Osobní údaje používejte pouze k vyřízení rezervací. Klíč se po odchodu nebo po 15 minutách smaže z paměti. Export obsahuje zákaznické údaje.', 'Use personal data only to manage reservations. The key is cleared when leaving or after 15 minutes. Exports contain customer information.')}</p></section>`;
       app.firstElementChild?.classList.add('is-in');
     }
@@ -1968,7 +1999,7 @@
           ...(r.roundtrip ? [[L('Zpáteční jízda', 'Return ride'), `${dtLbl(r.returnDate, r.returnTime)} / ${placeText(r.locations.destination)} → ${placeText(r.locations.pickup)}`, true]] : [])
         ];
         kind = 'data-detail';
-        mbody.innerHTML = dHead('Wayro / Operations', L('Detail rezervace', 'Reservation details'), esc(r.id)) + `<div class="summary-itinerary" style="margin-top:24px">${placeMarkup(r.locations.pickup, L('Vyzvednutí', 'Pickup'))}${r.locations.stopover ? placeMarkup(r.locations.stopover, L('Zastávka', 'Stopover')) : ''}${r.locations.destination ? placeMarkup(r.locations.destination, L('Cíl', 'Destination')) : `<p>${L('Hodinová dispozice', 'Hourly hire')} · ${r.hours} h</p>`}</div><dl class="data-detail">${lines.map(([label, value, full]) => `<div class="${full ? 'data-full' : ''}"><dt>${label}</dt><dd>${esc(value || '-')}</dd></div>`).join('')}</dl><div class="d-actions"><button class="btn btn-ghost" data-a="close" type="button">${L('Zavřít', 'Close')}</button>${!r.cancelled && r.stage < 6 ? `<a class="btn btn-solid" href="#/dispecink?order=${encodeURIComponent(r.id)}">${L('Přiřadit řidiče', 'Assign driver')}${icon('arrow')}</a>` : ''}</div></div>`;
+        mbody.innerHTML = dHead('Transfer by Van / Operations', L('Detail rezervace', 'Reservation details'), esc(r.id)) + `<div class="summary-itinerary" style="margin-top:24px">${placeMarkup(r.locations.pickup, L('Vyzvednutí', 'Pickup'))}${r.locations.stopover ? placeMarkup(r.locations.stopover, L('Zastávka', 'Stopover')) : ''}${r.locations.destination ? placeMarkup(r.locations.destination, L('Cíl', 'Destination')) : `<p>${L('Hodinová dispozice', 'Hourly hire')} · ${r.hours} h</p>`}</div><dl class="data-detail">${lines.map(([label, value, full]) => `<div class="${full ? 'data-full' : ''}"><dt>${label}</dt><dd>${esc(value || '-')}</dd></div>`).join('')}</dl><div class="d-actions"><button class="btn btn-ghost" data-a="close" type="button">${L('Zavřít', 'Close')}</button>${!r.cancelled && r.stage < 6 ? `<a class="btn btn-solid" href="#/dispecink?order=${encodeURIComponent(r.id)}">${L('Přiřadit řidiče', 'Assign driver')}${icon('arrow')}</a>` : ''}</div></div>`;
         open();
       } catch (error) {
         if (sequence === dataSession.sequence && path === PRIVATE_DATA_PATH && error.name !== 'AbortError') $('#data-message').textContent = error.message;
@@ -1978,14 +2009,14 @@
       if (!dataSession.authorized || !dataSession.items.length || dataSession.expiresAt <= Date.now()) return;
       const cell = value => `"${String(value ?? '').replace(/^[\s\u0000-\u001f]*[=+@-]/, "'$&").replaceAll('"', '""')}"`;
       const rows = [[L('Rezervace', 'Booking'), L('Klient', 'Client'), L('Datum', 'Date'), L('Čas', 'Time'), L('Vyzvednutí', 'Pickup'), L('Cíl', 'Destination'), L('Zastávka', 'Stopover'), L('Vůz', 'Vehicle'), 'CZK', L('Stav platby', 'Payment status')], ...dataSession.items.map(r => [r.id, r.customerName, r.date, r.time, placeText(r.locations.pickup), r.locations.destination ? placeText(r.locations.destination) : L('Hodinová dispozice', 'Hourly hire') + ` (${Number(r.hours) || 0} h)`, placeText(r.locations.stopover), FLEET[r.car]?.label || r.car, r.amount, paymentStateName(r.paymentStatus, r.testPayment)])];
-      download(`wayro-reservations-page-${dataSession.page}.csv`, rows.map(row => row.map(cell).join(';')).join('\r\n'), 'text/csv;charset=utf-8');
+      download(`transfer-by-van-reservations-page-${dataSession.page}.csv`, rows.map(row => row.map(cell).join(';')).join('\r\n'), 'text/csv;charset=utf-8');
     }
 
     function renderDispatch() {
-      app.innerHTML = head('Wayro / Dispatch', L('Přidělte řidiče.<br><em>Pošlete mu odkaz.</em>', 'Assign a driver.<br><em>Send the link.</em>'), L('Pouze pro provozovatele. Klíč dispečinku se neukládá do prohlížeče.', 'Operator access only. The dispatcher key is not saved in the browser.')) + `
+      app.innerHTML = head('Transfer by Van / Dispatch', L('Přidělte řidiče.<br><em>Pošlete mu odkaz.</em>', 'Assign a driver.<br><em>Send the link.</em>'), L('Pouze pro provozovatele. Klíč dispečinku se neukládá do prohlížeče.', 'Operator access only. The dispatcher key is not saved in the browser.')) + `
         <div class="driver-layout"><form class="driver-console" id="dispatch-form">
           <label class="form-field"><span>${L('Klíč dispečinku', 'Dispatcher key')} (DRIVER_ADMIN_TOKEN)</span><input class="input" name="key" type="password" autocomplete="off" minlength="32" required></label>
-          <label class="form-field"><span>${L('Číslo rezervace', 'Booking number')}</span><input class="input" name="orderId" placeholder="WY-..." maxlength="80" required></label>
+          <label class="form-field"><span>${L('Číslo rezervace', 'Booking number')}</span><input class="input" name="orderId" placeholder="TV-..." maxlength="80" required></label>
           <div class="form-grid"><label class="form-field"><span>${L('Jméno řidiče', 'Driver name')}</span><input class="input" name="name" maxlength="80" required></label><label class="form-field"><span>${L('SPZ', 'License plate')}</span><input class="input" name="plate" maxlength="20"></label></div>
           <label class="form-field"><span>${L('Telefon řidiče', 'Driver phone')}</span><input class="input" name="phone" type="tel" maxlength="25"></label>
           <button class="btn btn-solid wide" type="submit">${L('Vytvořit odkaz na 12 hodin', 'Create a 12-hour driver link')}${icon('arrow')}</button>
@@ -2023,7 +2054,7 @@
         ['STRIPE_WEBHOOK_SECRET', PUB.webhookConfigured, L('Tento krok uděláte až po nasazení. Přidejte níže uvedenou HTTPS adresu do Stripe a uložte signing secret na server.', 'Do this after deployment. Add the HTTPS address below in Stripe and store its signing secret on the server.')],
         ['OSRM_URL / DATA_FILE', PUB.routingProductionConfigured, L('Pro provoz potřebujete vlastní nebo smluvní routing a trvalý disk či databázi. Výchozí veřejný OSRM je jen pro zkoušky.', 'Production needs an owned or contracted routing service and persistent storage. The default public OSRM is for evaluation only.')]
       ];
-      app.innerHTML = head('Wayro / Setup', L('Nejdřív ověřit.<br><em>Potom vyjet.</em>', 'Verify first.<br><em>Then go live.</em>'), L('Stav konfigurace není potvrzení funkčnosti. Otestujte hotel, skutečný telefon, e-mail a platbu před přijetím zákazníků.', 'Configured does not mean tested. Verify a hotel search, a real phone, e-mail and a payment before accepting customers.')) + `<ul class="setup-list">${items.map(([name, value, text], i) => `<li><span class="section-kicker">0${i + 1}</span><div><h2>${name}</h2><p>${text}</p></div><span class="setup-state">${ready(value)}</span></li>`).join('')}</ul><div class="toolbar"><div><p class="note">Stripe webhook URL</p><code class="setup-code">${esc(location.protocol === 'https:' ? location.origin + '/api/webhook' : L('Dostupné až po nasazení na HTTPS doménu', 'Available after deployment on an HTTPS domain'))}</code><p class="note">checkout.session.completed<br>checkout.session.async_payment_succeeded</p></div><button class="btn btn-ghost" type="button" data-a="setup-check">${L('Obnovit konfiguraci', 'Refresh configuration')}</button></div><div class="app-actions"><a class="btn btn-solid" href="#/dispecink">${L('Dispečink', 'Dispatch')}${icon('arrow')}</a><a class="btn btn-ghost" href="#/ridic">${L('Obrazovka řidiče', 'Driver screen')}</a></div><p class="fine">${L('Pro nepřetržité GPS při zamčeném telefonu je potřeba nativní aplikace. Tento web takový provoz neslibuje.', 'Continuous GPS while the phone is locked requires a native app. This website does not promise background tracking.')}</p></section>`;
+      app.innerHTML = head('Transfer by Van / Setup', L('Nejdřív ověřit.<br><em>Potom vyjet.</em>', 'Verify first.<br><em>Then go live.</em>'), L('Stav konfigurace není potvrzení funkčnosti. Otestujte hotel, skutečný telefon, e-mail a platbu před přijetím zákazníků.', 'Configured does not mean tested. Verify a hotel search, a real phone, e-mail and a payment before accepting customers.')) + `<ul class="setup-list">${items.map(([name, value, text], i) => `<li><span class="section-kicker">0${i + 1}</span><div><h2>${name}</h2><p>${text}</p></div><span class="setup-state">${ready(value)}</span></li>`).join('')}</ul><div class="toolbar"><div><p class="note">Stripe webhook URL</p><code class="setup-code">${esc(location.protocol === 'https:' ? location.origin + '/api/webhook' : L('Dostupné až po nasazení na HTTPS doménu', 'Available after deployment on an HTTPS domain'))}</code><p class="note">checkout.session.completed<br>checkout.session.async_payment_succeeded</p></div><button class="btn btn-ghost" type="button" data-a="setup-check">${L('Obnovit konfiguraci', 'Refresh configuration')}</button></div><div class="app-actions"><a class="btn btn-solid" href="#/dispecink">${L('Dispečink', 'Dispatch')}${icon('arrow')}</a><a class="btn btn-ghost" href="#/ridic">${L('Obrazovka řidiče', 'Driver screen')}</a></div><p class="fine">${L('Pro nepřetržité GPS při zamčeném telefonu je potřeba nativní aplikace. Tento web takový provoz neslibuje.', 'Continuous GPS while the phone is locked requires a native app. This website does not promise background tracking.')}</p></section>`;
     }
 
     /* ---------- router ---------- */
@@ -2052,7 +2083,7 @@
         history.replaceState(null, '', location.pathname + '#/ridic');
       }
       const ref = urlParams.get('ref');
-      if (ref && /^WY-[A-Z0-9]{6}$/.test(ref) && ref !== refCode && !orders.some(o => !o.cancelled)) { S.promo = ref; S.discount = .1; }
+      if (ref && /^TV-[A-Z0-9]{6}$/.test(ref) && ref !== refCode && !orders.some(o => !o.cancelled)) { S.promo = ref; S.discount = .1; }
 
       // A payment-return URL is not proof of payment. Only the server can verify it.
       const paidOrderId = urlParams.get('orderId');
@@ -2061,15 +2092,15 @@
       const home = path === '/';
       document.body.classList.toggle('is-sub', !home);
       $('#stats').hidden = !home;
-      const active = { '/sluzby': 'services', '/vozy': 'fleet', '/letiste': 'airport', '/firmy': 'business', '/napoveda': 'help', '/jizdy': 'trips' }[path] || '';
+      const active = { '/sluzby': 'services', '/vozy': 'fleet', '/letiste': 'airport', '/firmy': 'business', '/kontakt': 'contact', '/napoveda': 'help', '/jizdy': 'trips' }[path] || '';
       $$('.nav-link').forEach(a => { const on = a.dataset.p === active; a.classList.toggle('active', on); on ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current'); });
-      const R = { '/': renderHome, '/sluzby': renderServices, '/vozy': renderFleet, '/letiste': renderAirport, '/firmy': renderBusiness, '/jizdy': renderTrips, '/hodnoceni': renderReviews, '/napoveda': renderHelp, '/doporuceni': renderRef, '/ridic': renderDriver, '/dispecink': renderDispatch, '/nastaveni': renderSetup, [PRIVATE_DATA_PATH]: renderDataPage };
+      const R = { '/': renderHome, '/sluzby': renderServices, '/vozy': renderFleet, '/letiste': renderAirport, '/firmy': renderBusiness, '/kontakt': renderContact, '/jizdy': renderTrips, '/hodnoceni': renderReviews, '/napoveda': renderHelp, '/doporuceni': renderRef, '/ridic': renderDriver, '/dispecink': renderDispatch, '/nastaveni': renderSetup, [PRIVATE_DATA_PATH]: renderDataPage };
       if (R[path]) R[path]();
       else if (path.startsWith('/jizda/')) { try { const id = decodeURIComponent(path.slice(7)); renderOrder(id); verifyPayment(id); } catch { renderMissing(); } }
       else renderMissing();
       if (path === '/dispecink' && urlParams.has('order')) { const field = $('#dispatch-form [name="orderId"]'); if (field) field.value = urlParams.get('order').slice(0, 80); }
-      const titles = { '/': L('Taxi na letiště Praha', 'Prague airport taxi'), '/sluzby': t('nav.services'), '/vozy': t('nav.fleet'), '/letiste': t('nav.airport'), '/firmy': t('nav.business'), '/jizdy': t('nav.trips'), '/hodnoceni': L('Hodnocení', 'Reviews'), '/napoveda': t('nav.help'), '/doporuceni': L('Doporučení', 'Referrals'), [PRIVATE_DATA_PATH]: L('Soukromé rezervace', 'Private reservations') };
-      document.title = `Wayro | ${titles[path] || L('Rezervace', 'Booking')}`;
+      const titles = { '/': L('Taxi a transfery Praha', 'Prague taxi and transfers'), '/sluzby': t('nav.services'), '/vozy': t('nav.fleet'), '/letiste': t('nav.airport'), '/firmy': t('nav.business'), '/kontakt': t('nav.contact'), '/jizdy': t('nav.trips'), '/hodnoceni': L('Hodnocení', 'Reviews'), '/napoveda': t('nav.help'), '/doporuceni': L('Doporučení', 'Referrals'), [PRIVATE_DATA_PATH]: L('Soukromé rezervace', 'Private reservations') };
+      document.title = `Transfer by Van | ${titles[path] || L('Rezervace', 'Booking')}`;
       count(); anim(app); window.scrollTo(0, 0);
       if (navCount++ > 0 && !home) { const hh = $('h1', app); hh?.setAttribute('tabindex', '-1'); hh?.focus({ preventScroll: true }); }
     }
@@ -2128,16 +2159,16 @@
         ${car.seats === 0 ? `<p class="note">${L('Mercedes E autosedačky nenabízí. Vyberte Sedan, Minibus nebo Mercedes V.', 'Mercedes E offers no child seats. Choose Sedan, Minibus or Mercedes V.')}</p>` : ''}
         ${addressField('stopover', L('Zastávka po cestě (nepovinné)', 'Stop along the way (optional)'), S.stopover || '', '', false)}
         <label class="form-field" style="margin-top:15px"><span>${L('Poznámka pro řidiče', 'Note for the driver')}</span><textarea class="input" name="notes" rows="2" maxlength="400" placeholder="${L('Nadměrné zavazadlo, jiná domluva…', 'Oversized luggage, other agreement…')}">${esc(S.notes)}</textarea></label>
-        <label class="s-label" for="promo">${L('Slevový kód', 'Promo code')}</label><div class="promo-row"><input class="input" id="promo" value="${esc(S.promo)}" placeholder="WAYRO10" maxlength="20"><button class="btn btn-ghost btn-small" type="button" data-a="promo-apply">${L('Použít', 'Apply')}</button></div>
-        <p class="promo-msg" id="promo-msg" role="status">${S.discount ? L(`Sleva ${Math.round(S.discount * 100)} % je aktivní.`, `${Math.round(S.discount * 100)} % discount active.`) : L('Zadej kód kamaráda nebo WAYRO10 – sleva 10 %.', "Enter a friend's code or WAYRO10 – 10 % off.")}</p>
+        <label class="s-label" for="promo">${L('Slevový kód', 'Promo code')}</label><div class="promo-row"><input class="input" id="promo" value="${esc(S.promo)}" placeholder="VAN10" maxlength="20"><button class="btn btn-ghost btn-small" type="button" data-a="promo-apply">${L('Použít', 'Apply')}</button></div>
+        <p class="promo-msg" id="promo-msg" role="status">${S.discount ? L(`Sleva ${Math.round(S.discount * 100)} % je aktivní.`, `${Math.round(S.discount * 100)} % discount active.`) : L('Zadej kód kamaráda nebo VAN10 – sleva 10 %.', "Enter a friend's code or VAN10 – 10 % off.")}</p>
         <p class="err" id="co-err" role="alert" hidden></p><div class="d-actions"><button class="btn btn-solid" type="submit">${L('Pokračovat', 'Continue')} ${icon('arrow')}</button></div>` : `
         <label class="form-field"><span>${L('Jméno a příjmení', 'Full name')}</span><input class="input" name="name" value="${esc(S.name)}" minlength="2" maxlength="60" autocomplete="name" required></label>
         <div class="form-grid"><label class="form-field"><span>${L('Telefon', 'Phone')}</span><input class="input" name="phone" type="tel" value="${esc(S.phone)}" placeholder="+420 777 123 456" maxlength="25" autocomplete="tel" required></label>
         <label class="form-field"><span>E-mail <span style="color:#867f6d;font-weight:400">${L('(pro odpověď dispečinku)', '(for the dispatcher reply)')}</span></span><input class="input" name="email" type="email" value="${esc(S.email)}" placeholder="jan@example.com" maxlength="120" autocomplete="email" required></label></div>
         <span class="s-label">${L('Platba', 'Payment')}</span>
         ${[['cash', 'cash'], ['card', 'card'], ['online', 'globe']].map(([k, ic]) => `<label class="pick" style="margin-bottom:8px"><input type="radio" name="pay" value="${k}" ${S.pay === k ? 'checked' : ''}>${icon(ic)}<span>${t('pay')[k]}<small style="display:block;color:#867f6d">${t('pay')[k + 'S']}</small></span></label>`).join('')}
-        <div class="banner" style="font-size:11.5px">${icon('info')}<p>${S.pay === 'online' && !CONFIG.bookingEndpoint ? L('Online platba běží přes platební bránu na serveru. Bez spuštěného backendu zvol platbu u řidiče, jak je to ve Wayro zvykem.', 'Online payment runs through the gateway on the server. If the backend is not running, choose payment to the driver, which is Wayro standard.') : L('Neplatíte nic předem. Rezervace je ve stavu zpracování, dokud ji dispečer nepotvrdí e-mailem.', 'You pay nothing upfront. The booking stays in processing until dispatch confirms it by e-mail.')}</p></div>
-        <label class="check"><input type="checkbox" name="consent" ${S.consent ? 'checked' : ''} required><span>${L('Souhlasím se zpracováním údajů pro rezervaci a s podmínkami Wayro. Závazná je až potvrzení dispečinkem.', 'I agree to data processing for this booking and to Wayro terms. It becomes binding only after dispatch confirms it.')}</span></label>
+        <div class="banner" style="font-size:11.5px">${icon('info')}<p>${S.pay === 'online' && !CONFIG.bookingEndpoint ? L('Online platba běží přes platební bránu na serveru. Bez spuštěného backendu zvol platbu u řidiče.', 'Online payment runs through the gateway on the server. If the backend is not running, choose payment to the driver.') : L('Neplatíte nic předem. Rezervace je ve stavu zpracování, dokud ji provozovatel nepotvrdí e-mailem.', 'You pay nothing upfront. The booking stays in processing until the operator confirms it by e-mail.')}</p></div>
+        <label class="check"><input type="checkbox" name="consent" ${S.consent ? 'checked' : ''} required><span>${L('Souhlasím se zpracováním údajů pro rezervaci a s podmínkami Transfer by Van. Závazná je až potvrzení provozovatelem.', 'I agree to data processing for this booking and to the Transfer by Van terms. It becomes binding only after operator confirmation.')}</span></label>
         <p class="err" id="co-err" role="alert" hidden></p>
         <div class="d-actions"><button class="btn btn-ghost" type="button" data-a="co-back">${L('Zpět', 'Back')}</button><button class="btn btn-solid" id="co-send" type="submit">${L('Odeslat rezervaci', 'Send booking')} ${icon('arrow')}</button></div>`}</form></div><div id="sum">${summary()}</div></div></div>`;
       modal.scrollTop = 0;
@@ -2188,10 +2219,10 @@
       const used = orders.some(o => !o.cancelled);
       let err = '', disc = 0;
       if (!v) { S.promo = ''; S.discount = 0; }
-      else if (v === 'WAYRO10') disc = .1;
+      else if (v === 'VAN10') disc = .1;
       else if (v === 'PRG15') { if (used) err = L('Kód platí jen pro první rezervaci.', 'This code is for the first booking only.'); else disc = .15; }
-      else if (/^WY-[A-Z0-9]{6}$/.test(v)) { if (v === refCode) err = L('Vlastní kód nelze použít.', 'You cannot use your own code.'); else if (used) err = L('Kód kamaráda platí na první jízdu.', "A friend's code applies to the first ride."); else disc = .1; }
-      else err = L('Kód neznáme. Zkuste WAYRO10.', 'Unknown code. Try WAYRO10.');
+      else if (/^TV-[A-Z0-9]{6}$/.test(v)) { if (v === refCode) err = L('Vlastní kód nelze použít.', 'You cannot use your own code.'); else if (used) err = L('Kód kamaráda platí na první jízdu.', "A friend's code applies to the first ride."); else disc = .1; }
+      else err = L('Kód neznáme. Zkuste VAN10.', 'Unknown code. Try VAN10.');
       if (!err) { S.promo = v; S.discount = disc; }
       const m = $('#promo-msg');
       m.textContent = err || (disc ? L(`Sleva ${Math.round(disc * 100)} % byla uplatněna.`, `${Math.round(disc * 100)} % discount applied.`) : L('Kód byl odebrán.', 'Code removed.'));
@@ -2205,7 +2236,7 @@
       if (S.seats > car.seats) return L(`${car.label} nabízí ${car.seats} autosedaček. Zvolte jiný vůz.`, `${car.label} offers ${car.seats} child seats. Please pick another vehicle.`);
       if (S.seats > S.pax) return L('Autosedaček nemůže být víc než cestujících.', 'There cannot be more child seats than passengers.');
       if (S.bagsBig > car.bags || S.bagsBig * 2 + S.bagsSmall + (S.pram ? 2 : 0) > car.bags * 2 + 2) return L(`Tolik zavazadel se do vozu ${car.label} nevejde. Zvolte větší vůz.`, `That much luggage will not fit in the ${car.label}. Please pick a larger vehicle.`);
-      if ((S.promo === 'PRG15' || S.promo.startsWith('WY-')) && orders.some(o => !o.cancelled)) return L('Sleva na první jízdu už není dostupná, použijte WAYRO10.', 'The first-ride discount is no longer available; use WAYRO10.');
+      if ((S.promo === 'PRG15' || S.promo.startsWith('TV-')) && orders.some(o => !o.cancelled)) return L('Sleva na první jízdu už není dostupná, použijte VAN10.', 'The first-ride discount is no longer available; use VAN10.');
       return validateRide();
     }
     function buildOrder(demo = true, b = S, receipt = null) {
@@ -2217,7 +2248,7 @@
         stopover: chosen.stopover ? snapshotPlace(chosen.stopover, b.stopover) : null
       };
       return {
-        id: `WY-${uid().slice(0, 6).toUpperCase()}`, at: new Date().toISOString(),
+        id: `TV-${uid().slice(0, 6).toUpperCase()}`, at: new Date().toISOString(),
         from: locations.pickup.label, to: locations.destination?.label || '',
         locations, fromGeo: locations.pickup, toGeo: locations.destination,
         distanceKm: receipt?.distanceKm ?? q.km ?? null, durationMin: receipt?.durationMin ?? q.min ?? null,
@@ -2359,7 +2390,7 @@
         <p style="margin-top:14px">${L('Historie v prohlížeči neobsahuje celé telefonní číslo ani e-mail. Server uchovává kontakty, zvolená místa a adresy pro vyřízení rezervace. Přehled těchto údajů je dostupný pouze po ověření přístupu dispečinku. Číslo karty se zadává jen u platebního poskytovatele.', 'Browser history does not contain your full phone number or e-mail. The server keeps contacts, selected locations and addresses to process your booking. Access to these records requires dispatcher authorization. Card details are entered only with the payment provider.')}</p>
         <p style="margin-top:14px">${L('Bez spuštěného backendu se objednávka nikam neposílá. S backendem míří na /api/checkout a platba teče přes platební bránu.', 'Without the backend nothing is sent. With it, the booking goes to /api/checkout and payment runs through the gateway.')}</p>
         <p style="margin-top:14px">${L('Sledování polohy a letů, potvrzovací e-maily a online platba by vyžadovaly serverovou část.', 'Live tracking, flight data, confirmation e-mails and online payments would require a backend.')}</p></div>
-        <a class="btn btn-ghost wide" href="${SITE.home}" target="_blank" rel="noopener">${L('Otevřít provozní web', 'Open operator site')} ↗</a>
+        <a class="btn btn-ghost wide" href="#/kontakt">${L('Kontakt a údaje provozovatele', 'Contact and operator details')} ${icon('arrow')}</a>
         <button class="btn btn-solid wide" type="button" data-a="close">${L('Rozumím', 'Got it')}</button></div>`;
       open(true);
     }
@@ -2379,8 +2410,8 @@
     function voucher(id) {
       const o = orders.find(x => x.id === id); if (!o) return;
       const locations = orderPlaces(o), m = meetingFor(locations.pickup, o.ext.meet), dl = cancelDeadline(o);
-      download(`wayro-${o.id}.txt`, [
-        `WAYRO — ${L('VOUCHER / POTVRZENÍ TRANSFERU', 'VOUCHER / TRANSFER CONFIRMATION')}`, '',
+      download(`transfer-by-van-${o.id}.txt`, [
+        `TRANSFER BY VAN — ${L('VOUCHER / POTVRZENÍ TRANSFERU', 'VOUCHER / TRANSFER CONFIRMATION')}`, '',
         `${L('Rezervace', 'Booking')}: ${o.id}`,
         `${L('Stav', 'Status')}: ${o.cancelled ? L('Zrušeno', 'Cancelled') : t('stages')[o.stage]}`,
         `${L('Vyzvednutí na adrese', 'Pickup location')}: ${placeText(locations.pickup)}`,
@@ -2399,7 +2430,7 @@
         `${L('Bezplatné storno do', 'Free cancellation until')}: ${dl.when.toLocaleString('cs-CZ', { timeZone: TZ })} (${dl.hrs} h)`, '',
         `${L('Označení', 'Mark')}: ${o.demo ? L('lokální záznam – backend rezervaci nedostal', 'local record – backend did not receive it') : L('odesláno na server', 'sent to the server')}`,
         L('Voucher slouží k domluvě s řidičem. Konečné potvrzení posílá dispečink e-mailem.', 'The voucher is for arranging pickup with the driver. Final confirmation is sent by dispatch via e-mail.'),
-        L('Skutečnou rezervaci vytvoříte na', 'Make a real booking at') + ' ' + SITE.home
+        `${L('Kontakt', 'Contact')}: ${CONTACT.phone} / ${CONTACT.email}`
       ].filter(Boolean).join('\n'));
       toast(L('Voucher stažen. Jde o ukázkový doklad.', 'Voucher downloaded. It is a demo document.'));
     }
@@ -2531,14 +2562,15 @@
           const cell = x => `"${String(x).replace(/^\s*[=+@-]/, "'$&").replaceAll('"', '""')}"`;
           const rows = [[L('Číslo', 'ID'), L('Datum', 'Date'), L('Čas', 'Time'), L('Odkud', 'From'), L('Kam', 'To'), L('Vůz', 'Vehicle'), 'CZK', L('Stav', 'Status')],
             ...orders.map(o => { const p = orderPlaces(o); return [o.id, o.date, o.time, placeText(p.pickup), p.destination ? placeText(p.destination) : L('Hodinová dispozice', 'Hourly hire'), FLEET[o.car].label, o.total, o.cancelled ? L('Zrušeno', 'Cancelled') : t('stages')[o.stage]]; })];
-          download('wayro-rides.csv', rows.map(r => r.map(cell).join(';')).join('\r\n'), 'text/csv;charset=utf-8');
+          download('transfer-by-van-rides.csv', rows.map(r => r.map(cell).join(';')).join('\r\n'), 'text/csv;charset=utf-8');
           break;
         }
         case 'voucher': voucher(v); break;
         case 'review': openReview(v); break;
         case 'rate': rating = Number(v); $$('.rate button').forEach(b => { b.classList.toggle('on', Number(b.dataset.v) <= rating); b.setAttribute('aria-pressed', String(Number(b.dataset.v) === rating)); }); break;
         case 'copy-code': copy(refCode); break;
-        case 'share': { const u = new URL(location.href); u.hash = `/?ref=${refCode}`; copy(L(`Jezdím s Wayro na letiště – fixní cena a živá poloha auta. S kódem ${refCode} máš 10 % na první jízdě: ${u.href}`, `I ride with Wayro – fixed price and live car tracking. Use ${refCode} for 10 % off your first ride: ${u.href}`)); break; }
+        case 'share': { const u = new URL(location.href); u.hash = `/?ref=${refCode}`; copy(L(`Jezdím s Transfer by Van – fixní cena a živá poloha auta. S kódem ${refCode} máš 10 % na první jízdě: ${u.href}`, `I ride with Transfer by Van – fixed price and live car tracking. Use ${refCode} for 10 % off your first ride: ${u.href}`)); break; }
+        case 'copy-value': copy(v); break;
         case 'chat': chat(); open(true); break;
         case 'privacy': privacy(); break;
         case 'promo-apply': applyPromo(); break;
@@ -2629,7 +2661,7 @@
       }
       if (f.id === 'biz-send') {
         const d = new FormData(f);
-        download('wayro-firemni-poptavka.txt', `WAYRO — ${L('PŘEDBĚŽNÁ POPTÁVKA', 'PRELIMINARY REQUEST')}\n\n${L('Firma', 'Company')}: ${d.get('co')}\nE-mail: ${d.get('mail')}\n${L('Jízd měsíčně', 'Rides per month')}: ${f.dataset.n}\n${L('Vůz', 'Vehicle')}: ${FLEET[f.dataset.c].label}\n${L('Vzorová trasa', 'Sample route')}: ${AIRPORT} – Praha\n${L('Orientační rozpočet', 'Estimated budget')}: ${money(Number(f.dataset.t))}\n\n${L('Nezávazný odhad, nejde o nabídku ani smlouvu. Poptávka nebyla odeslána.', 'Non-binding estimate, not an offer or contract. The request was not sent.')}\n`);
+        download('transfer-by-van-firemni-poptavka.txt', `TRANSFER BY VAN — ${L('PŘEDBĚŽNÁ POPTÁVKA', 'PRELIMINARY REQUEST')}\n\n${L('Firma', 'Company')}: ${d.get('co')}\nE-mail: ${d.get('mail')}\n${L('Jízd měsíčně', 'Rides per month')}: ${f.dataset.n}\n${L('Vůz', 'Vehicle')}: ${FLEET[f.dataset.c].label}\n${L('Vzorová trasa', 'Sample route')}: ${AIRPORT} – Praha\n${L('Orientační rozpočet', 'Estimated budget')}: ${money(Number(f.dataset.t))}\n\n${L('Nezávazný odhad, nejde o nabídku ani smlouvu. Poptávka nebyla odeslána.', 'Non-binding estimate, not an offer or contract. The request was not sent.')}\n`);
         modal.close(); toast(L('Podklad stažen. Odeslání dispečinku není v ukázce připojené.', 'File downloaded. Sending to dispatch is not connected in this demo.'));
         return;
       }

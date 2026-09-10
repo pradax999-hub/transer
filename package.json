@@ -1,7 +1,7 @@
 {
-  "name": "wayro-backend",
+  "name": "transfer-by-van-backend",
   "version": "2.0.0",
-  "description": "Wayro transfer backend with payments, live driver tracking & email confirmations",
+  "description": "Transfer by Van backend with payments, live driver tracking and email confirmations",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
