@@ -170,7 +170,12 @@ app.get(PRIVATE_DATA_PATH, (req, res) => {
   res.redirect('/#' + PRIVATE_DATA_PATH);
 });
 app.get(['/inter.woff2', '/instrument-serif-italic.woff2'], (req, res) => {
-  res.sendFile(path.join(__dirname, path.basename(req.path)));
+  const fontPath = path.join(__dirname, path.basename(req.path));
+  if (fs.existsSync(fontPath)) {
+    res.sendFile(fontPath);
+  } else {
+    res.status(404).send('Font not found');
+  }
 });
 
 // ============ Тарифи Wayro ============
