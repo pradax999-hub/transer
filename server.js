@@ -356,7 +356,13 @@ async function roadRoute(a, b) {
   if (hit && Date.now() - hit.at < CACHE_TTL) return hit;
 
   const endpoint = (process.env.OSRM_URL || 'https://router.project-osrm.org').replace(/\/+$/, '');
-  const url = `${endpoint}/route/v1/driving/${a.lng},${a.lat};${b.lng},${b.lat}?overview=false`;
+  let url = `${endpoint}/route/v1/driving/${a.lng},${a.lat};${b.lng},${b.lat}?overview=false`;
+  
+  // Add Geoapify authentication if credentials are provided
+  if (process.env.GEOAPIFY_ROUTING_ORG && process.env.GEOAPIFY_ROUTING_ID) {
+    url += `&apiKey=${process.env.GEOAPIFY_API_KEY || ''}`;
+  }
+  
   const r = await fetch(url, { headers: { 'User-Agent': UA }, signal: AbortSignal.timeout(9000) });
   if (!r.ok) throw new Error('router unavailable');
   const d = await r.json();
