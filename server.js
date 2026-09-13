@@ -220,13 +220,19 @@ function persistData() {
 }
 function loadData() {
   try {
-    if (!fs.existsSync(DATA_FILE)) return;
+    if (!fs.existsSync(DATA_FILE)) {
+      console.log(`Creating empty data file at ${DATA_FILE}`);
+      fs.writeFileSync(DATA_FILE, JSON.stringify({ orders: [] }, null, 2), 'utf8');
+      return;
+    }
     const d = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
     (d.orders || []).forEach(o => ORDERS.set(o.orderId || o.id, o));
     // GPS is ephemeral: after restart the driver must send a fresh measurement.
     if (ORDERS.size) console.log(`✓ Loaded ${ORDERS.size} orders from disk`);
   } catch (e) {
-    throw new Error('Could not read order storage. Restore the file before starting the server.');
+    console.error('Error reading data file:', e.message);
+    console.log(`Recreating empty data file at ${DATA_FILE}`);
+    fs.writeFileSync(DATA_FILE, JSON.stringify({ orders: [] }, null, 2), 'utf8');
   }
 }
 loadData();
