@@ -5,11 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#000000">
   <meta name="color-scheme" content="dark">
-  <meta name="description" content="Transfer by Van – letištní, městské a dálkové transfery. Fixní cena, živá poloha řidiče, sledování letu a platba u řidiče.">
-  <title>Transfer by Van | Taxi a transfery Praha</title>
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23f5c66b'%3E%3Cpath d='M4 10 6 4h12l2 6v9h-3v-2H7v2H4v-9Zm3.2 5h9.6M7 13.5h2m6 0h2'/%3E%3Cpath d='M4.6 10.4h14.8v7.2H4.6z'/%3E%3C/svg%3E">
+  <meta name="description" content="Transfer by Van – spolehlivá osobní přeprava a transfery z/na letiště Václava Havla Praha (PRG), vícemístné vozy a minibusy. Fixní ceny, autosedačky zdarma, platba u řidiče.">
+  <title>Transfer by Van | Taxi na letiště Praha</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23f5c66b'%3E%3Cpath d='M2 17V9a2 2 0 0 1 2-2h9l5 5h2a2 2 0 0 1 2 2v3M2 17h3m14 0h3M2 12h11'/%3E%3Ccircle cx='7.5' cy='17.5' r='2'/%3E%3Ccircle cx='17' cy='17.5' r='2'/%3E%3C/svg%3E">
+  <script>
+    // Apply the saved theme before first paint to avoid a light/dark flash.
+    (() => {
+      try {
+        const saved = localStorage.getItem('tbv.theme');
+        const light = saved ? saved === 'light' : matchMedia('(prefers-color-scheme: light)').matches;
+        if (light) document.documentElement.setAttribute('data-theme', 'light');
+      } catch { /* storage blocked — dark default stays */ }
+    })();
+  </script>
   <style>
     html, body { background: #000000 !important; color: #ffffff; }
+    html[data-theme="light"], html[data-theme="light"] body { background: #ffffff !important; color: #18181b; }
     @font-face { font-family: "Inter"; font-style: normal; font-weight: 100 900; font-display: swap; src: url("inter.woff2") format("woff2"); }
     @font-face { font-family: "Instrument Serif"; font-style: italic; font-weight: 400; font-display: swap; src: url("instrument-serif-italic.woff2") format("woff2"); }
     :root {
@@ -23,11 +34,200 @@
       --field: #17150f;
       --line: rgba(255,255,255,.14);
       --line-soft: rgba(255,255,255,.09);
+      --panel: #15120b;
+      --panel-2: #11100b;
+      --panel-3: #17150f;
+      --card-ink: #d5cdbd;
+      --ink-soft: #9d968a;
+      --ink-faint: #877f6f;
+      --hero-veil: rgba(0,0,0,.96);
+      --scrim: rgba(8,6,2,.72);
       --font: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       --gutter: 60px;
       --ease: cubic-bezier(.16,1,.3,1);
     }
+    html[data-theme="light"] {
+      --bg: #ffffff;
+      --text: #18181b;
+      --muted: #71717a;
+      --accent: #a07c1e;
+      --accent-soft: #c9a13c;
+      --accent-ink: #ffffff;
+      --surface: #ffffff;
+      --field: #f4f4f5;
+      --line: rgba(9,9,11,.14);
+      --line-soft: rgba(9,9,11,.07);
+      --panel: #f7f6f3;
+      --panel-2: #f1f0eb;
+      --panel-3: #ffffff;
+      --card-ink: #3f3f46;
+      --ink-soft: #52525b;
+      --ink-faint: #71717a;
+      --hero-veil: rgba(255,255,255,.94);
+      --scrim: rgba(255,255,255,.85);
+      --shadow: 0 14px 34px rgba(24,24,27,.10);
+    }
     html, body { background: #000000; background: var(--bg, #000000); color: #ffffff; color: var(--text, #ffffff); }
+    html { scrollbar-color: #c9c4b8 #ffffff; }
+
+    /* ---------- light theme: complete surface rewrite ---------- */
+    html[data-theme="light"] body { background: #ffffff; }
+    html[data-theme="light"] .header::after { background: var(--line-soft); }
+    html[data-theme="light"] .hero-photo { filter: saturate(.9); }
+    html[data-theme="light"] .hero-photo::after {
+      background: linear-gradient(92deg,rgba(255,255,255,.97) 0%,rgba(255,255,255,.94) 26%,rgba(255,255,255,.72) 52%,rgba(255,255,255,.42) 78%,rgba(255,255,255,.2) 96%),
+                  linear-gradient(180deg,rgba(255,255,255,.55) 0%,transparent 24%,transparent 58%,#fff 99%);
+    }
+    html[data-theme="light"] .hero h1, html[data-theme="light"] .media-caption strong { color: #18181b; }
+    html[data-theme="light"] .lede, html[data-theme="light"] .media-caption span { color: #3f3f46; }
+    html[data-theme="light"] .logo em, html[data-theme="light"] em { color: #8a6a10; }
+    html[data-theme="light"] .eyebrow, html[data-theme="light"] .media-caption strong { color: #18181b; }
+    html[data-theme="light"] .pill { background: rgba(255,255,255,.86); border-color: rgba(9,9,11,.12); color: #3f3f46; box-shadow: var(--shadow); }
+    html[data-theme="light"] .pill .icon { color: #a07c1e; }
+    html[data-theme="light"] .eyebrow-dot { background: #a07c1e; box-shadow: 0 0 8px rgba(160,124,30,.4); }
+    html[data-theme="light"] .booking { background: var(--panel-3); border-color: var(--line); box-shadow: var(--shadow); }
+    html[data-theme="light"] .booking-note, html[data-theme="light"] .booking-foot, html[data-theme="light"] .foot-right .note { color: var(--ink-soft); }
+    html[data-theme="light"] .booking-foot .icon { color: #8a7233; }
+    html[data-theme="light"] .field, html[data-theme="light"] .input { background: var(--field); border-color: var(--line); color: var(--text); box-shadow: none; }
+    html[data-theme="light"] .field:focus-within, html[data-theme="light"] .input:focus { border-color: #b8933c; background: #fff; }
+    html[data-theme="light"] .field > .icon { color: #8a7233; }
+    html[data-theme="light"] .field-caption { color: var(--ink-soft); }
+    html[data-theme="light"] .field input, html[data-theme="light"] .field select { color: #18181b; }
+    html[data-theme="light"] .field input::placeholder { color: #a1a1aa; }
+    html[data-theme="light"] option { background: #fff; color: #18181b; }
+    html[data-theme="light"] .swap { color: #8a7233; }
+    html[data-theme="light"] .mode-switch button { border-color: var(--line); color: var(--ink-soft); background: transparent; }
+    html[data-theme="light"] .mode-switch button[aria-pressed="true"] { color: #18181b; border-color: #b8933c; background: rgba(160,124,30,.10); }
+    html[data-theme="light"] .quote-amount { color: #18181b; }
+    html[data-theme="light"] .route-info { background: rgba(160,124,30,.09); border-color: rgba(160,124,30,.28); color: #5c4a1c; }
+    html[data-theme="light"] .route-info.calc { color: var(--ink-soft); border-style: dashed; }
+    html[data-theme="light"] .chip { border-color: var(--line); color: var(--ink-soft); background: transparent; }
+    html[data-theme="light"] .chip:hover { color: #8a6a10; border-color: #b8933c; }
+    html[data-theme="light"] .chosen-addresses { border-top-color: var(--line-soft); }
+    html[data-theme="light"] .location-label { color: #18181b; }
+    html[data-theme="light"] .location-address { color: var(--ink-soft); }
+    html[data-theme="light"] .location-caption { color: #8a7233; }
+    html[data-theme="light"] .ac { background: var(--panel-3); border-color: var(--line); box-shadow: 0 18px 40px rgba(24,24,27,.16); }
+    html[data-theme="light"] .ac button:hover, html[data-theme="light"] .ac button.sel { background: rgba(160,124,30,.09); }
+    html[data-theme="light"] .ac .icon { color: #8a7233; }
+    html[data-theme="light"] .ac b { color: #18181b; }
+    html[data-theme="light"] .ac small, html[data-theme="light"] .ac .ac-meta, html[data-theme="light"] .ac .ac-msg { color: var(--ink-soft); }
+    html[data-theme="light"] .ac-meta { border-top-color: var(--line-soft); }
+    html[data-theme="light"] .home-section, html[data-theme="light"] .info-row, html[data-theme="light"] .data-filters,
+    html[data-theme="light"] .data-table td, html[data-theme="light"] .data-table th, html[data-theme="light"] .data-detail > div,
+    html[data-theme="light"] .faq-item, html[data-theme="light"] .faq-preview details, html[data-theme="light"] .counter-row,
+    html[data-theme="light"] .tabs, html[data-theme="light"] .toolbar .tabs, html[data-theme="light"] .steps-ol li,
+    html[data-theme="light"] .steps, html[data-theme="light"] .list li, html[data-theme="light"] .trip, html[data-theme="light"] .ref-code,
+    html[data-theme="light"] .search, html[data-theme="light"] .aside, html[data-theme="light"] .links { border-color: var(--line-soft); }
+    html[data-theme="light"] .home-title { color: #18181b; }
+    html[data-theme="light"] .section-kicker, html[data-theme="light"] .kicker, html[data-theme="light"] .step-num,
+    html[data-theme="light"] .footer-col h4, html[data-theme="light"] .meet-badge, html[data-theme="light"] .car-tag { color: #8a7233; }
+    html[data-theme="light"] .feature, html[data-theme="light"] .card, html[data-theme="light"] .route-card,
+    html[data-theme="light"] .mini-car, html[data-theme="light"] .contact-card, html[data-theme="light"] .panel,
+    html[data-theme="light"] .meet, html[data-theme="light"] .terminal-body, html[data-theme="light"] .interaction-panel,
+    html[data-theme="light"] .banner, html[data-theme="light"] .empty-state { background: var(--panel-3); border-color: var(--line-soft); }
+    html[data-theme="light"] .feature:hover, html[data-theme="light"] .card:hover, html[data-theme="light"] .route-card:hover { border-color: rgba(160,124,30,.35); }
+    html[data-theme="light"] .feature h3, html[data-theme="light"] .card h3, html[data-theme="light"] .route-card h3,
+    html[data-theme="light"] .mini-body h3, html[data-theme="light"] .section-h, html[data-theme="light"] .panel h2,
+    html[data-theme="light"] .interaction-panel h2, html[data-theme="light"] .meet h3, html[data-theme="light"] .empty-state h2,
+    html[data-theme="light"] .trip-route, html[data-theme="light"] .page-heading, html[data-theme="light"] .d-title,
+    html[data-theme="light"] .data-client, html[data-theme="light"] .total-row strong, html[data-theme="light"] .trip-price,
+    html[data-theme="light"] .ref-code strong, html[data-theme="light"] .c-label, html[data-theme="light"] .review-txt,
+    html[data-theme="light"] .form-field > span, html[data-theme="light"] .s-label, html[data-theme="light"] .search input,
+    html[data-theme="light"] .search input::placeholder, html[data-theme="light"] .aside h2, html[data-theme="light"] .contact-row strong,
+    html[data-theme="light"] .contact-hl { color: #18181b; }
+    html[data-theme="light"] .feature p, html[data-theme="light"] .card p, html[data-theme="light"] .route-card p,
+    html[data-theme="light"] .mini-body p, html[data-theme="light"] .meet p, html[data-theme="light"] .quote p,
+    html[data-theme="light"] .quote small, html[data-theme="light"] .info-row p, html[data-theme="light"] .step p,
+    html[data-theme="light"] .card-icon, html[data-theme="light"] .trip-detail, html[data-theme="light"] .trip-sub,
+    html[data-theme="light"] .trip-meta, html[data-theme="light"] .dline, html[data-theme="light"] .sum-det,
+    html[data-theme="light"] .d-desc, html[data-theme="light"] .gps-message, html[data-theme="light"] .setup-list p,
+    html[data-theme="light"] .fine, html[data-theme="light"] .note, html[data-theme="light"] .input-note,
+    html[data-theme="light"] .promo-msg, html[data-theme="light"] .page-desc, html[data-theme="light"] .home-lede,
+    html[data-theme="light"] .footer-desc, html[data-theme="light"] .footer-col p, html[data-theme="light"] .footer-bottom,
+    html[data-theme="light"] .data-message, html[data-theme="light"] .data-state, html[data-theme="light"] .benefit p,
+    html[data-theme="light"] .aside p, html[data-theme="light"] .bizQuote, html[data-theme="light"] .faq-preview p,
+    html[data-theme="light"] .faq-answer { color: var(--ink-soft); }
+    html[data-theme="light"] .banner { color: #5c4a1c; border-left-color: #b8933c; }
+    html[data-theme="light"] .route-price, html[data-theme="light"] .car-price, html[data-theme="light"] .data-money,
+    html[data-theme="light"] .quote-btn small { color: #8a6a10; }
+    html[data-theme="light"] .car-media { background: var(--panel-2); }
+    html[data-theme="light"] .car-media::after { box-shadow: inset 0 0 0 1px rgba(9,9,11,.08); }
+    html[data-theme="light"] .car-media img { filter: none; }
+    html[data-theme="light"] .mini-car { background: var(--panel-3); }
+    html[data-theme="light"] .terminal { box-shadow: var(--shadow); }
+    html[data-theme="light"] .terminal-photo { background: var(--panel-2); }
+    html[data-theme="light"] .terminal-body { background: var(--panel-3); color: #3f3f46; }
+    html[data-theme="light"] .terminal-body h3 { color: #09090b; }
+    html[data-theme="light"] .terminal-sub { color: #71717a; }
+    html[data-theme="light"] .terminal-desc { color: #52525b; }
+    html[data-theme="light"] .terminal-desc p { color: #52525b; }
+    html[data-theme="light"] .contact-card.highlight { background: var(--panel); border-color: rgba(160,124,30,.35); }
+    html[data-theme="light"] .contact-card-icon { background: rgba(160,124,30,.12); color: #8a7233; }
+    html[data-theme="light"] .contact-card h3 { color: #18181b; }
+    html[data-theme="light"] .contact-row span { color: var(--ink-soft); }
+    html[data-theme="light"] .site-footer { background: var(--panel); border-top-color: var(--line); }
+    html[data-theme="light"] .footer-inner { border-bottom-color: var(--line-soft); }
+    html[data-theme="light"] .logo { color: #18181b; }
+    html[data-theme="light"] .logo-mark { background: linear-gradient(150deg,#c9a13c,#8a6a10); color: #fff; }
+    html[data-theme="light"] .stat .icon, html[data-theme="light"] .list .icon, html[data-theme="light"] .data-stat .icon { color: #8a7233; }
+    html[data-theme="light"] .theme-toggle { background: var(--panel-3); border-color: var(--line); color: #8a7233; }
+    html[data-theme="light"] .theme-toggle:hover { border-color: #b8933c; }
+    html[data-theme="light"] .lang-switch button { color: var(--ink-soft); }
+    html[data-theme="light"] .lang-switch button[aria-pressed="true"] { background: #18181b; color: #fff; }
+    html[data-theme="light"] .btn-solid { color: #fff; background: linear-gradient(170deg,#b8933c,#8a6a10 60%,#6f550d); border-color: #b8933c; }
+    html[data-theme="light"] .btn-solid:hover { color: #fff; box-shadow: 0 8px 22px rgba(138,106,16,.28); }
+    html[data-theme="light"] .btn-ghost { color: #27272a; border-color: rgba(9,9,11,.2); background: rgba(9,9,11,.02); }
+    html[data-theme="light"] .btn-ghost:hover { background: rgba(9,9,11,.06); border-color: rgba(9,9,11,.38); }
+    html[data-theme="light"] .btn-small.btn-ghost { color: #27272a; }
+    html[data-theme="light"] .terminal-btn { background: #18181b; color: #fff; }
+    html[data-theme="light"] .terminal-btn:hover { background: #27272a; color: #fff; }
+    html[data-theme="light"] .icon-btn, html[data-theme="light"] .counter button { border-color: var(--line); color: #8a7233; background: var(--panel-3); }
+    html[data-theme="light"] .icon-btn:hover, html[data-theme="light"] .counter button:hover { border-color: #b8933c; }
+    html[data-theme="light"] .text-link { color: #7a5c10; }
+    html[data-theme="light"] .tabs button, html[data-theme="light"] .tabs a { color: var(--ink-soft); }
+    html[data-theme="light"] .tabs .active, html[data-theme="light"] .tabs [aria-pressed="true"] { color: #8a6a10; border-bottom-color: #b8933c; }
+    html[data-theme="light"] .data-state { color: #6b7f52; }
+    html[data-theme="light"] .status { color: #6b7f52; }
+    html[data-theme="light"] .status.off { color: #b4531f; }
+    html[data-theme="light"] .err, html[data-theme="light"] .data-error { color: #b4531f; }
+    html[data-theme="light"] .data-login, html[data-theme="light"] .driver-console { background: var(--panel-3); border-color: var(--line); box-shadow: var(--shadow); }
+    html[data-theme="light"] .driver-layout { gap: 44px; }
+    html[data-theme="light"] .gps-details { border-block-color: var(--line); }
+    html[data-theme="light"] .gps-details dt { color: var(--ink-soft); }
+    html[data-theme="light"] .gps-details dd { color: #18181b; }
+    html[data-theme="light"] .setup-code { color: #8a6a10; }
+    html[data-theme="light"] .bubble, html[data-theme="light"] .chat-log { background: var(--panel-2); }
+    html[data-theme="light"] .bubble { color: #3f3f46; }
+    html[data-theme="light"] .bubble.me { background: rgba(160,124,30,.12); color: #18181b; }
+    html[data-theme="light"] .chat-bubble, html[data-theme="light"] .live, html[data-theme="light"] .map-wrap, html[data-theme="light"] #live-map { background: var(--panel-2); }
+    html[data-theme="light"] .live { border-color: var(--line); }
+    html[data-theme="light"] .live-top, html[data-theme="light"] .live-note, html[data-theme="light"] .map-cap, html[data-theme="light"] .live-stats { border-color: var(--line-soft); }
+    html[data-theme="light"] .live-stat { background: var(--panel-3); }
+    html[data-theme="light"] .live-stat strong { color: #18181b; }
+    html[data-theme="light"] .live-badge { color: #8a7233; border-color: rgba(160,124,30,.4); }
+    html[data-theme="light"] .live-badge.off { color: var(--ink-soft); border-color: var(--line); }
+    html[data-theme="light"] .map-txt { fill: #a1a1aa; }
+    html[data-theme="light"] .timeline li, html[data-theme="light"] .timeline li.done, html[data-theme="light"] .timeline li.now { color: #3f3f46; }
+    html[data-theme="light"] .timeline li:not(:last-child)::after { background: var(--line-soft); }
+    html[data-theme="light"] .tdot { border-color: var(--line); }
+    html[data-theme="light"] .avatar { background: rgba(160,124,30,.14); color: #8a7233; }
+    html[data-theme="light"] .driver strong { color: #18181b; }
+    html[data-theme="light"] dialog, html[data-theme="light"] .toast { background: var(--panel-3); color: #18181b; border-color: var(--line); box-shadow: 0 30px 80px rgba(24,24,27,.28); }
+    html[data-theme="light"] dialog::backdrop { background: rgba(24,24,27,.42); backdrop-filter: blur(10px); }
+    html[data-theme="light"] .x, html[data-theme="light"] .dialog-close { background: var(--panel-3); border-color: var(--line); color: var(--ink-soft); }
+    html[data-theme="light"] .d-eyebrow { color: #8a7233; }
+    html[data-theme="light"] .menu-backdrop { background: rgba(24,24,27,.35); }
+    html[data-theme="light"] .site-nav .nav-link { background: rgba(255,255,255,.9); border-color: var(--line); color: #27272a; }
+    html[data-theme="light"] .burger { background: var(--panel-3); border-color: var(--line); }
+    html[data-theme="light"] .burger span { background: #27272a; }
+    html[data-theme="light"] .grain { opacity: .014; }
+    html[data-theme="light"] { scrollbar-color: #c9c4b8 #ffffff; }
+    .theme-toggle { display: inline-grid; place-items: center; width: 40px; height: 40px; border: 1px solid var(--line); border-radius: 8px; background: var(--field); color: var(--accent); transition: border-color .25s, background .25s; cursor: pointer; }
+    .theme-toggle:hover { border-color: var(--accent); }
+    .theme-toggle .icon { width: 18px; height: 18px; }
+    .theme-toggle .i-moon, html[data-theme="light"] .theme-toggle .i-sun { display: none; }
+    html[data-theme="light"] .theme-toggle .i-moon { display: block; }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; scrollbar-color: #45402f #08080a; }
     body { font-family: var(--font); font-size: 14px; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; overflow-x: hidden; position: relative; }
@@ -52,7 +252,7 @@
     .page { position: relative; z-index: 1; display: flex; flex-direction: column; min-height: 100vh; min-height: 100dvh; }
     .header { position: relative; z-index: 50; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 22px; min-height: 88px; padding: 19px var(--gutter); }
     .header::after { position: absolute; content: ""; bottom: 0; left: var(--gutter); right: var(--gutter); height: 1px; background: rgba(255,255,255,.1); }
-    .logo { display: inline-flex; align-items: center; gap: 10px; justify-self: start; font-size: 22px; line-height: 1; font-weight: 700; letter-spacing: -.045em; white-space: nowrap; }
+    .logo { display: inline-flex; align-items: center; gap: 10px; justify-self: start; font-size: 25px; line-height: 1; font-weight: 700; letter-spacing: -.055em; }
     .logo-mark { display: grid; place-items: center; width: 33px; height: 33px; border-radius: 8px; background: linear-gradient(150deg,var(--accent),#c9963c); color: #1a1204; }
     .logo-mark .icon { width: 19px; height: 19px; stroke-width: 1.8; }
     .logo em { font-family: "Instrument Serif","Times New Roman",serif; font-style: italic; font-weight: 400; color: var(--accent); letter-spacing: -.02em; }
@@ -196,7 +396,7 @@
     .data-detail { display: grid; grid-template-columns: 1fr 1fr; gap: 22px 28px; margin-top: 26px; }
     .data-detail > div { min-width: 0; padding-top: 14px; border-top: 1px solid var(--line-soft); }
     .data-detail dt { color: #a0947e; font-size: 11px; margin-bottom: 8px; }
-    .data-detail dd { font-size: 13px; line-height: 1.75; color: #e5dcce; white-space: pre-wrap; overflow-wrap: anywhere; }
+    .data-detail dd { font-size: 13px; line-height: 1.75; color: var(--text); white-space: pre-wrap; overflow-wrap: anywhere; }
     .data-detail .data-full { grid-column: 1 / -1; }
     .private-page .page-heading { max-width: 780px; }
     @media (max-width: 1100px) { .data-filters { grid-template-columns: 1fr 1fr; } .data-filters .data-search { grid-column: 1 / -1; } }
@@ -244,7 +444,7 @@
     .home-media { position: relative; overflow: hidden; min-height: 390px; border-radius: 16px; background: #14120c; }
     .home-media img { width: 100%; height: 100%; min-height: 390px; object-fit: cover; filter: saturate(.78); }
     .home-media::after { content: ""; position: absolute; inset: 0; background: linear-gradient(0deg,rgba(0,0,0,.72),transparent 50%); }
-    .media-caption { position: absolute; z-index: 1; left: 22px; right: 22px; bottom: 20px; display: flex; justify-content: space-between; gap: 14px; align-items: end; color: #fff; }
+    .media-caption { position: absolute; z-index: 1; left: 22px; right: 22px; bottom: 20px; display: flex; justify-content: space-between; gap: 14px; align-items: end; color: var(--text); }
     .media-caption strong { display: block; font-size: 22px; font-weight: 500; letter-spacing: -.04em; }
     .media-caption span { color: #c9c0ac; font-size: 12px; line-height: 1.6; }
     .info-stack { display: grid; gap: 13px; }
@@ -256,7 +456,7 @@
     .route-card { display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: center; min-height: 96px; border: 1px solid var(--line-soft); border-radius: 13px; padding: 18px; background: rgba(17,15,9,.72); transition: border-color .3s, transform .35s var(--ease); }
     .route-card:hover { border-color: rgba(245,198,107,.4); transform: translateY(-2px); }
     .route-card h3 { font-size: 16px; font-weight: 520; letter-spacing: -.025em; }
-    .route-card p { color: #8e8779; font-size: 11.5px; line-height: 1.7; margin-top: 6px; }
+    .route-card p { color: var(--ink-soft); font-size: 11.5px; line-height: 1.7; margin-top: 6px; }
     .route-price { color: var(--accent); font-size: 21px; font-weight: 700; letter-spacing: -.04em; white-space: nowrap; }
     .route-price small { display: block; color: #827a69; font-size: 10px; font-weight: 400; text-align: right; margin-top: 4px; letter-spacing: 0; }
     .fleet-strip { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 14px; margin-top: 30px; }
@@ -268,48 +468,46 @@
     .mini-body h3 { display: flex; justify-content: space-between; gap: 10px; font-size: 15px; font-weight: 560; letter-spacing: -.03em; }
     .mini-body h3 span:last-child { color: var(--accent); white-space: nowrap; }
     .mini-body p { color: #8b8476; font-size: 11.5px; line-height: 1.6; margin-top: 8px; }
-    .terminal-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 14px; margin-top: 30px; }
-    .terminal { position: relative; overflow: hidden; min-height: 250px; border-radius: 14px; background: #15120b; }
-    .terminal img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: saturate(.64); opacity: .72; }
-    .terminal::after { content: ""; position: absolute; inset: 0; background: linear-gradient(0deg,rgba(0,0,0,.86),rgba(0,0,0,.1)); }
-    .terminal-body { position: absolute; z-index: 1; inset: auto 18px 18px; }
-    .terminal-body span { color: var(--accent); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; }
-    .terminal-body h3 { margin-top: 8px; font-size: 19px; font-weight: 520; letter-spacing: -.035em; }
-    .terminal-body p { color: #d1c7b1; font-size: 12px; line-height: 1.65; margin-top: 8px; }
+    .terminal-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 20px; margin-top: 32px; }
+    .terminal { background: #ffffff; color: #18181b; border-radius: 18px; overflow: hidden; box-shadow: 0 16px 36px rgba(0,0,0,.45); display: flex; flex-direction: column; transition: transform .3s var(--ease), box-shadow .3s; }
+    .terminal:hover { transform: translateY(-4px); box-shadow: 0 22px 48px rgba(0,0,0,.6); }
+    .terminal-photo { width: 100%; aspect-ratio: 16/10; overflow: hidden; background: #e4e4e7; position: relative; }
+    .terminal-photo img { width: 100%; height: 100%; object-fit: cover; }
+    .terminal-body { padding: 24px 22px 26px; display: flex; flex-direction: column; flex: 1; color: #27272a; }
+    .terminal-body h3 { font-size: 22px; font-weight: 700; color: #09090b; letter-spacing: -.03em; margin: 0 0 4px; }
+    .terminal-sub { font-size: 13.5px; font-weight: 500; color: #71717a; margin-bottom: 16px; }
+    .terminal-desc { font-size: 13.5px; line-height: 1.65; color: #3f3f46; flex: 1; margin-bottom: 20px; display: flex; flex-direction: column; gap: 12px; }
+    .terminal-desc p { margin: 0; color: #3f3f46; }
+    .terminal-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 12px 16px; border-radius: 8px; background: #18181b; color: #ffffff; font-size: 13px; font-weight: 600; transition: background .2s, color .2s; cursor: pointer; border: 0; }
+    .terminal-btn:hover { background: #27272a; color: var(--accent); }
     .review-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 14px; margin-top: 30px; }
     .quote { border-left: 1px solid rgba(245,198,107,.42); padding: 4px 0 4px 18px; }
     .quote p { color: #d5cdbd; font-size: 14px; line-height: 1.75; letter-spacing: -.015em; }
     .quote small { display: block; margin-top: 13px; color: #877f6f; font-size: 11px; line-height: 1.6; }
-    .app-band { display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: center; border: 1px solid #3a321c; border-radius: 16px; padding: 28px; background: radial-gradient(circle at 84% 30%,rgba(245,198,107,.16),transparent 28%),linear-gradient(140deg,#171309,#0b0a07); }
-    .app-band h2 { font-size: clamp(26px,3vw,42px); font-weight: 500; letter-spacing: -.05em; line-height: 1.15; }
-    .app-band p { max-width: 570px; color: #9d9585; font-size: 13px; line-height: 1.75; margin-top: 12px; }
-    .app-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
-    .contact-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 14px; margin-top: 28px; }
-    .contact-line { display: flex; align-items: flex-start; gap: 14px; padding: 20px 0; border-top: 1px solid var(--line-soft); }
-    .contact-line .icon { width: 18px; height: 18px; color: var(--accent); margin-top: 2px; }
-    .contact-line small { display: block; color: #8d8577; font-size: 10px; margin-bottom: 6px; text-transform: uppercase; letter-spacing: .08em; }
-    .contact-line strong { display: block; color: #eee8db; font-size: 14px; font-weight: 500; line-height: 1.55; overflow-wrap: anywhere; }
-    .bank-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 26px; }
-    .bank-account { border: 1px solid var(--line-soft); border-radius: 12px; padding: 22px; background: linear-gradient(150deg,rgba(245,198,107,.06),transparent); }
-    .bank-account span { color: #998f7e; font-size: 10px; text-transform: uppercase; letter-spacing: .1em; }
-    .bank-account strong { display: block; margin: 12px 0 16px; color: var(--accent); font-size: clamp(20px,2.4vw,30px); letter-spacing: -.035em; overflow-wrap: anywhere; }
-    .legal-list { list-style: none; margin-top: 24px; }
-    .legal-list li { display: flex; justify-content: space-between; gap: 22px; padding: 15px 0; border-bottom: 1px solid var(--line-soft); color: #9f9789; font-size: 12px; line-height: 1.7; }
-    .legal-list strong { color: #e4dccd; font-weight: 500; text-align: right; }
-    .mini-phone { width: 172px; height: 240px; border: 1px solid rgba(245,198,107,.35); border-radius: 26px; padding: 14px; background: #090806; box-shadow: inset 0 0 0 5px #14110a; }
-    .mini-screen { height: 100%; border-radius: 18px; background: linear-gradient(180deg,#20190b,#0e0d09); padding: 18px 13px; }
-    .mini-screen .bar { height: 7px; border-radius: 20px; background: rgba(245,198,107,.28); margin-bottom: 14px; }
-    .mini-screen .bar:nth-child(2) { width: 70%; }
-    .mini-screen .bar:nth-child(3) { width: 45%; background: rgba(255,255,255,.14); }
-    .mini-screen .mapline { height: 86px; border: 1px dashed rgba(245,198,107,.45); border-radius: 16px; margin-top: 22px; position: relative; }
-    .mini-screen .mapline::before, .mini-screen .mapline::after { content: ""; position: absolute; width: 10px; height: 10px; border-radius: 50%; background: var(--accent); }
-    .mini-screen .mapline::before { left: 21px; top: 18px; }
-    .mini-screen .mapline::after { right: 22px; bottom: 18px; }
+    .contact-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 18px; margin-top: 32px; }
+    .contact-card { border: 1px solid var(--line-soft); border-radius: 16px; padding: 26px; background: rgba(18,16,11,.88); display: flex; flex-direction: column; }
+    .contact-card.highlight { border-color: rgba(245,198,107,.45); background: linear-gradient(150deg, rgba(245,198,107,.08), rgba(18,16,11,.94)); }
+    .contact-card-icon { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 10px; background: rgba(245,198,107,.12); color: var(--accent); margin-bottom: 16px; }
+    .contact-card h3 { font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+    .contact-hl { font-size: 18px; font-weight: 700; color: var(--accent); margin-bottom: 16px; }
+    .contact-rows { display: flex; flex-direction: column; gap: 10px; font-size: 12.5px; }
+    .contact-row { display: flex; justify-content: space-between; gap: 10px; padding-bottom: 8px; border-bottom: 1px solid var(--line-soft); }
+    .contact-row span { color: var(--ink-soft); }
+    .contact-row strong { color: #f0ece3; text-align: right; font-weight: 500; }
+    .contact-acc { font-family: ui-monospace, monospace; font-size: 13px; color: var(--accent); }
+    .contact-buttons { display: flex; flex-direction: column; gap: 10px; margin-top: auto; padding-top: 16px; }
+    .site-footer { border-top: 1px solid var(--line); padding: 50px var(--gutter) 40px; background: #080705; color: #8f887b; margin-top: auto; }
+    .footer-inner { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 36px; padding-bottom: 36px; border-bottom: 1px solid var(--line-soft); }
+    .footer-brand .logo { font-size: 22px; margin-bottom: 14px; }
+    .footer-desc { font-size: 12.5px; line-height: 1.75; color: #9a9386; max-width: 380px; }
+    .footer-col h4 { font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
+    .footer-col p { font-size: 12.5px; line-height: 1.8; color: #c9c1b2; }
+    .footer-bottom { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding-top: 24px; font-size: 11.5px; color: #787265; flex-wrap: wrap; }
     .faq-preview { display: grid; grid-template-columns: 1fr 1fr; gap: 0 32px; margin-top: 28px; }
     .faq-preview details { border-bottom: 1px solid var(--line-soft); padding: 18px 0; }
     .faq-preview summary { cursor: pointer; list-style: none; font-size: 14px; line-height: 1.5; }
     .faq-preview summary::-webkit-details-marker { display: none; }
-    .faq-preview p { color: #928b7d; font-size: 12.5px; line-height: 1.75; margin-top: 10px; }
+    .faq-preview p { color: var(--ink-soft); font-size: 12.5px; line-height: 1.75; margin-top: 10px; }
     .stats { display: flex; align-items: center; justify-content: space-between; gap: 22px; padding: 26px var(--gutter) max(28px,env(safe-area-inset-bottom)); color: #b1aa9c; }
     .stat { display: inline-flex; align-items: center; gap: 12px; font-size: 12px; letter-spacing: -.012em; white-space: nowrap; }
     .stat .icon { width: 19px; height: 19px; color: var(--accent); }
@@ -403,7 +601,7 @@
     .point:last-child::before { border-radius: 2px; background: var(--accent); }
     .point small { display: block; margin-top: 6px; color: #8d8779; font-size: 11px; }
     .dline { display: flex; justify-content: space-between; gap: 16px; padding: 11px 0; border-top: 1px solid var(--line-soft); font-size: 12px; color: #8d8779; }
-    .dline span:last-child { color: #ddd6c6; text-align: right; }
+    .dline span:last-child { color: var(--card-ink); text-align: right; }
     .driver { display: flex; align-items: center; gap: 13px; padding: 18px 0; margin-top: 8px; border-top: 1px solid var(--line); }
     .avatar { width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center; background: #2a2314; color: var(--accent); font-size: 18px; }
     .driver strong { font-size: 13px; font-weight: 500; }
@@ -484,7 +682,7 @@
     .stars .icon { width: 15px; height: 15px; fill: currentColor; stroke: none; }
     .review-txt { font-size: 18px; line-height: 1.65; letter-spacing: -.02em; }
     .review-by { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 17px; color: #8d8779; font-size: 11px; }
-    dialog { color: #fff; width: min(900px,calc(100vw - 40px)); max-height: calc(100dvh - 50px); margin: auto; border: 1px solid #3d3724; border-radius: 14px; padding: 0; background: #0d0b07; box-shadow: 0 35px 100px rgba(0,0,0,.7); overscroll-behavior: contain; }
+    dialog { color: var(--text); width: min(900px,calc(100vw - 40px)); max-height: calc(100dvh - 50px); margin: auto; border: 1px solid var(--line); border-radius: 14px; padding: 0; background: var(--panel-3); box-shadow: 0 35px 100px rgba(0,0,0,.7); overscroll-behavior: contain; }
     dialog::backdrop { background: rgba(0,0,0,.78); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
     dialog[open] { animation: dialog-in .35s var(--ease); }
     dialog.slim { width: min(560px,calc(100vw - 32px)); }
@@ -510,15 +708,15 @@
     .summary .total-row strong { font-size: 24px; }
     .sum-inc { margin-top: 20px; color: #7f7867; font-size: 10px; line-height: 1.95; }
     .picks { display: grid; grid-template-columns: repeat(2,1fr); gap: 8px; margin-bottom: 20px; }
-    .pick { position: relative; display: flex; justify-content: space-between; align-items: center; border: 1px solid #37311f; padding: 12px 11px; border-radius: 6px; cursor: pointer; gap: 8px; font-size: 11.5px; }
-    .pick:has(input:checked) { border-color: var(--accent); background: rgba(245,198,107,.07); }
+    .pick { position: relative; display: flex; justify-content: space-between; align-items: center; border: 1px solid #37311f; border-color: var(--line); background: var(--panel-3); color: var(--text); padding: 12px 11px; border-radius: 6px; cursor: pointer; gap: 8px; font-size: 11.5px; }
+    .pick:has(input:checked) { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 10%, var(--panel-3)); }
     .pick input { accent-color: var(--accent); width: 13px; height: 13px; }
     .pick span { flex: 1; }
     .pick small { color: #b0a077; font-size: 10.5px; white-space: nowrap; }
     .pick.wide-pick { grid-column: 1 / -1; }
     .s-label { display: block; font-size: 12px; margin: 20px 0 11px; color: #c3bcab; font-weight: 500; }
-    .counter-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 0; border-bottom: 1px solid #262316; }
-    .c-label { display: flex; align-items: center; gap: 11px; font-size: 11.5px; color: #c1baa9; }
+    .counter-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--line-soft); }
+    .c-label { display: flex; align-items: center; gap: 11px; font-size: 11.5px; color: var(--text); }
     .c-label .icon { color: #ab9c74; width: 17px; height: 17px; }
     .c-label small { display: block; margin-top: 4px; color: #857e6c; font-size: 9.5px; }
     .counter { display: flex; align-items: center; gap: 11px; }
@@ -572,7 +770,7 @@
     @media (min-width: 1600px) {
       :root { --gutter: 78px; }
       .header { min-height: 100px; }
-      .logo { font-size: 24px; }
+      .logo { font-size: 28px; }
       .nav-link { font-size: 14px; }
       h1 { font-size: min(96px,13vh); }
       .lede { font-size: 16.5px; max-width: 470px; }
@@ -662,11 +860,9 @@
       .route-board { grid-template-columns: 1fr; }
       .fleet-strip { grid-template-columns: repeat(2,minmax(0,1fr)); }
       .terminal-grid { grid-template-columns: 1fr; }
-      .terminal { min-height: 230px; }
       .review-grid { grid-template-columns: 1fr; }
-      .app-band { grid-template-columns: 1fr; }
-      .contact-grid { grid-template-columns: 1fr 1fr; }
-      .mini-phone { display: none; }
+      .contact-grid { grid-template-columns: 1fr; }
+      .footer-inner { grid-template-columns: 1fr 1fr; gap: 28px; }
       .faq-preview { grid-template-columns: 1fr; gap: 0; }
       .fleet-grid, .meet-grid, .steps { grid-template-columns: 1fr 1fr; }
       .split { grid-template-columns: 1fr; gap: 34px; }
@@ -711,7 +907,6 @@
       .route-card { grid-template-columns: 1fr; }
       .route-price small { text-align: left; }
       .app-band { padding: 22px; }
-      .contact-grid, .bank-grid { grid-template-columns: 1fr; }
       .subpage { padding-top: 24px; padding-bottom: 52px; }
       .page-heading { font-size: 36px; }
       .page-desc { font-size: 13px; }
@@ -755,7 +950,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 </head>
-<body style="background:#000;color:#fff">
+<body data-theme-init>
   <div class="grain" aria-hidden="true">
     <svg xmlns="http://www.w3.org/2000/svg">
       <defs>
@@ -796,6 +991,11 @@
         <symbol id="i-ticket" viewBox="0 0 24 24"><path d="M3 9V6h18v3a3 3 0 0 0 0 6v3H3v-3a3 3 0 0 0 0-6Z"/><path d="M12 7v2m0 2v2m0 2v2"/></symbol>
         <symbol id="i-navigation" viewBox="0 0 24 24"><path d="M3 11 21 3l-8 18-2-7-8-3Z"/></symbol>
         <symbol id="i-satellite" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 3v3m0 12v3M3 12h3m12 0h3M6.4 6.4l2.1 2.1m7 7 2.1 2.1m0-11.2-2.1 2.1m-7 7-2.1 2.1"/></symbol>
+        <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.2m0 14.4v2.2M2.6 12h2.2m14.4 0h2.2M5.4 5.4l1.6 1.6m10 10 1.6 1.6m0-13.2-1.6 1.6m-10 10-1.6 1.6"/></symbol>
+        <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.4A8.6 8.6 0 0 1 9.6 4a8.4 8.4 0 1 0 10.4 10.4Z"/></symbol>
+        <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.6 6.6 8.4 6 8.4-6"/></symbol>
+        <symbol id="i-bank" viewBox="0 0 24 24"><path d="M3 9.5 12 4l9 5.5M4.5 10v9m15-9v9M3 20h18M8 13v4m4-4v4m4-4v4"/></symbol>
+        <symbol id="i-id" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2.2"/><path d="M5.5 17c.8-2 2-3 3.5-3s2.7 1 3.5 3M15 9.5h4M15 13h4"/></symbol>
       </defs>
       <rect width="100%" height="100%" filter="url(#gf)" opacity=".7"/>
     </svg>
@@ -807,11 +1007,15 @@
     <div class="menu-backdrop" id="backdrop"></div>
     <header class="header">
       <a class="logo appear a-scale" href="#/" aria-label="Transfer by Van" style="--d:.08s">
-        <span class="logo-mark"><svg class="icon" aria-hidden="true"><use href="#i-car"/></svg></span>
-        <span>Transfer <em>by Van</em></span>
+        <span class="logo-mark"><svg class="icon" aria-hidden="true"><use href="#i-van"/></svg></span>
+        <span>Transfer by <em>Van</em></span>
       </a>
       <nav class="site-nav" id="nav" aria-label="Hlavní navigace"></nav>
       <div class="header-actions">
+        <button class="theme-toggle appear a-scale" type="button" id="theme-toggle" aria-label="Přepnout motiv" aria-pressed="false" style="--d:.26s">
+          <svg class="icon i-sun" aria-hidden="true"><use href="#i-sun"/></svg>
+          <svg class="icon i-moon" aria-hidden="true"><use href="#i-moon"/></svg>
+        </button>
         <div class="lang-switch appear a-scale" id="langs" role="group" aria-label="Jazyk / Language" style="--d:.3s"></div>
         <a class="btn btn-ghost header-cta appear a-scale" href="#/jizdy" style="--d:.34s"><svg class="icon" aria-hidden="true"><use href="#i-user"/></svg><span class="label" id="cta-label">Moje jízdy</span><span class="trip-count" id="tcount" hidden>0</span></a>
       </div>
@@ -819,6 +1023,27 @@
     </header>
     <main id="app"></main>
     <footer class="stats" id="stats" hidden></footer>
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <a class="logo" href="#/" aria-label="Transfer by Van"><span class="logo-mark"><svg class="icon" aria-hidden="true"><use href="#i-van"/></svg></span><span>Transfer by <em>Van</em></span></a>
+          <p class="footer-desc">${''}${L('Osobní přeprava a transfery z/na letiště Václava Havla Praha. Fixní ceny, vícemístné vozy, dětské autosedačky zdarma.', 'Passenger transport and transfers to and from Václav Havel Airport Prague. Fixed prices, multi-seat vehicles and free child seats.')}</p>
+        </div>
+        <div class="footer-col">
+          <h4>${L('Kontakt', 'Contact')}</h4>
+          <p><a class="text-link" href="tel:+420774571747">+420 774 571 747</a><br><a class="text-link" href="https://wa.me/420774571747" target="_blank" rel="noopener">WhatsApp</a><br><a class="text-link" href="mailto:cztransfertaxi@gmail.com">cztransfertaxi@gmail.com</a></p>
+        </div>
+        <div class="footer-col">
+          <h4>${L('Provozovatel', 'Operator')}</h4>
+          <p>Serhii Boliak<br>IČO: 08865931<br>${L('silniční motorová doprava', 'road passenger transport')}<br>${L('vznik živnosti 22. 2. 2020', 'registered 22 Feb 2020')}</p>
+        </div>
+        <div class="footer-col">
+          <h4>${L('Účty', 'Accounts')}</h4>
+          <p>CZK: 4160775073/0800<br>EUR: 2209598233/0800<br>Česká spořitelna</p>
+        </div>
+      </div>
+      <div class="footer-bottom"><span>© <span id="year"></span> Transfer by Van · Serhii Boliak</span><span>${L('Ceny včetně DPH, pokud není uvedeno jinak.', 'Prices include VAT unless stated otherwise.')}</span></div>
+    </footer>
   </div>
   <datalist id="places"></datalist>
   <dialog id="modal" aria-labelledby="d-title"><div id="modal-body"></div></dialog>
@@ -845,12 +1070,7 @@
       trackPollMs: 5000,
       paymentHosts: ['checkout.stripe.com', 'checkout.stripe.dev']
     });
-    const CONTACT = Object.freeze({
-      operator: 'Serhii Boliak', ico: '08865931', since: '22. 2. 2020',
-      phone: '+420 774 571 747', phoneDigits: '420774571747', email: 'cztransfertaxi@gmail.com',
-      czk: '4160775073/0800', eur: '2209598233/0800',
-      registry: 'https://www.podnikatel.cz/rejstrik/serhii-boliak-08865931/'
-    });
+    const SITE = Object.freeze({ faq: 'https://www.phcars.cz/faq/', app: 'https://letiste-praha.taxi/aplikace/', admin: 'https://book.letiste-praha.taxi/bookings', home: 'https://www.phcars.cz/' });
     const PRIVATE_DATA_PATH = '/wry-ops-8f3c9a71d6e24b50';
 
     const $ = (s, r = document) => r.querySelector(s);
@@ -861,14 +1081,14 @@
     const esc = v => { const n = document.createElement('span'); n.textContent = String(v ?? ''); return n.innerHTML.replaceAll('"', '&#34;').replaceAll("'", '&#39;'); };
     const icon = (n, c = '') => `<svg class="icon ${c}" aria-hidden="true"><use href="#i-${n}"/></svg>`;
     const uid = () => globalThis.crypto?.randomUUID ? crypto.randomUUID() : `${Date.now().toString(36)}${Math.random().toString(36).slice(2, 10)}`;
-    const KEY = 'transfer-by-van.app.v1';
+    const KEY = 'wayro.app.v2';
     const TZ = 'Europe/Prague';
     const dstr = d => { const p = new Intl.DateTimeFormat('en-CA', { timeZone: TZ, year: 'numeric', month: '2-digit', day: '2-digit' }).formatToParts(d); const g = k => p.find(x => x.type === k).value; return `${g('year')}-${g('month')}-${g('day')}`; };
     const plusDays = n => { const d = new Date(`${dstr(new Date())}T12:00:00+01:00`); d.setUTCDate(d.getUTCDate() + n); return dstr(d); };
     const stamp = (date, time) => new Date(`${date}T${time}:00${offset(date)}`);
     function offset(date) { const probe = new Date(`${date}T12:00:00Z`); const s = new Intl.DateTimeFormat('en-US', { timeZone: TZ, timeZoneName: 'longOffset' }).formatToParts(probe).find(p => p.type === 'timeZoneName').value; return s.replace('GMT', '') || '+01:00'; }
 
-    /* ---------- Fleet & prices: Transfer by Van tariff ---------- */
+    /* ---------- Fleet & prices: actual Wayro tariff (airport <-> Prague fixed, long = per km) ---------- */
     const FLEET = {
       sedan:   { label: 'Sedan',       base: 850,  pax: 4, bags: 3, seats: 1, rate: 34, city: 390, hour: 690,  ico: 'car',
                  model: { cs: 'Škoda Superb nebo obdobný vůz', en: 'Škoda Superb or similar' },
@@ -908,19 +1128,29 @@
       { n: 'Mnichov / Munich', g: 'eu', km: 385, lat: 48.1351, lng: 11.5820 }
     ];
     const SEATS = { egg: { cs: 'Vajíčko (0–1 rok)', en: 'Infant seat (0–1 y)' }, mid: { cs: 'Střední sedačka (1–4 roky)', en: 'Child seat (1–4 y)' }, boost: { cs: 'Podsedák (4–12 let)', en: 'Booster (4–12 y)' } };
+    /* Місця зустрічі: фото та опис відповідають реальним орієнтирам.
+       Джерело фото — офіційний сайт оператора (phcars.cz), який показує ті самі точки. */
     const MEETS = {
-      t1: { t: 'Terminál 1', s: 'Mattoni Bar', lat: 50.1028, lng: 14.2580, d: { cs: 'Po přistání si zapněte telefon. Řidič vás kontaktuje telefonicky nebo přes WhatsApp a bude čekat v příletové hale terminálu 1 před Mattoni Barem s cedulkou se jménem.', en: 'Turn on your phone after landing. The driver will contact you by phone or WhatsApp and wait in the Terminal 1 arrivals hall in front of Mattoni Bar with a name sign.' }, img: 'https://www.phcars.cz/wp-content/uploads/2026/02/Matoni-bar.webp' },
-      t2: { t: 'Terminál 2', s: 'Visitor Centre', lat: 50.1069, lng: 14.2647, d: { cs: 'Po přistání si zapněte telefon. Řidič vás kontaktuje telefonicky nebo přes WhatsApp a bude čekat v příletové hale terminálu 2 před Visitor Centrem s cedulkou se jménem.', en: 'Turn on your phone after landing. The driver will contact you by phone or WhatsApp and wait in the Terminal 2 arrivals hall in front of the Visitor Centre with a name sign.' }, img: 'https://www.phcars.cz/wp-content/uploads/2026/02/Visitor-centrum.webp' },
-      hn: { t: 'Praha Hlavní nádraží', s: 'Burger King', lat: 50.0831, lng: 14.4360, d: { cs: 'Řidič vás bude čekat uvnitř haly před restaurací Burger King s cedulkou se jménem.', en: 'The driver will wait inside the station hall in front of Burger King with a name sign.' }, img: 'https://www.phcars.cz/wp-content/uploads/2026/02/Burger-king-hlavak.webp' }
+      t1: { t: 'Terminál 1', s: 'Mattoni Bar', lat: 50.1028, lng: 14.2580,
+        intro: { cs: 'Po přistání si zapněte telefon – řidič vás bude kontaktovat přes telefon nebo WhatsApp.', en: 'After landing, switch your phone on – the driver will contact you by phone or WhatsApp.' },
+        d: { cs: 'Řidič vás bude čekat v příletové hale terminálu 1 před Mattoni Barem s cedulkou se jménem.', en: 'Your driver waits in Terminal 1 arrivals in front of the Mattoni Bar with a name sign.' },
+        img: 'https://www.phcars.cz/wp-content/uploads/2026/02/Matoni-bar.webp' },
+      t2: { t: 'Terminál 2', s: 'Visitor Centre', lat: 50.1069, lng: 14.2647,
+        intro: { cs: 'Po přistání si zapněte telefon – řidič vás bude kontaktovat přes telefon nebo WhatsApp.', en: 'After landing, switch your phone on – the driver will contact you by phone or WhatsApp.' },
+        d: { cs: 'Řidič vás bude čekat v příletové hale terminálu 2 před Visitor Centrem s cedulkou se jménem.', en: 'Your driver waits in Terminal 2 arrivals in front of the Visitor Centre with a name sign.' },
+        img: 'https://www.phcars.cz/wp-content/uploads/2026/02/Visitor-centrum.webp' },
+      hn: { t: 'Praha Hlavní nádraží', s: 'Burger King', lat: 50.0831, lng: 14.4360,
+        d: { cs: 'Řidič vás bude čekat uvnitř haly před restaurací Burger King s cedulkou se jménem.', en: 'Your driver waits inside the hall in front of Burger King with a name sign.' },
+        img: 'https://www.phcars.cz/wp-content/uploads/2026/02/Burger-king-hlavak.webp' }
     };
 
     /* ---------- i18n ---------- */
     const D = {
       cs: {
-        nav: { services: 'Služby', fleet: 'Vozy a ceny', airport: 'Letiště', business: 'Pro firmy', contact: 'Kontakt', help: 'Nápověda', trips: 'Moje jízdy' },
-        hero: { eyebrow: 'Praha · Letiště Václava Havla (PRG) · nonstop 24/7', l1: 'Taxi na letiště.', l2a: 'Bez ', l2em: 'stresu.', lede: 'Fixní cenu znáte předem. Řidič sleduje váš let, čeká s cedulkou a jeho auto vidíte na mapě. Platíte až po jízdě.', p1: 'Letiště – Praha od 850 Kč', p2: 'Autosedačka zdarma', p3: 'Sledujeme váš let', p4: 'Platba u řidiče', p5: 'Živá poloha auta' },
+        nav: { services: 'Služby', fleet: 'Vozy a ceny', airport: 'Letiště', business: 'Pro firmy', help: 'Nápověda', trips: 'Moje jízdy' },
+        hero: { eyebrow: 'Praha · Letiště Václava Havla (PRG) · nonstop 24/7', l1: 'Taxi na letiště', l2a: 'Bez ', l2em: 'stresu.', lede: 'Fixní cenu znáte předem. Řidič sleduje váš let, čeká s cedulkou a jeho auto vidíte na mapě. Platíte až po jízdě.', p1: 'Letiště – Praha od 850 Kč', p2: 'Autosedačka zdarma', p3: 'Sledujeme váš let', p4: 'Platba u řidiče', p5: 'Živá poloha auta' },
         modes: { to: 'Na letiště', from: 'Z letiště', long: 'Jiná trasa', hourly: 'Hodinová dispozice' },
-        f: { from: 'Odkud', to: 'Kam', when: 'Datum a čas (SEČ)', pax: 'Osoby', car: 'Vůz', hours: 'Počet hodin', cta: 'Vybrat vůz', promo: 'Máte slevový kód?', fixed: 'Fixní cena. Bez skrytých poplatků.', est: 'Orientační cena – potvrdí dispečer.', hourNote: 'Hodinová sazba, minimálně 2 hodiny.', demo: 'Cena dle ceníku Transfer by Van · odsouhlasí backend', ret: 'Zpáteční jízda', retNote: 'Účtuje se cena za každý směr.', quick: 'Oblíbené trasy:' },
+        f: { from: 'Odkud', to: 'Kam', when: 'Datum a čas (SEČ)', pax: 'Osoby', car: 'Vůz', hours: 'Počet hodin', cta: 'Vybrat vůz', promo: 'Máte slevový kód?', fixed: 'Fixní cena. Bez skrytých poplatků.', est: 'Orientační cena – potvrdí dispečer.', hourNote: 'Hodinová sazba, minimálně 2 hodiny.', demo: 'Cena dle ceníku Transfer by Van · potvrdí dispečink', ret: 'Zpáteční jízda', retNote: 'Účtuje se cena za každý směr.', quick: 'Oblíbené trasy:' },
         stats: { s1: 'Fixní cena předem', s1s: 'Bez příplatků za provoz a zavazadla', s2: 'Sledujeme váš let', s2s: 'Zpoždění letu čekáme zdarma', s3: 'Autosedačka zdarma', s3s: 'Vajíčko, sedačka i podsedák', s4: 'Platba u řidiče', s4s: 'Hotově nebo kartou po jízdě' },
         pax: n => n === 1 ? '1 osoba' : n < 5 ? `${n} osoby` : `${n} osob`,
         hrs: n => n === 1 ? '1 hodina' : n < 5 ? `${n} hodiny` : `${n} hodin`,
@@ -929,8 +1159,8 @@
         back: 'Zpět na hlavní stranu', more: 'Více'
       },
       en: {
-        nav: { services: 'Services', fleet: 'Fleet & prices', airport: 'Airport', business: 'Business', contact: 'Contact', help: 'Help', trips: 'My rides' },
-        hero: { eyebrow: 'Prague · Václav Havel Airport (PRG) · 24/7', l1: 'Airport taxi.', l2a: 'Zero ', l2em: 'stress.', lede: 'A fixed price upfront. Your driver tracks the flight, waits with a name sign and you can watch the car on a live map. Pay after the ride.', p1: 'Airport – Prague from 850 CZK', p2: 'Free child seat', p3: 'Flight tracking', p4: 'Pay the driver', p5: 'Live car position' },
+        nav: { services: 'Services', fleet: 'Fleet & prices', airport: 'Airport', business: 'Business', help: 'Help', trips: 'My rides' },
+        hero: { eyebrow: 'Prague · Václav Havel Airport (PRG) · 24/7', l1: 'Airport taxi', l2a: 'Zero ', l2em: 'stress.', lede: 'A fixed price upfront. Your driver tracks the flight, waits with a name sign and you can watch the car on a live map. Pay after the ride.', p1: 'Airport – Prague from 850 CZK', p2: 'Free child seat', p3: 'Flight tracking', p4: 'Pay the driver', p5: 'Live car position' },
         modes: { to: 'To airport', from: 'From airport', long: 'Other route', hourly: 'Hourly hire' },
         f: { from: 'From', to: 'To', when: 'Date and time (CET)', pax: 'People', car: 'Vehicle', hours: 'Hours', cta: 'Choose vehicle', promo: 'Have a promo code?', fixed: 'Fixed price. No hidden fees.', est: 'Estimate – confirmed by the dispatcher.', hourNote: 'Hourly rate, minimum 2 hours.', demo: 'Priced from the Transfer by Van rate list · confirmed by the backend', ret: 'Return ride', retNote: 'Each direction is charged separately.', quick: 'Popular routes:' },
         stats: { s1: 'Fixed price upfront', s1s: 'No traffic or luggage surcharges', s2: 'We track your flight', s2s: 'Delayed flight? We wait for free', s3: 'Free child seat', s3s: 'Infant, child and booster seats', s4: 'Pay the driver', s4s: 'Cash or card after the ride' },
@@ -960,7 +1190,7 @@
     const okOrder = o => o && typeof o.id === 'string' && o.id.length < 80 && typeof o.from === 'string' && typeof o.to === 'string' && Object.hasOwn(FLEET, o.car) && Number.isFinite(o.total) && Number.isInteger(o.stage) && o.stage >= 0 && o.stage <= 6 && typeof o.date === 'string' && typeof o.time === 'string' && o.ext && typeof o.ext === 'object';
     let orders = Array.isArray(store.orders) ? store.orders.filter(okOrder) : [];
     let reviews = Array.isArray(store.reviews) ? store.reviews.filter(r => r && typeof r.text === 'string' && typeof r.orderId === 'string' && Number.isInteger(r.rating) && r.rating > 0 && r.rating < 6) : [];
-    const refCode = typeof store.ref === 'string' && /^TV-[A-Z0-9]{6}$/.test(store.ref) ? store.ref : `TV-${uid().replaceAll('-', '').slice(0, 6).toUpperCase()}`;
+    const refCode = typeof store.ref === 'string' && /^WY-[A-Z0-9]{6}$/.test(store.ref) ? store.ref : `WY-${uid().replaceAll('-', '').slice(0, 6).toUpperCase()}`;
     let lang = ['cs', 'en'].includes(store.lang) ? store.lang : (navigator.language || 'cs').toLowerCase().startsWith('cs') ? 'cs' : 'en';
 
     const S = {
@@ -976,7 +1206,7 @@
     const dataSession = { key: '', authorized: false, items: [], selected: null, page: 1, pages: 1, total: 0, query: '', state: 'all', dateFrom: '', dateTo: '', controller: null, detailController: null, sequence: 0, timer: null, expiresAt: 0, loading: false };
 
     /* Public settings from the backend (driver contacts, flight data, etc.) */
-    const PUB = { whatsapp: CONTACT.phoneDigits, phone: CONTACT.phone, supportEmail: CONTACT.email, flightProvider: null, loaded: false };
+    const PUB = { whatsapp: null, phone: null, supportEmail: null, flightProvider: null, loaded: false };
     fetch(CONFIG.configEndpoint).then(r => r.ok ? r.json() : null).then(d => { if (d) { Object.assign(PUB, d, { loaded: true }); if (path === '/nastaveni') renderSetup(); } }).catch(() => {});
 
     /* Serverový výpočet trasy: skutečné kilometry po silnici + cena za každý vůz.
@@ -1124,7 +1354,7 @@
     /* ---------- shell ---------- */
     function shellChrome() {
       $('#nav').innerHTML = [
-        ['services', '#/sluzby'], ['fleet', '#/vozy'], ['airport', '#/letiste'], ['business', '#/firmy'], ['contact', '#/kontakt']
+        ['services', '#/sluzby'], ['fleet', '#/vozy'], ['airport', '#/letiste'], ['business', '#/firmy']
       ].map(([k, href], i) => `<a class="nav-link appear ${i % 2 ? 'a-soft' : 'a-scale'}" href="${href}" data-p="${k}" style="--d:${.16 + i * .12}s">${t('nav.' + k)}</a>`).join('')
         + `<a class="nav-link mobile-only" href="#/napoveda" data-p="help">${t('nav.help')}</a>`
         + `<a class="nav-link mobile-only" href="#/jizdy" data-p="trips">${t('nav.trips')}</a>`;
@@ -1160,8 +1390,8 @@
       const routeDeals = [
         ['PRG → Praha centrum', L('Fixní cena letištního transferu', 'Fixed airport transfer price'), FLEET.sedan.base, 't1'],
         ['Praha → PRG', L('Včasný odvoz na odlet', 'On-time departure pickup'), FLEET.sedan.base, 't2'],
-        ['PRG → Karlovy Vary', L('Orientačně podle sazby 34 Kč/km', 'Estimate at 34 CZK/km'), Math.round((130 * FLEET.sedan.rate) / 10) * 10, 't3'],
-        ['Praha → Vídeň', L('Orientačně podle sazby 34 Kč/km', 'Estimate at 34 CZK/km'), Math.round((335 * FLEET.sedan.rate) / 10) * 10, 't4']
+        ['PRG → Karlovy Vary', L('Dálková jízda bez přestupů', 'Long-distance ride with no transfers'), Math.round((130 * FLEET.sedan.rate + FLEET.sedan.base * .4) / 10) * 10, 't3'],
+        ['Praha → Vídeň', L('Soukromý transfer do Rakouska', 'Private transfer to Austria'), Math.round((335 * FLEET.sedan.rate + FLEET.sedan.base * .4) / 10) * 10, 't4']
       ];
       const process = [
         [L('Vyplníte trasu', 'Enter the route'), L('Zvolíte směr, čas, počet osob a vůz. Cena se přepočítá okamžitě.', 'Choose direction, time, people and car. The price updates instantly.')],
@@ -1225,7 +1455,7 @@
         <section class="home-section appear a-soft" style="--d:.06s">
           <p class="section-kicker">${L('Proč Transfer by Van', 'Why Transfer by Van')}</p>
           <h2 class="home-title">${L('Letištní transfer, který je jasný ještě před nástupem.', 'An airport transfer that is clear before you get in.')}</h2>
-          <p class="home-lede">${L('Transfer by Van staví službu na přesné ceně, jednoduchém vyzvednutí a lidské komunikaci. Víte, kde se potkáte s řidičem, kolik zaplatíte, co je v ceně a kde zrovna jede auto.', 'Transfer by Van is built around exact pricing, simple pickup and human communication. You know where you meet the driver, what you pay, what is included and where the car is right now.')}</p>
+          <p class="home-lede">${L('Transfer by Van staví službu na přesné ceně, jednoduchém vyzvednutí a lidské komunikaci. Víte, kde se potkáte s řidičem, kolik zaplatíte a co je v ceně.', 'Transfer by Van is built around exact pricing, simple pickup and human communication. You know where you meet the driver, what you pay and what is included.')}</p>
           <div class="feature-grid">${featureItems.map(([ic, title, text]) => `<article class="feature">${icon(ic)}<h3>${title}</h3><p>${text}</p></article>`).join('')}</div>
         </section>
 
@@ -1256,13 +1486,53 @@
         <section class="home-section">
           <p class="section-kicker">${L('Místa setkání', 'Meeting points')}</p>
           <h2 class="home-title">${L('Vystoupíte z letadla a víte, kam jít.', 'You leave the plane and know where to go.')}</h2>
-          <div class="terminal-grid">${terminalItems.map(m => `<article class="terminal"><img src="${m.img}" alt="${esc(m.t)}" loading="lazy" decoding="async"><div class="terminal-body"><span>${m.s}</span><h3>${m.t}</h3><p>${m.d[lang] || m.d.cs}</p><button class="text-link" type="button" data-a="pick-meet" data-v="${m.key}">${L('Vybrat místo', 'Choose point')} →</button></div></article>`).join('')}</div>
+          <div class="terminal-grid">${terminalItems.map(m => `<article class="terminal">
+            <div class="terminal-photo"><img src="${esc(m.img)}" alt="${esc(m.t)} — ${esc(m.s)}" loading="lazy" decoding="async"></div>
+            <div class="terminal-body">
+              <h3>${esc(m.t)}</h3>
+              <p class="terminal-sub">${esc(m.s)}</p>
+              <div class="terminal-desc">${m.intro ? `<p>${esc(m.intro[lang] || m.intro.cs)}</p>` : ''}<p>${esc(m.d[lang] || m.d.cs)}</p></div>
+              <button class="terminal-btn" type="button" data-a="pick-meet" data-v="${m.key}">${L('Vybrat místo vyzvednutí', 'Choose pickup point')} ${icon('arrow')}</button>
+            </div></article>`).join('')}</div>
         </section>
 
-        <section class="home-section">
-          <div class="app-band">
-            <div><p class="section-kicker">${L('Přímý kontakt', 'Direct contact')}</p><h2>${L('Domluvte transfer přímo s provozovatelem.', 'Arrange your transfer directly with the operator.')}</h2><p>${L('Serhii Boliak · IČO 08865931. Zavolejte, napište na WhatsApp nebo e-mail. Bankovní převod používejte až po potvrzení rezervace.', 'Serhii Boliak · Company ID 08865931. Call, use WhatsApp or e-mail. Make a bank transfer only after the booking is confirmed.')}</p><div class="app-actions"><a class="btn btn-solid" href="tel:+420774571747">${icon('headset')}${CONTACT.phone}</a><a class="btn btn-ghost" href="https://wa.me/${CONTACT.phoneDigits}" target="_blank" rel="noopener">WhatsApp</a><a class="btn btn-ghost" href="#/kontakt">${L('Kontakty a platba', 'Contacts and payment')}${icon('arrow')}</a></div></div>
-            <div class="bank-account"><span>${L('Příjemce', 'Account holder')}</span><strong style="font-size:22px">${CONTACT.operator}</strong><p class="note">${CONTACT.email}<br>IČO ${CONTACT.ico}</p></div>
+        <section class="home-section" id="kontakt">
+          <p class="section-kicker">${L('Kontakt a fakturace', 'Contact and billing')}</p>
+          <h2 class="home-title">${L('Přímálinka na řidiče, žádná call centra.', 'Direct line to the driver, no call centres.')}</h2>
+          <p class="home-lede">${L('Rezervaci potvrdí dispečink e-mailem. Fakturu vystavujeme jako fyzická osoba s živností silniční motorová doprava.', 'Dispatch confirms your booking by e-mail. Invoices are issued by a self-employed carrier licensed for road passenger transport.')}</p>
+          <div class="contact-grid">
+            <div class="contact-card highlight">
+              <div class="contact-card-icon">${icon('headset')}</div>
+              <h3>${L('Nepřetržitá linka 24/7', 'Non-stop line 24/7')}</h3>
+              <p class="contact-hl">+420 774 571 747</p>
+              <div class="contact-buttons">
+                <a class="btn btn-solid" href="tel:+420774571747">${icon('headset')}${L('Zavolat', 'Call')}</a>
+                <a class="btn btn-ghost" href="https://wa.me/420774571747" target="_blank" rel="noopener">WhatsApp</a>
+              </div>
+            </div>
+            <div class="contact-card">
+              <div class="contact-card-icon">${icon('id')}</div>
+              <h3>${L('Provozovatel', 'Operator')}</h3>
+              <div class="contact-rows">
+                <div class="contact-row"><span>${L('Jméno', 'Name')}</span><strong>Serhii Boliak</strong></div>
+                <div class="contact-row"><span>IČO</span><strong>08865931</strong></div>
+                <div class="contact-row"><span>${L('Povolení', 'Licence')}</span><strong>${L('silniční osobní doprava', 'road passenger transport')}</strong></div>
+                <div class="contact-row"><span>E-mail</span><strong>cztransfertaxi@gmail.com</strong></div>
+              </div>
+              <div class="contact-buttons">
+                <a class="btn btn-ghost" href="mailto:cztransfertaxi@gmail.com">${icon('mail')}${L('Napsat e-mail', 'Send e-mail')}</a>
+              </div>
+            </div>
+            <div class="contact-card">
+              <div class="contact-card-icon">${icon('bank')}</div>
+              <h3>${L('Platební údaje', 'Payment details')}</h3>
+              <div class="contact-rows">
+                <div class="contact-row"><span>${L('Koruna (CZK)', 'Czech koruna')}</span><strong class="contact-acc">4160775073/0800</strong></div>
+                <div class="contact-row"><span>Euro (EUR)</span><strong class="contact-acc">2209598233/0800</strong></div>
+                <div class="contact-row"><span>${L('Banka', 'Bank')}</span><strong>Česká spořitelna</strong></div>
+              </div>
+              <p class="note" style="margin-top:16px">${L('Platba kartou nebo hotově u řidiče. Online platba probíhá výhradně na stránce platební brány.', 'Pay by card or cash with the driver. Online payment happens only on the payment gateway page.')}</p>
+            </div>
           </div>
         </section>
 
@@ -1440,7 +1710,7 @@
       if (seq !== acSeq || !box.isConnected || input.value.trim() !== term || document.activeElement !== input || !box.classList.contains('on')) return;
       if (!results.length) {
         results = PLACES.filter(p => p.n.toLocaleLowerCase('cs').includes(term.toLocaleLowerCase('cs')))
-          .map(p => ({ label: p.n, full: p.n, address: L('Bod ze seznamu Transfer by Van', 'Transfer by Van pickup point'), lat: p.lat, lng: p.lng, known: true }));
+          .map(p => ({ label: p.n, full: p.n, address: L('Bod ze seznamu Wayro', 'Wayro pickup point'), lat: p.lat, lng: p.lng, known: true }));
       }
       const warningText = warning === 'places_not_configured' ? L('Vyhledávání hotelů ještě není připojeno. Je nutné nastavit GEOAPIFY_API_KEY na serveru.', 'Hotel search is not connected yet. GEOAPIFY_API_KEY must be set on the server.') : warning ? L('Hledání je dočasně nedostupné. Zkuste to znovu.', 'Place search is temporarily unavailable. Please retry.') : '';
       if (!results.length) {
@@ -1454,7 +1724,7 @@
         const showKm = validGeo(opp) && Number.isFinite(localKm) && localKm >= 0.1 && oppWhich && S[oppWhich];
         const addr = x.address && x.address !== x.label ? x.address : x.full;
         return `<button type="button" role="option" aria-selected="false" tabindex="-1" id="option-${which}-${i}" data-pick="${which}" data-i="${i}" title="${esc(x.full)}">${icon(x.kind === 'hotel' ? 'building' : 'pin')}<span><b>${matchText(x.label, term)}</b><small>${esc(addr)}${showKm ? `<span style="color:var(--accent)"> · ≈ ${esc(fmtKm(localKm))} ${L('vzdušně', 'straight line')}</span>` : ''}</small></span></button>`;
-      }).join('') + `<div class="ac-meta" role="presentation">${provider === 'geoapify' ? '<a href="https://www.geoapify.com/" target="_blank" rel="noopener">Geoapify</a> · <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>' : L('Body Transfer by Van', 'Transfer by Van locations')}${warningText ? `<br>${warningText}` : ''}<br>${L('Přesné km po silnici ukážeme po výběru obou míst.', 'Exact road km appear after you pick both places.')}</div>`;
+      }).join('') + `<div class="ac-meta" role="presentation">${provider === 'geoapify' ? '<a href="https://www.geoapify.com/" target="_blank" rel="noopener">Geoapify</a> · <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>' : L('Body Wayro', 'Wayro locations')}${warningText ? `<br>${warningText}` : ''}<br>${L('Přesné km po silnici ukážeme po výběru obou míst.', 'Exact road km appear after you pick both places.')}</div>`;
     }
     function readHome() {
       if (!$('#book-form')) return;
@@ -1524,7 +1794,7 @@
           [L('Příjezd řidiče', 'Driver arrives'), L('Řidič přijede včas, na letišti čeká s cedulkou a pomůže se zavazadly.', 'The driver arrives on time, waits with a name sign at the airport and helps with the luggage.')],
           [L('Platba', 'Payment'), L('Zaplatíte po jízdě hotově nebo kartou u řidiče a dostanete doklad.', 'You pay after the ride in cash or by card and receive a receipt.')]
         ].map(([ttl, txt], i) => `<div class="step"><span class="step-num">0${i + 1}</span><h3>${ttl}</h3><p>${txt}</p></div>`).join('')}</div>`
-        + `<div class="banner">${icon('info')}<p>${L('Ceny letiště – Praha odpovídají ceníku Transfer by Van a jsou pevné. Dálkové a hodinové kalkulace jsou orientační, finální cenu potvrzuje provozovatel.', 'Airport – Prague prices follow the Transfer by Van price list and are fixed. Long-distance and hourly calculations are estimates; the operator confirms the final price.')}</p></div></section>`;
+        + `<div class="banner">${icon('info')}<p>${L('Ceny letiště – Praha odpovídají ceníku Wayro a jsou pevné. Dálkové a hodinové kalkulace jsou orientační, finální cenu potvrzuje dispečink.', 'Airport – Prague prices follow the Wayro price list and are fixed. Long-distance and hourly calculations are estimates; dispatch confirms the final price.')}</p></div></section>`;
     }
     function renderFleet() {
       const items = Object.entries(FLEET).filter(([k]) => fleetFilter === 'all' || fleetFilter === k);
@@ -1569,7 +1839,7 @@
         </div></section>`;
     }
     function renderBusiness() {
-      app.innerHTML = head(L('Transfer by Van pro firmy', 'Transfer by Van for business'), L('Vaši klienti.<br>Naše <em>starost.</em>', 'Your clients.<br>Our <em>care.</em>'), L('Přeprava partnerů, klientů i týmu s jedním standardem a přehledem nákladů.', 'Transport for partners, clients and your team with one standard and a clear cost overview.'))
+      app.innerHTML = head(L('Wayro pro firmy', 'Wayro for business'), L('Vaši klienti.<br>Naše <em>starost.</em>', 'Your clients.<br>Our <em>care.</em>'), L('Přeprava partnerů, klientů i týmu s jedním standardem a přehledem nákladů.', 'Transport for partners, clients and your team with one standard and a clear cost overview.'))
         + `<div class="split"><div><ul class="list">
           ${[L('Transfery klientů a delegací na letiště i na jednání', 'Client and delegation transfers to the airport and meetings'),
              L('Pravidelné jízdy zaměstnanců podle firemní politiky', 'Recurring staff rides following your travel policy'),
@@ -1580,24 +1850,12 @@
           <label class="form-field"><span>${L('Počet jízd měsíčně', 'Rides per month')}</span><input class="input" id="biz-n" type="number" min="1" max="999" value="20" required></label>
           <label class="form-field"><span>${L('Vůz', 'Vehicle')}</span><select class="input" id="biz-car">${Object.entries(FLEET).map(([k, c]) => `<option value="${k}" ${k === 'sedan' ? 'selected' : ''}>${c.label}</option>`).join('')}</select></label>
           <p class="note">${L('Vzorová trasa letiště – Praha. Od 20 jízd −8 %, od 60 jízd −15 % (ukázková sazba).', 'Sample route airport – Prague. From 20 rides −8 %, from 60 rides −15 % (demo rate).')}</p>
-          <div class="total-row"><span>${L('Měsíčně přibližně', 'Approx. per month')}</span><strong id="biz-total">${money(20 * FLEET.sedan.base * .92)}</strong></div>
+          <div class="total-row"><span>${L('Měsíčně přibližně', 'Approx. per month')}</span><strong id="biz-total">${money(20 * 690 * .92)}</strong></div>
           <button class="btn btn-solid wide" type="submit">${L('Připravit poptávku', 'Prepare request')} ${icon('arrow')}</button></form></div></section>`;
       bizTotal();
     }
     const bizQuote = () => { const n = Math.max(1, Math.min(999, Number($('#biz-n')?.value) || 1)); const c = $('#biz-car')?.value || 'sedan'; const d = n >= 60 ? .15 : n >= 20 ? .08 : 0; return { n, c, d, total: Math.round(n * FLEET[c].base * (1 - d)) }; };
     const bizTotal = () => { if ($('#biz-total')) $('#biz-total').textContent = money(bizQuote().total); };
-
-    function renderContact() {
-      app.innerHTML = head(L('Kontakt a platba', 'Contact and payment'), L('Jedna cesta.<br><em>Jeden kontakt.</em>', 'One journey.<br><em>One contact.</em>'), L('Rezervace, změny trasy, vyzvednutí i platba přímo s provozovatelem Transfer by Van.', 'Bookings, route changes, pickup and payment directly with the Transfer by Van operator.')) + `
-        <div class="contact-grid">
-          <a class="contact-line" href="tel:+${CONTACT.phoneDigits}">${icon('headset')}<span><small>${L('Telefon', 'Phone')}</small><strong>${CONTACT.phone}</strong></span></a>
-          <a class="contact-line" href="https://wa.me/${CONTACT.phoneDigits}" target="_blank" rel="noopener">${icon('msg')}<span><small>WhatsApp</small><strong>${CONTACT.phone}</strong></span></a>
-          <a class="contact-line" href="mailto:${CONTACT.email}">${icon('globe')}<span><small>E-mail</small><strong>${CONTACT.email}</strong></span></a>
-        </div>
-        <div class="split" style="margin-top:48px"><section><p class="section-kicker">${L('Provozovatel', 'Operator')}</p><h2 class="section-h">${CONTACT.operator}</h2><ul class="legal-list"><li><span>IČO</span><strong>${CONTACT.ico}</strong></li><li><span>${L('Právní forma', 'Legal form')}</span><strong>${L('Fyzická osoba podnikající dle živnostenského zákona', 'Sole trader under the Czech Trade Licensing Act')}</strong></li><li><span>${L('Datum vzniku', 'Established')}</span><strong>${CONTACT.since}</strong></li><li><span>${L('Činnost', 'Activity')}</span><strong>${L('Ostatní pozemní osobní doprava (CZ-NACE 493)', 'Other passenger land transport (CZ-NACE 493)')}</strong></li><li><span>${L('Koncese', 'Licence')}</span><strong>${L('Silniční motorová doprava osob do 9 osob včetně řidiče', 'Road passenger transport up to 9 people including driver')}</strong></li></ul><a class="btn btn-ghost" href="${CONTACT.registry}" target="_blank" rel="noopener" style="margin-top:24px">${L('Ověřit ve veřejném rejstříku', 'Verify in the public registry')} ↗</a><p class="fine">${L('Údaje o IČO, právní formě, datu vzniku a činnosti jsou převzaté z veřejného rejstříku. Provozovatel odpovídá za jejich aktuálnost na tomto webu.', 'Company ID, legal form, establishment date and activity are taken from the public registry. The operator is responsible for keeping them current on this website.')}</p></section>
-        <section><p class="section-kicker">${L('Bankovní převod', 'Bank transfer')}</p><h2 class="section-h">${L('Účty v CZK a EUR', 'CZK and EUR accounts')}</h2><div class="bank-grid"><article class="bank-account"><span>${L('Účet CZK', 'CZK account')}</span><strong>${CONTACT.czk}</strong><button class="btn btn-ghost btn-small" type="button" data-a="copy-value" data-v="${CONTACT.czk}">${icon('copy')}${L('Kopírovat', 'Copy')}</button></article><article class="bank-account"><span>${L('Účet EUR', 'EUR account')}</span><strong>${CONTACT.eur}</strong><button class="btn btn-ghost btn-small" type="button" data-a="copy-value" data-v="${CONTACT.eur}">${icon('copy')}${L('Kopírovat', 'Copy')}</button></article></div><div class="banner">${icon('info')}<p>${L('Příjemce: Serhii Boliak. Převod proveďte pouze po domluvě a potvrzení rezervace. Do zprávy pro příjemce napište celé číslo rezervace. Odeslání převodu samo nepotvrzuje přijetí platby ani přidělení vozidla; vyčkejte na potvrzení provozovatele.', 'Account holder: Serhii Boliak. Transfer funds only after the booking has been agreed and confirmed. Include the full booking number in the payment message. Sending a transfer does not by itself confirm payment receipt or vehicle assignment; wait for operator confirmation.')}</p></div></section></div>
-        <section class="home-section" style="margin-top:56px"><p class="section-kicker">${L('Kdy se ozvat', 'When to contact us')}</p><div class="feature-grid"><article class="feature">${icon('calendar')}<h3>${L('Změna rezervace', 'Booking changes')}</h3><p>${L('Změna času, trasy, zastávky, letu nebo počtu cestujících.', 'Changes to time, route, stopover, flight or passenger count.')}</p></article><article class="feature">${icon('case')}<h3>${L('Speciální zavazadla', 'Special luggage')}</h3><p>${L('Kočárek, kolo, lyže nebo více velkých zavazadel ověřte před jízdou.', 'Confirm a pram, bike, skis or multiple large bags before the ride.')}</p></article><article class="feature">${icon('sign')}<h3>${L('Místo setkání', 'Meeting point')}</h3><p>${L('Pomůžeme najít Mattoni Bar, Visitor Centre nebo Burger King.', 'We can help you find Mattoni Bar, the Visitor Centre or Burger King.')}</p></article><article class="feature">${icon('card')}<h3>${L('Platba', 'Payment')}</h3><p>${L('Před bankovním převodem nebo při nejasném stavu platby kontaktujte provozovatele.', 'Contact the operator before a bank transfer or when payment status is unclear.')}</p></article></div></section></section>`;
-    }
 
     function renderTrips() {
       const list = orders.filter(o => tripFilter === 'all' || (tripFilter === 'next' ? !o.cancelled && o.stage < 6 : o.cancelled || o.stage === 6));
@@ -1761,7 +2019,7 @@
         <aside class="aside"><h2>${L('Nenašli jste odpověď?', 'Still stuck?')}</h2><p>${L('Průvodce vám poradí s rezervací, zavazadly nebo autosedačkou přímo tady v prohlížeči.', 'The assistant helps with bookings, luggage or child seats right here in your browser.')}</p>
         <button class="btn btn-ghost" type="button" data-a="chat">${icon('msg')}${L('Zeptat se průvodce', 'Ask the assistant')}</button>
         <p class="fine">${L('Jde o lokální nápovědu, ne o živý dispečink. Zprávy se nikam neodesílají.', 'This is a local helper, not live dispatch. Messages are not sent anywhere.')}</p>
-        <div class="links"><a class="text-link" href="https://wa.me/${CONTACT.phoneDigits}" target="_blank" rel="noopener">WhatsApp · ${CONTACT.phone} ↗</a><a class="text-link" href="tel:+${CONTACT.phoneDigits}">${L('Telefon', 'Phone')} · ${CONTACT.phone}</a><a class="text-link" href="mailto:${CONTACT.email}">${CONTACT.email}</a><a class="text-link" href="#/kontakt">${L('Kontakty, provozovatel a bankovní účty', 'Contact, operator and bank accounts')} →</a><a class="text-link" href="${CONTACT.registry}" target="_blank" rel="noopener">${L('Veřejný rejstřík · IČO', 'Public registry · Company ID')} ${CONTACT.ico} ↗</a><a class="text-link" href="/webhook-setup" target="_blank" rel="noopener">${L('Nastavení plateb – provozovatel', 'Payment setup – operator')} ↗</a><button class="text-link" type="button" data-a="privacy">${L('O datech a soukromí', 'About data and privacy')}</button></div></aside></div></section>`;
+        <div class="links" style="display:none"><a class="text-link" href="tel:+420774571747">${L('Telefon 24/7', 'Phone 24/7')} · +420 774 571 747 ↗</a><a class="text-link" href="https://wa.me/420774571747" target="_blank" rel="noopener">WhatsApp ↗</a><a class="text-link" href="mailto:cztransfertaxi@gmail.com">cztransfertaxi@gmail.com ↗</a><button class="text-link" type="button" data-a="privacy">${L('O datech', 'About the data')}</button></div></aside></div></section>`;
     }
     function renderRef() {
       app.innerHTML = head(L('Doporučení', 'Referrals'), L('Sdílejte.<br>Jezděte <em>výhodněji.</em>', 'Share it.<br>Ride for <em>less.</em>'), L('Váš kód dá kamarádovi slevu na první jízdu.', 'Your code gives a friend a discount on their first ride.'))
@@ -1771,16 +2029,16 @@
         <ol class="steps-ol"><li>${L('Pošlete kamarádovi kód nebo odkaz.', 'Send your friend the code or link.')}</li><li>${L('Zadá ho v detailech první rezervace.', 'They enter it in the details of their first booking.')}</li><li>${L('Kalkulačka sníží cenu o 10 %. Kódy se nesčítají.', 'The calculator lowers the price by 10 %. Codes do not stack.')}</li></ol></div></section>`;
     }
     function renderMissing() {
-      app.innerHTML = head('Transfer by Van', L('Tady <em>nic není.</em>', 'Nothing <em>here.</em>'), L('Tato stránka neexistuje. Vraťme se tam, kde začíná cesta.', 'This page does not exist. Let us head back to the start.')) + `<a class="btn btn-solid" href="#/" style="margin-top:26px">${L('Na hlavní stranu', 'Go home')} ${icon('arrow')}</a></section>`;
+      app.innerHTML = head('Wayro', L('Tady <em>nic není.</em>', 'Nothing <em>here.</em>'), L('Tato stránka neexistuje. Vraťme se tam, kde začíná cesta.', 'This page does not exist. Let us head back to the start.')) + `<a class="btn btn-solid" href="#/" style="margin-top:26px">${L('Na hlavní stranu', 'Go home')} ${icon('arrow')}</a></section>`;
     }
 
     function renderDriver() {
-      app.innerHTML = head('Transfer by Van / GPS', L('Vaše poloha.<br><em>Jen pro vaši jízdu.</em>', 'Your location.<br><em>Only for your ride.</em>'), L('Sdílení spustíte sami. Potřebujete zabezpečenou stránku, internet a odkaz od dispečera.', 'You control when sharing starts. A secure page, internet and a dispatcher link are required.')) + `
+      app.innerHTML = head('Wayro / GPS', L('Vaše poloha.<br><em>Jen pro vaši jízdu.</em>', 'Your location.<br><em>Only for your ride.</em>'), L('Sdílení spustíte sami. Potřebujete zabezpečenou stránku, internet a odkaz od dispečera.', 'You control when sharing starts. A secure page, internet and a dispatcher link are required.')) + `
         <div class="driver-layout"><form class="driver-console" id="driver-form">
           ${icon('satellite', 'gps-symbol')}<h2>${L('Sdílení z telefonu řidiče', 'Share from the driver phone')}</h2>
           <p class="gps-message" id="driver-message" role="status">${L('Zatím nesdílíte svou polohu.', 'Your location is not being shared.')}</p>
           <div class="summary-itinerary" id="driver-itinerary" hidden style="margin-bottom:22px"></div>
-          <label class="form-field"><span>${L('Číslo rezervace', 'Booking number')}</span><input class="input" id="driver-order" value="${esc(driverSession.orderId)}" placeholder="TV-..." maxlength="80" autocomplete="off" required></label>
+          <label class="form-field"><span>${L('Číslo rezervace', 'Booking number')}</span><input class="input" id="driver-order" value="${esc(driverSession.orderId)}" placeholder="WY-..." maxlength="80" autocomplete="off" required></label>
           <label class="form-field"><span>${L('Klíč z odkazu dispečera', 'Key from the dispatcher link')}</span><input class="input" id="driver-key" type="password" value="${esc(driverSession.token)}" autocomplete="off" maxlength="120" required></label>
           <label class="check"><input type="checkbox" id="driver-consent" required><span>${L('Souhlasím se sdílením GPS pro tuto jízdu. Sdílení mohu kdykoli zastavit.', 'I agree to share my GPS for this ride. I can stop sharing at any time.')}</span></label>
           <div class="d-actions"><button class="btn btn-solid" id="driver-start" type="submit">${icon('navigation')}${L('Zapnout GPS', 'Enable GPS')}</button><button class="btn btn-ghost" id="driver-stop" data-a="driver-stop" type="button" disabled>${L('Zastavit', 'Stop')}</button></div>
@@ -1902,7 +2160,7 @@
     }
     function renderDataPage(message = '') {
       const allowed = dataSession.authorized && dataSession.key && dataSession.expiresAt > Date.now();
-      const intro = head('Transfer by Van / Operations', L('Rezervace.<br><em>Přesně tak, jak přišly.</em>', 'Reservations.<br><em>Exactly as submitted.</em>'), L('Soukromý přehled skutečných záznamů ze serveru. Místa, adresy a kontakty z rezervací.', 'A private view of actual server records. Selected locations, addresses and booking contacts.'));
+      const intro = head('Wayro / Operations', L('Rezervace.<br><em>Přesně tak, jak přišly.</em>', 'Reservations.<br><em>Exactly as submitted.</em>'), L('Soukromý přehled skutečných záznamů ze serveru. Místa, adresy a kontakty z rezervací.', 'A private view of actual server records. Selected locations, addresses and booking contacts.'));
       if (!allowed) {
         app.innerHTML = intro + `<form class="data-login" id="data-login-form"><label class="form-field"><span>${L('Přístupový klíč dispečinku', 'Dispatcher access key')}</span><input class="input" name="operatorKey" type="password" autocomplete="off" minlength="32" maxlength="512" required ${dataSession.loading ? 'disabled' : ''}></label><button class="btn btn-solid wide" type="submit" ${dataSession.loading ? 'disabled' : ''}>${icon('shield')}${dataSession.loading ? L('Ověřuji přístup…', 'Verifying access…') : L('Otevřít rezervace', 'Open reservations')}</button><p class="data-message" id="data-message" role="status">${esc(message || '')}</p><p class="note">${L('Používá se již existující klíč dispečinku. V URL ani v úložišti prohlížeče jej neuchováváme. Samotný název stránky není zabezpečení.', 'This uses the existing dispatcher key. It is not saved in the URL or browser storage. An obscure page name is not authentication.')}</p></form></section>`;
         app.firstElementChild?.classList.add('is-in');
@@ -1914,7 +2172,7 @@
         <form class="data-filters" id="data-filter-form"><label class="form-field data-search"><span>${L('Hledat rezervaci', 'Search reservations')}</span><input class="input" type="search" name="query" maxlength="160" value="${esc(s.query)}" placeholder="${L('Číslo, jméno, hotel, adresa…', 'Number, name, hotel, address…')}"></label><label class="form-field"><span>${L('Stav jízdy', 'Ride status')}</span><select class="input" name="state">${[['all',L('Všechny', 'All')],['pending',L('Nové žádosti', 'New requests')],['active',L('Přidělené / na cestě', 'Assigned / en route')],['completed',L('Dokončené', 'Completed')],['cancelled',L('Zrušené', 'Cancelled')]].map(([value, label]) => `<option value="${value}" ${value === s.state ? 'selected' : ''}>${label}</option>`).join('')}</select></label><label class="form-field"><span>${L('Datum jízdy od', 'Ride date from')}</span><input class="input" type="date" name="dateFrom" value="${esc(s.dateFrom)}"></label><label class="form-field"><span>${L('Datum jízdy do', 'Ride date to')}</span><input class="input" type="date" name="dateTo" value="${esc(s.dateTo)}"></label><button class="btn btn-solid" type="submit" ${s.loading ? 'disabled' : ''}>${icon('search')}${L('Hledat', 'Search')}</button></form>
         <p class="data-message" id="data-message" role="status">${esc(message || (s.loading ? L('Načítáme rezervace ze serveru…', 'Loading server reservations…') : s.error || L(`Nalezeno ${s.total} rezervací.`, `${s.total} reservations found.`)))}</p>
         <div id="data-results" tabindex="-1" aria-busy="${s.loading}">${s.loading ? `<p class="data-empty">${L('Čekejte prosím. Nezobrazujeme lokální ani ukázkové rezervace.', 'Please wait. This view does not substitute local or sample bookings.')}</p>` : s.error ? `<p class="data-empty">${L('Data se nepodařilo načíst. Zkuste je obnovit.', 'Could not load data. Try refreshing.')}</p>` : s.items.length ? `
-        <div class="data-scroll"><table class="data-table"><caption class="sr-only">${L('Rezervace na serveru Transfer by Van', 'Reservations on the Transfer by Van server')}</caption><thead><tr><th scope="col">${L('Rezervace / klient', 'Booking / client')}</th><th scope="col">${L('Skutečně zvolená místa', 'Selected locations')}</th><th scope="col">${L('Cena / platba', 'Price / payment')}</th><th scope="col">${L('Stav', 'Status')}</th><th scope="col">${L('Detail', 'Details')}</th></tr></thead><tbody>${s.items.map(r => `<tr><td><span class="data-client">${esc(r.customerName || L('Jméno neuvedeno', 'No name recorded'))}</span><span class="data-id">${esc(r.id)}</span>${esc(dtLbl(r.date, r.time))}<br><span class="note">${esc(FLEET[r.car]?.label || r.car)} · ${Number(r.passengers) || 0} ${L('os.', 'pax')}</span></td><td>${placeMarkup(r.locations.pickup, L('Vyzvednutí', 'Pickup'))}<span class="data-route-divider" aria-hidden="true">↓</span>${r.locations.destination ? placeMarkup(r.locations.destination, L('Cíl', 'Destination')) : `<span class="note">${L('Hodinová dispozice', 'Hourly hire')} · ${Number(r.hours) || 0} h</span>`}${r.locations.stopover ? `<span class="note">${L('Se zastávkou', 'Includes a stop')}</span>` : ''}</td><td><span class="data-money">${Number.isFinite(r.amount) ? money(r.amount) : '-'}</span><br>${paymentStateName(r.paymentStatus, r.testPayment)}</td><td><span class="status ${r.cancelled ? 'off' : ''}">${r.cancelled ? L('Zrušena', 'Cancelled') : t('stages')[r.stage] || L('Neznámý', 'Unknown')}</span><br><span class="note">${emailStateName(r.emailStatus)}</span></td><td><button class="btn btn-ghost btn-small" type="button" data-a="data-detail" data-v="${esc(r.id)}" aria-label="${esc(L('Otevřít rezervaci ', 'Open booking ') + r.id)}">${L('Otevřít', 'Open')}${icon('arrow')}</button></td></tr>`).join('')}</tbody></table></div>` : `<p class="data-empty">${L('Žádné rezervace neodpovídají filtru. Zkontrolujte datum nebo hledaný text.', 'No reservations match the filters. Check the dates or search text.')}</p>`}</div>
+        <div class="data-scroll"><table class="data-table"><caption class="sr-only">${L('Rezervace na serveru Wayro', 'Reservations on the Wayro server')}</caption><thead><tr><th scope="col">${L('Rezervace / klient', 'Booking / client')}</th><th scope="col">${L('Skutečně zvolená místa', 'Selected locations')}</th><th scope="col">${L('Cena / platba', 'Price / payment')}</th><th scope="col">${L('Stav', 'Status')}</th><th scope="col">${L('Detail', 'Details')}</th></tr></thead><tbody>${s.items.map(r => `<tr><td><span class="data-client">${esc(r.customerName || L('Jméno neuvedeno', 'No name recorded'))}</span><span class="data-id">${esc(r.id)}</span>${esc(dtLbl(r.date, r.time))}<br><span class="note">${esc(FLEET[r.car]?.label || r.car)} · ${Number(r.passengers) || 0} ${L('os.', 'pax')}</span></td><td>${placeMarkup(r.locations.pickup, L('Vyzvednutí', 'Pickup'))}<span class="data-route-divider" aria-hidden="true">↓</span>${r.locations.destination ? placeMarkup(r.locations.destination, L('Cíl', 'Destination')) : `<span class="note">${L('Hodinová dispozice', 'Hourly hire')} · ${Number(r.hours) || 0} h</span>`}${r.locations.stopover ? `<span class="note">${L('Se zastávkou', 'Includes a stop')}</span>` : ''}</td><td><span class="data-money">${Number.isFinite(r.amount) ? money(r.amount) : '-'}</span><br>${paymentStateName(r.paymentStatus, r.testPayment)}</td><td><span class="status ${r.cancelled ? 'off' : ''}">${r.cancelled ? L('Zrušena', 'Cancelled') : t('stages')[r.stage] || L('Neznámý', 'Unknown')}</span><br><span class="note">${emailStateName(r.emailStatus)}</span></td><td><button class="btn btn-ghost btn-small" type="button" data-a="data-detail" data-v="${esc(r.id)}" aria-label="${esc(L('Otevřít rezervaci ', 'Open booking ') + r.id)}">${L('Otevřít', 'Open')}${icon('arrow')}</button></td></tr>`).join('')}</tbody></table></div>` : `<p class="data-empty">${L('Žádné rezervace neodpovídají filtru. Zkontrolujte datum nebo hledaný text.', 'No reservations match the filters. Check the dates or search text.')}</p>`}</div>
         <div class="data-pagination"><span>${L('Stránka', 'Page')} ${s.page} / ${s.pages}</span><div class="data-actions"><button class="btn btn-ghost btn-small" type="button" data-a="data-prev" ${s.loading || s.page <= 1 ? 'disabled' : ''}>${L('Předchozí', 'Previous')}</button><button class="btn btn-ghost btn-small" type="button" data-a="data-next" ${s.loading || s.page >= s.pages ? 'disabled' : ''}>${L('Další', 'Next')}</button></div></div><p class="fine">${L('Osobní údaje používejte pouze k vyřízení rezervací. Klíč se po odchodu nebo po 15 minutách smaže z paměti. Export obsahuje zákaznické údaje.', 'Use personal data only to manage reservations. The key is cleared when leaving or after 15 minutes. Exports contain customer information.')}</p></section>`;
       app.firstElementChild?.classList.add('is-in');
     }
@@ -1999,7 +2257,7 @@
           ...(r.roundtrip ? [[L('Zpáteční jízda', 'Return ride'), `${dtLbl(r.returnDate, r.returnTime)} / ${placeText(r.locations.destination)} → ${placeText(r.locations.pickup)}`, true]] : [])
         ];
         kind = 'data-detail';
-        mbody.innerHTML = dHead('Transfer by Van / Operations', L('Detail rezervace', 'Reservation details'), esc(r.id)) + `<div class="summary-itinerary" style="margin-top:24px">${placeMarkup(r.locations.pickup, L('Vyzvednutí', 'Pickup'))}${r.locations.stopover ? placeMarkup(r.locations.stopover, L('Zastávka', 'Stopover')) : ''}${r.locations.destination ? placeMarkup(r.locations.destination, L('Cíl', 'Destination')) : `<p>${L('Hodinová dispozice', 'Hourly hire')} · ${r.hours} h</p>`}</div><dl class="data-detail">${lines.map(([label, value, full]) => `<div class="${full ? 'data-full' : ''}"><dt>${label}</dt><dd>${esc(value || '-')}</dd></div>`).join('')}</dl><div class="d-actions"><button class="btn btn-ghost" data-a="close" type="button">${L('Zavřít', 'Close')}</button>${!r.cancelled && r.stage < 6 ? `<a class="btn btn-solid" href="#/dispecink?order=${encodeURIComponent(r.id)}">${L('Přiřadit řidiče', 'Assign driver')}${icon('arrow')}</a>` : ''}</div></div>`;
+        mbody.innerHTML = dHead('Wayro / Operations', L('Detail rezervace', 'Reservation details'), esc(r.id)) + `<div class="summary-itinerary" style="margin-top:24px">${placeMarkup(r.locations.pickup, L('Vyzvednutí', 'Pickup'))}${r.locations.stopover ? placeMarkup(r.locations.stopover, L('Zastávka', 'Stopover')) : ''}${r.locations.destination ? placeMarkup(r.locations.destination, L('Cíl', 'Destination')) : `<p>${L('Hodinová dispozice', 'Hourly hire')} · ${r.hours} h</p>`}</div><dl class="data-detail">${lines.map(([label, value, full]) => `<div class="${full ? 'data-full' : ''}"><dt>${label}</dt><dd>${esc(value || '-')}</dd></div>`).join('')}</dl><div class="d-actions"><button class="btn btn-ghost" data-a="close" type="button">${L('Zavřít', 'Close')}</button>${!r.cancelled && r.stage < 6 ? `<a class="btn btn-solid" href="#/dispecink?order=${encodeURIComponent(r.id)}">${L('Přiřadit řidiče', 'Assign driver')}${icon('arrow')}</a>` : ''}</div></div>`;
         open();
       } catch (error) {
         if (sequence === dataSession.sequence && path === PRIVATE_DATA_PATH && error.name !== 'AbortError') $('#data-message').textContent = error.message;
@@ -2009,14 +2267,14 @@
       if (!dataSession.authorized || !dataSession.items.length || dataSession.expiresAt <= Date.now()) return;
       const cell = value => `"${String(value ?? '').replace(/^[\s\u0000-\u001f]*[=+@-]/, "'$&").replaceAll('"', '""')}"`;
       const rows = [[L('Rezervace', 'Booking'), L('Klient', 'Client'), L('Datum', 'Date'), L('Čas', 'Time'), L('Vyzvednutí', 'Pickup'), L('Cíl', 'Destination'), L('Zastávka', 'Stopover'), L('Vůz', 'Vehicle'), 'CZK', L('Stav platby', 'Payment status')], ...dataSession.items.map(r => [r.id, r.customerName, r.date, r.time, placeText(r.locations.pickup), r.locations.destination ? placeText(r.locations.destination) : L('Hodinová dispozice', 'Hourly hire') + ` (${Number(r.hours) || 0} h)`, placeText(r.locations.stopover), FLEET[r.car]?.label || r.car, r.amount, paymentStateName(r.paymentStatus, r.testPayment)])];
-      download(`transfer-by-van-reservations-page-${dataSession.page}.csv`, rows.map(row => row.map(cell).join(';')).join('\r\n'), 'text/csv;charset=utf-8');
+      download(`wayro-reservations-page-${dataSession.page}.csv`, rows.map(row => row.map(cell).join(';')).join('\r\n'), 'text/csv;charset=utf-8');
     }
 
     function renderDispatch() {
-      app.innerHTML = head('Transfer by Van / Dispatch', L('Přidělte řidiče.<br><em>Pošlete mu odkaz.</em>', 'Assign a driver.<br><em>Send the link.</em>'), L('Pouze pro provozovatele. Klíč dispečinku se neukládá do prohlížeče.', 'Operator access only. The dispatcher key is not saved in the browser.')) + `
+      app.innerHTML = head('Wayro / Dispatch', L('Přidělte řidiče.<br><em>Pošlete mu odkaz.</em>', 'Assign a driver.<br><em>Send the link.</em>'), L('Pouze pro provozovatele. Klíč dispečinku se neukládá do prohlížeče.', 'Operator access only. The dispatcher key is not saved in the browser.')) + `
         <div class="driver-layout"><form class="driver-console" id="dispatch-form">
           <label class="form-field"><span>${L('Klíč dispečinku', 'Dispatcher key')} (DRIVER_ADMIN_TOKEN)</span><input class="input" name="key" type="password" autocomplete="off" minlength="32" required></label>
-          <label class="form-field"><span>${L('Číslo rezervace', 'Booking number')}</span><input class="input" name="orderId" placeholder="TV-..." maxlength="80" required></label>
+          <label class="form-field"><span>${L('Číslo rezervace', 'Booking number')}</span><input class="input" name="orderId" placeholder="WY-..." maxlength="80" required></label>
           <div class="form-grid"><label class="form-field"><span>${L('Jméno řidiče', 'Driver name')}</span><input class="input" name="name" maxlength="80" required></label><label class="form-field"><span>${L('SPZ', 'License plate')}</span><input class="input" name="plate" maxlength="20"></label></div>
           <label class="form-field"><span>${L('Telefon řidiče', 'Driver phone')}</span><input class="input" name="phone" type="tel" maxlength="25"></label>
           <button class="btn btn-solid wide" type="submit">${L('Vytvořit odkaz na 12 hodin', 'Create a 12-hour driver link')}${icon('arrow')}</button>
@@ -2054,7 +2312,7 @@
         ['STRIPE_WEBHOOK_SECRET', PUB.webhookConfigured, L('Tento krok uděláte až po nasazení. Přidejte níže uvedenou HTTPS adresu do Stripe a uložte signing secret na server.', 'Do this after deployment. Add the HTTPS address below in Stripe and store its signing secret on the server.')],
         ['OSRM_URL / DATA_FILE', PUB.routingProductionConfigured, L('Pro provoz potřebujete vlastní nebo smluvní routing a trvalý disk či databázi. Výchozí veřejný OSRM je jen pro zkoušky.', 'Production needs an owned or contracted routing service and persistent storage. The default public OSRM is for evaluation only.')]
       ];
-      app.innerHTML = head('Transfer by Van / Setup', L('Nejdřív ověřit.<br><em>Potom vyjet.</em>', 'Verify first.<br><em>Then go live.</em>'), L('Stav konfigurace není potvrzení funkčnosti. Otestujte hotel, skutečný telefon, e-mail a platbu před přijetím zákazníků.', 'Configured does not mean tested. Verify a hotel search, a real phone, e-mail and a payment before accepting customers.')) + `<ul class="setup-list">${items.map(([name, value, text], i) => `<li><span class="section-kicker">0${i + 1}</span><div><h2>${name}</h2><p>${text}</p></div><span class="setup-state">${ready(value)}</span></li>`).join('')}</ul><div class="toolbar"><div><p class="note">Stripe webhook URL</p><code class="setup-code">${esc(location.protocol === 'https:' ? location.origin + '/api/webhook' : L('Dostupné až po nasazení na HTTPS doménu', 'Available after deployment on an HTTPS domain'))}</code><p class="note">checkout.session.completed<br>checkout.session.async_payment_succeeded</p></div><button class="btn btn-ghost" type="button" data-a="setup-check">${L('Obnovit konfiguraci', 'Refresh configuration')}</button></div><div class="app-actions"><a class="btn btn-solid" href="#/dispecink">${L('Dispečink', 'Dispatch')}${icon('arrow')}</a><a class="btn btn-ghost" href="#/ridic">${L('Obrazovka řidiče', 'Driver screen')}</a></div><p class="fine">${L('Pro nepřetržité GPS při zamčeném telefonu je potřeba nativní aplikace. Tento web takový provoz neslibuje.', 'Continuous GPS while the phone is locked requires a native app. This website does not promise background tracking.')}</p></section>`;
+      app.innerHTML = head('Wayro / Setup', L('Nejdřív ověřit.<br><em>Potom vyjet.</em>', 'Verify first.<br><em>Then go live.</em>'), L('Stav konfigurace není potvrzení funkčnosti. Otestujte hotel, skutečný telefon, e-mail a platbu před přijetím zákazníků.', 'Configured does not mean tested. Verify a hotel search, a real phone, e-mail and a payment before accepting customers.')) + `<ul class="setup-list">${items.map(([name, value, text], i) => `<li><span class="section-kicker">0${i + 1}</span><div><h2>${name}</h2><p>${text}</p></div><span class="setup-state">${ready(value)}</span></li>`).join('')}</ul><div class="toolbar"><div><p class="note">Stripe webhook URL</p><code class="setup-code">${esc(location.protocol === 'https:' ? location.origin + '/api/webhook' : L('Dostupné až po nasazení na HTTPS doménu', 'Available after deployment on an HTTPS domain'))}</code><p class="note">checkout.session.completed<br>checkout.session.async_payment_succeeded</p></div><button class="btn btn-ghost" type="button" data-a="setup-check">${L('Obnovit konfiguraci', 'Refresh configuration')}</button></div><div class="app-actions"><a class="btn btn-solid" href="#/dispecink">${L('Dispečink', 'Dispatch')}${icon('arrow')}</a><a class="btn btn-ghost" href="#/ridic">${L('Obrazovka řidiče', 'Driver screen')}</a></div><p class="fine">${L('Pro nepřetržité GPS při zamčeném telefonu je potřeba nativní aplikace. Tento web takový provoz neslibuje.', 'Continuous GPS while the phone is locked requires a native app. This website does not promise background tracking.')}</p></section>`;
     }
 
     /* ---------- router ---------- */
@@ -2083,7 +2341,7 @@
         history.replaceState(null, '', location.pathname + '#/ridic');
       }
       const ref = urlParams.get('ref');
-      if (ref && /^TV-[A-Z0-9]{6}$/.test(ref) && ref !== refCode && !orders.some(o => !o.cancelled)) { S.promo = ref; S.discount = .1; }
+      if (ref && /^WY-[A-Z0-9]{6}$/.test(ref) && ref !== refCode && !orders.some(o => !o.cancelled)) { S.promo = ref; S.discount = .1; }
 
       // A payment-return URL is not proof of payment. Only the server can verify it.
       const paidOrderId = urlParams.get('orderId');
@@ -2092,14 +2350,14 @@
       const home = path === '/';
       document.body.classList.toggle('is-sub', !home);
       $('#stats').hidden = !home;
-      const active = { '/sluzby': 'services', '/vozy': 'fleet', '/letiste': 'airport', '/firmy': 'business', '/kontakt': 'contact', '/napoveda': 'help', '/jizdy': 'trips' }[path] || '';
+      const active = { '/sluzby': 'services', '/vozy': 'fleet', '/letiste': 'airport', '/firmy': 'business', '/napoveda': 'help', '/jizdy': 'trips' }[path] || '';
       $$('.nav-link').forEach(a => { const on = a.dataset.p === active; a.classList.toggle('active', on); on ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current'); });
-      const R = { '/': renderHome, '/sluzby': renderServices, '/vozy': renderFleet, '/letiste': renderAirport, '/firmy': renderBusiness, '/kontakt': renderContact, '/jizdy': renderTrips, '/hodnoceni': renderReviews, '/napoveda': renderHelp, '/doporuceni': renderRef, '/ridic': renderDriver, '/dispecink': renderDispatch, '/nastaveni': renderSetup, [PRIVATE_DATA_PATH]: renderDataPage };
+      const R = { '/': renderHome, '/sluzby': renderServices, '/vozy': renderFleet, '/letiste': renderAirport, '/firmy': renderBusiness, '/jizdy': renderTrips, '/hodnoceni': renderReviews, '/napoveda': renderHelp, '/doporuceni': renderRef, '/ridic': renderDriver, '/dispecink': renderDispatch, '/nastaveni': renderSetup, [PRIVATE_DATA_PATH]: renderDataPage };
       if (R[path]) R[path]();
       else if (path.startsWith('/jizda/')) { try { const id = decodeURIComponent(path.slice(7)); renderOrder(id); verifyPayment(id); } catch { renderMissing(); } }
       else renderMissing();
       if (path === '/dispecink' && urlParams.has('order')) { const field = $('#dispatch-form [name="orderId"]'); if (field) field.value = urlParams.get('order').slice(0, 80); }
-      const titles = { '/': L('Taxi a transfery Praha', 'Prague taxi and transfers'), '/sluzby': t('nav.services'), '/vozy': t('nav.fleet'), '/letiste': t('nav.airport'), '/firmy': t('nav.business'), '/kontakt': t('nav.contact'), '/jizdy': t('nav.trips'), '/hodnoceni': L('Hodnocení', 'Reviews'), '/napoveda': t('nav.help'), '/doporuceni': L('Doporučení', 'Referrals'), [PRIVATE_DATA_PATH]: L('Soukromé rezervace', 'Private reservations') };
+      const titles = { '/': L('Taxi na letiště Praha', 'Prague airport taxi'), '/sluzby': t('nav.services'), '/vozy': t('nav.fleet'), '/letiste': t('nav.airport'), '/firmy': t('nav.business'), '/jizdy': t('nav.trips'), '/hodnoceni': L('Hodnocení', 'Reviews'), '/napoveda': t('nav.help'), '/doporuceni': L('Doporučení', 'Referrals'), [PRIVATE_DATA_PATH]: L('Soukromé rezervace', 'Private reservations') };
       document.title = `Transfer by Van | ${titles[path] || L('Rezervace', 'Booking')}`;
       count(); anim(app); window.scrollTo(0, 0);
       if (navCount++ > 0 && !home) { const hh = $('h1', app); hh?.setAttribute('tabindex', '-1'); hh?.focus({ preventScroll: true }); }
@@ -2145,8 +2403,8 @@
         one ? L('Vůz, zavazadla a autosedačky. Vše zdarma navíc.', 'Vehicle, luggage and child seats. All extras free.') : L('Dispečer rezervaci potvrzuje e-mailem. V ukázce se nic neodesílá.', 'Dispatch confirms by e-mail. Nothing is sent in this demo.'))
         + `<div class="checkout"><div class="co-main"><form id="co-form">${one ? `
         <span class="s-label" style="margin-top:0">${L('Vůz', 'Vehicle')}</span>
-        <div class="picks">${Object.entries(FLEET).map(([k, c]) => `<label class="pick"><input type="radio" name="car" value="${k}" ${S.car === k ? 'checked' : ''}><span>${c.label}<small style="display:block;color:#867f6d">${L('max', 'max')} ${c.pax} · ${c.bags} ${L('zav.', 'bags')}</small></span><small class="pick-price">${money(fare({ ...S, car: k }).total)}</small></label>`).join('')}</div>
-        ${airportPickup ? `<span class="s-label">${L('Terminál vyzvednutí', 'Pickup terminal')}</span><div class="picks">${['t1','t2'].map(k => { const m = MEETS[k]; return `<label class="pick"><input type="radio" name="meet" value="${k}" ${S.meet === k ? 'checked' : ''}><span>${m.t}<small style="display:block;color:#867f6d">${m.s}</small></span></label>`; }).join('')}</div>` : ''}
+        <div class="picks">${Object.entries(FLEET).map(([k, c]) => `<label class="pick"><input type="radio" name="car" value="${k}" ${S.car === k ? 'checked' : ''}><span>${c.label}<small style="display:block;color:var(--ink-faint)">${L('max', 'max')} ${c.pax} · ${c.bags} ${L('zav.', 'bags')}</small></span><small class="pick-price">${money(fare({ ...S, car: k }).total)}</small></label>`).join('')}</div>
+        ${airportPickup ? `<span class="s-label">${L('Terminál vyzvednutí', 'Pickup terminal')}</span><div class="picks">${['t1','t2'].map(k => { const m = MEETS[k]; return `<label class="pick"><input type="radio" name="meet" value="${k}" ${S.meet === k ? 'checked' : ''}><span>${m.t}<small style="display:block;color:var(--ink-faint)">${m.s}</small></span></label>`; }).join('')}</div>` : ''}
         <div class="form-grid"><label class="form-field"><span>${L('Číslo letu', 'Flight number')}${airportPickup ? '' : L(' (nepovinné)', ' (optional)')}</span><input class="input" name="flight" value="${esc(S.flight)}" placeholder="LH1400" maxlength="9" style="text-transform:uppercase"></label>
         <label class="form-field"><span>${L('Jméno na cedulku', 'Name for the sign')}</span><input class="input" name="sign" value="${esc(S.sign || '')}" placeholder="${L('Např. Novák', 'e.g. Novak')}" maxlength="50"></label></div>
         <span class="s-label">${L('Zavazadla', 'Luggage')}</span>
@@ -2159,16 +2417,16 @@
         ${car.seats === 0 ? `<p class="note">${L('Mercedes E autosedačky nenabízí. Vyberte Sedan, Minibus nebo Mercedes V.', 'Mercedes E offers no child seats. Choose Sedan, Minibus or Mercedes V.')}</p>` : ''}
         ${addressField('stopover', L('Zastávka po cestě (nepovinné)', 'Stop along the way (optional)'), S.stopover || '', '', false)}
         <label class="form-field" style="margin-top:15px"><span>${L('Poznámka pro řidiče', 'Note for the driver')}</span><textarea class="input" name="notes" rows="2" maxlength="400" placeholder="${L('Nadměrné zavazadlo, jiná domluva…', 'Oversized luggage, other agreement…')}">${esc(S.notes)}</textarea></label>
-        <label class="s-label" for="promo">${L('Slevový kód', 'Promo code')}</label><div class="promo-row"><input class="input" id="promo" value="${esc(S.promo)}" placeholder="VAN10" maxlength="20"><button class="btn btn-ghost btn-small" type="button" data-a="promo-apply">${L('Použít', 'Apply')}</button></div>
-        <p class="promo-msg" id="promo-msg" role="status">${S.discount ? L(`Sleva ${Math.round(S.discount * 100)} % je aktivní.`, `${Math.round(S.discount * 100)} % discount active.`) : L('Zadej kód kamaráda nebo VAN10 – sleva 10 %.', "Enter a friend's code or VAN10 – 10 % off.")}</p>
+        <label class="s-label" for="promo">${L('Slevový kód', 'Promo code')}</label><div class="promo-row"><input class="input" id="promo" value="${esc(S.promo)}" placeholder="WAYRO10" maxlength="20"><button class="btn btn-ghost btn-small" type="button" data-a="promo-apply">${L('Použít', 'Apply')}</button></div>
+        <p class="promo-msg" id="promo-msg" role="status">${S.discount ? L(`Sleva ${Math.round(S.discount * 100)} % je aktivní.`, `${Math.round(S.discount * 100)} % discount active.`) : L('Zadej kód kamaráda nebo WAYRO10 – sleva 10 %.', "Enter a friend's code or WAYRO10 – 10 % off.")}</p>
         <p class="err" id="co-err" role="alert" hidden></p><div class="d-actions"><button class="btn btn-solid" type="submit">${L('Pokračovat', 'Continue')} ${icon('arrow')}</button></div>` : `
         <label class="form-field"><span>${L('Jméno a příjmení', 'Full name')}</span><input class="input" name="name" value="${esc(S.name)}" minlength="2" maxlength="60" autocomplete="name" required></label>
         <div class="form-grid"><label class="form-field"><span>${L('Telefon', 'Phone')}</span><input class="input" name="phone" type="tel" value="${esc(S.phone)}" placeholder="+420 777 123 456" maxlength="25" autocomplete="tel" required></label>
-        <label class="form-field"><span>E-mail <span style="color:#867f6d;font-weight:400">${L('(pro odpověď dispečinku)', '(for the dispatcher reply)')}</span></span><input class="input" name="email" type="email" value="${esc(S.email)}" placeholder="jan@example.com" maxlength="120" autocomplete="email" required></label></div>
+        <label class="form-field"><span>E-mail <span style="color:var(--ink-faint);font-weight:400">${L('(pro odpověď dispečinku)', '(for the dispatcher reply)')}</span></span><input class="input" name="email" type="email" value="${esc(S.email)}" placeholder="jan@example.com" maxlength="120" autocomplete="email" required></label></div>
         <span class="s-label">${L('Platba', 'Payment')}</span>
-        ${[['cash', 'cash'], ['card', 'card'], ['online', 'globe']].map(([k, ic]) => `<label class="pick" style="margin-bottom:8px"><input type="radio" name="pay" value="${k}" ${S.pay === k ? 'checked' : ''}>${icon(ic)}<span>${t('pay')[k]}<small style="display:block;color:#867f6d">${t('pay')[k + 'S']}</small></span></label>`).join('')}
-        <div class="banner" style="font-size:11.5px">${icon('info')}<p>${S.pay === 'online' && !CONFIG.bookingEndpoint ? L('Online platba běží přes platební bránu na serveru. Bez spuštěného backendu zvol platbu u řidiče.', 'Online payment runs through the gateway on the server. If the backend is not running, choose payment to the driver.') : L('Neplatíte nic předem. Rezervace je ve stavu zpracování, dokud ji provozovatel nepotvrdí e-mailem.', 'You pay nothing upfront. The booking stays in processing until the operator confirms it by e-mail.')}</p></div>
-        <label class="check"><input type="checkbox" name="consent" ${S.consent ? 'checked' : ''} required><span>${L('Souhlasím se zpracováním údajů pro rezervaci a s podmínkami Transfer by Van. Závazná je až potvrzení provozovatelem.', 'I agree to data processing for this booking and to the Transfer by Van terms. It becomes binding only after operator confirmation.')}</span></label>
+        ${[['cash', 'cash'], ['card', 'card'], ['online', 'globe']].map(([k, ic]) => `<label class="pick" style="margin-bottom:8px"><input type="radio" name="pay" value="${k}" ${S.pay === k ? 'checked' : ''}>${icon(ic)}<span>${t('pay')[k]}<small style="display:block;color:var(--ink-faint)">${t('pay')[k + 'S']}</small></span></label>`).join('')}
+        <div class="banner" style="font-size:11.5px">${icon('info')}<p>${S.pay === 'online' && !CONFIG.bookingEndpoint ? L('Online platba běží přes platební bránu na serveru. Bez spuštěného backendu zvol platbu u řidiče, jak je to ve Wayro zvykem.', 'Online payment runs through the gateway on the server. If the backend is not running, choose payment to the driver, which is Wayro standard.') : L('Neplatíte nic předem. Rezervace je ve stavu zpracování, dokud ji dispečer nepotvrdí e-mailem.', 'You pay nothing upfront. The booking stays in processing until dispatch confirms it by e-mail.')}</p></div>
+        <label class="check"><input type="checkbox" name="consent" ${S.consent ? 'checked' : ''} required><span>${L('Souhlasím se zpracováním údajů pro rezervaci a s podmínkami Wayro. Závazná je až potvrzení dispečinkem.', 'I agree to data processing for this booking and to Wayro terms. It becomes binding only after dispatch confirms it.')}</span></label>
         <p class="err" id="co-err" role="alert" hidden></p>
         <div class="d-actions"><button class="btn btn-ghost" type="button" data-a="co-back">${L('Zpět', 'Back')}</button><button class="btn btn-solid" id="co-send" type="submit">${L('Odeslat rezervaci', 'Send booking')} ${icon('arrow')}</button></div>`}</form></div><div id="sum">${summary()}</div></div></div>`;
       modal.scrollTop = 0;
@@ -2219,10 +2477,10 @@
       const used = orders.some(o => !o.cancelled);
       let err = '', disc = 0;
       if (!v) { S.promo = ''; S.discount = 0; }
-      else if (v === 'VAN10') disc = .1;
+      else if (v === 'WAYRO10') disc = .1;
       else if (v === 'PRG15') { if (used) err = L('Kód platí jen pro první rezervaci.', 'This code is for the first booking only.'); else disc = .15; }
-      else if (/^TV-[A-Z0-9]{6}$/.test(v)) { if (v === refCode) err = L('Vlastní kód nelze použít.', 'You cannot use your own code.'); else if (used) err = L('Kód kamaráda platí na první jízdu.', "A friend's code applies to the first ride."); else disc = .1; }
-      else err = L('Kód neznáme. Zkuste VAN10.', 'Unknown code. Try VAN10.');
+      else if (/^WY-[A-Z0-9]{6}$/.test(v)) { if (v === refCode) err = L('Vlastní kód nelze použít.', 'You cannot use your own code.'); else if (used) err = L('Kód kamaráda platí na první jízdu.', "A friend's code applies to the first ride."); else disc = .1; }
+      else err = L('Kód neznáme. Zkuste WAYRO10.', 'Unknown code. Try WAYRO10.');
       if (!err) { S.promo = v; S.discount = disc; }
       const m = $('#promo-msg');
       m.textContent = err || (disc ? L(`Sleva ${Math.round(disc * 100)} % byla uplatněna.`, `${Math.round(disc * 100)} % discount applied.`) : L('Kód byl odebrán.', 'Code removed.'));
@@ -2236,7 +2494,7 @@
       if (S.seats > car.seats) return L(`${car.label} nabízí ${car.seats} autosedaček. Zvolte jiný vůz.`, `${car.label} offers ${car.seats} child seats. Please pick another vehicle.`);
       if (S.seats > S.pax) return L('Autosedaček nemůže být víc než cestujících.', 'There cannot be more child seats than passengers.');
       if (S.bagsBig > car.bags || S.bagsBig * 2 + S.bagsSmall + (S.pram ? 2 : 0) > car.bags * 2 + 2) return L(`Tolik zavazadel se do vozu ${car.label} nevejde. Zvolte větší vůz.`, `That much luggage will not fit in the ${car.label}. Please pick a larger vehicle.`);
-      if ((S.promo === 'PRG15' || S.promo.startsWith('TV-')) && orders.some(o => !o.cancelled)) return L('Sleva na první jízdu už není dostupná, použijte VAN10.', 'The first-ride discount is no longer available; use VAN10.');
+      if ((S.promo === 'PRG15' || S.promo.startsWith('WY-')) && orders.some(o => !o.cancelled)) return L('Sleva na první jízdu už není dostupná, použijte WAYRO10.', 'The first-ride discount is no longer available; use WAYRO10.');
       return validateRide();
     }
     function buildOrder(demo = true, b = S, receipt = null) {
@@ -2248,7 +2506,7 @@
         stopover: chosen.stopover ? snapshotPlace(chosen.stopover, b.stopover) : null
       };
       return {
-        id: `TV-${uid().slice(0, 6).toUpperCase()}`, at: new Date().toISOString(),
+        id: `WY-${uid().slice(0, 6).toUpperCase()}`, at: new Date().toISOString(),
         from: locations.pickup.label, to: locations.destination?.label || '',
         locations, fromGeo: locations.pickup, toGeo: locations.destination,
         distanceKm: receipt?.distanceKm ?? q.km ?? null, durationMin: receipt?.durationMin ?? q.min ?? null,
@@ -2390,7 +2648,7 @@
         <p style="margin-top:14px">${L('Historie v prohlížeči neobsahuje celé telefonní číslo ani e-mail. Server uchovává kontakty, zvolená místa a adresy pro vyřízení rezervace. Přehled těchto údajů je dostupný pouze po ověření přístupu dispečinku. Číslo karty se zadává jen u platebního poskytovatele.', 'Browser history does not contain your full phone number or e-mail. The server keeps contacts, selected locations and addresses to process your booking. Access to these records requires dispatcher authorization. Card details are entered only with the payment provider.')}</p>
         <p style="margin-top:14px">${L('Bez spuštěného backendu se objednávka nikam neposílá. S backendem míří na /api/checkout a platba teče přes platební bránu.', 'Without the backend nothing is sent. With it, the booking goes to /api/checkout and payment runs through the gateway.')}</p>
         <p style="margin-top:14px">${L('Sledování polohy a letů, potvrzovací e-maily a online platba by vyžadovaly serverovou část.', 'Live tracking, flight data, confirmation e-mails and online payments would require a backend.')}</p></div>
-        <a class="btn btn-ghost wide" href="#/kontakt">${L('Kontakt a údaje provozovatele', 'Contact and operator details')} ${icon('arrow')}</a>
+        <a class="btn btn-ghost wide" href="${SITE.home}" target="_blank" rel="noopener">${L('Otevřít provozní web', 'Open operator site')} ↗</a>
         <button class="btn btn-solid wide" type="button" data-a="close">${L('Rozumím', 'Got it')}</button></div>`;
       open(true);
     }
@@ -2410,8 +2668,8 @@
     function voucher(id) {
       const o = orders.find(x => x.id === id); if (!o) return;
       const locations = orderPlaces(o), m = meetingFor(locations.pickup, o.ext.meet), dl = cancelDeadline(o);
-      download(`transfer-by-van-${o.id}.txt`, [
-        `TRANSFER BY VAN — ${L('VOUCHER / POTVRZENÍ TRANSFERU', 'VOUCHER / TRANSFER CONFIRMATION')}`, '',
+      download(`wayro-${o.id}.txt`, [
+        `WAYRO — ${L('VOUCHER / POTVRZENÍ TRANSFERU', 'VOUCHER / TRANSFER CONFIRMATION')}`, '',
         `${L('Rezervace', 'Booking')}: ${o.id}`,
         `${L('Stav', 'Status')}: ${o.cancelled ? L('Zrušeno', 'Cancelled') : t('stages')[o.stage]}`,
         `${L('Vyzvednutí na adrese', 'Pickup location')}: ${placeText(locations.pickup)}`,
@@ -2430,7 +2688,7 @@
         `${L('Bezplatné storno do', 'Free cancellation until')}: ${dl.when.toLocaleString('cs-CZ', { timeZone: TZ })} (${dl.hrs} h)`, '',
         `${L('Označení', 'Mark')}: ${o.demo ? L('lokální záznam – backend rezervaci nedostal', 'local record – backend did not receive it') : L('odesláno na server', 'sent to the server')}`,
         L('Voucher slouží k domluvě s řidičem. Konečné potvrzení posílá dispečink e-mailem.', 'The voucher is for arranging pickup with the driver. Final confirmation is sent by dispatch via e-mail.'),
-        `${L('Kontakt', 'Contact')}: ${CONTACT.phone} / ${CONTACT.email}`
+        L('Skutečnou rezervaci vytvoříte na', 'Make a real booking at') + ' ' + SITE.home
       ].filter(Boolean).join('\n'));
       toast(L('Voucher stažen. Jde o ukázkový doklad.', 'Voucher downloaded. It is a demo document.'));
     }
@@ -2562,15 +2820,14 @@
           const cell = x => `"${String(x).replace(/^\s*[=+@-]/, "'$&").replaceAll('"', '""')}"`;
           const rows = [[L('Číslo', 'ID'), L('Datum', 'Date'), L('Čas', 'Time'), L('Odkud', 'From'), L('Kam', 'To'), L('Vůz', 'Vehicle'), 'CZK', L('Stav', 'Status')],
             ...orders.map(o => { const p = orderPlaces(o); return [o.id, o.date, o.time, placeText(p.pickup), p.destination ? placeText(p.destination) : L('Hodinová dispozice', 'Hourly hire'), FLEET[o.car].label, o.total, o.cancelled ? L('Zrušeno', 'Cancelled') : t('stages')[o.stage]]; })];
-          download('transfer-by-van-rides.csv', rows.map(r => r.map(cell).join(';')).join('\r\n'), 'text/csv;charset=utf-8');
+          download('wayro-rides.csv', rows.map(r => r.map(cell).join(';')).join('\r\n'), 'text/csv;charset=utf-8');
           break;
         }
         case 'voucher': voucher(v); break;
         case 'review': openReview(v); break;
         case 'rate': rating = Number(v); $$('.rate button').forEach(b => { b.classList.toggle('on', Number(b.dataset.v) <= rating); b.setAttribute('aria-pressed', String(Number(b.dataset.v) === rating)); }); break;
         case 'copy-code': copy(refCode); break;
-        case 'share': { const u = new URL(location.href); u.hash = `/?ref=${refCode}`; copy(L(`Jezdím s Transfer by Van – fixní cena a živá poloha auta. S kódem ${refCode} máš 10 % na první jízdě: ${u.href}`, `I ride with Transfer by Van – fixed price and live car tracking. Use ${refCode} for 10 % off your first ride: ${u.href}`)); break; }
-        case 'copy-value': copy(v); break;
+        case 'share': { const u = new URL(location.href); u.hash = `/?ref=${refCode}`; copy(L(`Jezdím s Wayro na letiště – fixní cena a živá poloha auta. S kódem ${refCode} máš 10 % na první jízdě: ${u.href}`, `I ride with Wayro – fixed price and live car tracking. Use ${refCode} for 10 % off your first ride: ${u.href}`)); break; }
         case 'chat': chat(); open(true); break;
         case 'privacy': privacy(); break;
         case 'promo-apply': applyPromo(); break;
@@ -2661,7 +2918,7 @@
       }
       if (f.id === 'biz-send') {
         const d = new FormData(f);
-        download('transfer-by-van-firemni-poptavka.txt', `TRANSFER BY VAN — ${L('PŘEDBĚŽNÁ POPTÁVKA', 'PRELIMINARY REQUEST')}\n\n${L('Firma', 'Company')}: ${d.get('co')}\nE-mail: ${d.get('mail')}\n${L('Jízd měsíčně', 'Rides per month')}: ${f.dataset.n}\n${L('Vůz', 'Vehicle')}: ${FLEET[f.dataset.c].label}\n${L('Vzorová trasa', 'Sample route')}: ${AIRPORT} – Praha\n${L('Orientační rozpočet', 'Estimated budget')}: ${money(Number(f.dataset.t))}\n\n${L('Nezávazný odhad, nejde o nabídku ani smlouvu. Poptávka nebyla odeslána.', 'Non-binding estimate, not an offer or contract. The request was not sent.')}\n`);
+        download('wayro-firemni-poptavka.txt', `WAYRO — ${L('PŘEDBĚŽNÁ POPTÁVKA', 'PRELIMINARY REQUEST')}\n\n${L('Firma', 'Company')}: ${d.get('co')}\nE-mail: ${d.get('mail')}\n${L('Jízd měsíčně', 'Rides per month')}: ${f.dataset.n}\n${L('Vůz', 'Vehicle')}: ${FLEET[f.dataset.c].label}\n${L('Vzorová trasa', 'Sample route')}: ${AIRPORT} – Praha\n${L('Orientační rozpočet', 'Estimated budget')}: ${money(Number(f.dataset.t))}\n\n${L('Nezávazný odhad, nejde o nabídku ani smlouvu. Poptávka nebyla odeslána.', 'Non-binding estimate, not an offer or contract. The request was not sent.')}\n`);
         modal.close(); toast(L('Podklad stažen. Odeslání dispečinku není v ukázce připojené.', 'File downloaded. Sending to dispatch is not connected in this demo.'));
         return;
       }
@@ -2756,6 +3013,29 @@
       } catch { /* ignore unrelated storage writes */ }
     });
 
+    const THEME_KEY = 'tbv.theme';
+    function applyTheme(light) {
+      document.documentElement.toggleAttribute('data-theme', false);
+      if (light) document.documentElement.setAttribute('data-theme', 'light');
+      else document.documentElement.removeAttribute('data-theme');
+      const btn = $('#theme-toggle');
+      if (btn) {
+        btn.setAttribute('aria-pressed', String(light));
+        btn.setAttribute('aria-label', light ? L('Přepnout na tmavý motiv', 'Switch to dark theme') : L('Přepnout na světlý motiv', 'Switch to light theme'));
+      }
+      const meta = document.querySelector('meta[name="theme-color"]');
+      if (meta) meta.content = light ? '#ffffff' : '#000000';
+    }
+    const prefersLight = (() => { try { return localStorage.getItem(THEME_KEY) === 'light'; } catch { return false; } })() ||
+      (!(() => { try { return localStorage.getItem(THEME_KEY); } catch { return true; } })() && matchMedia('(prefers-color-scheme: light)').matches);
+    applyTheme(prefersLight);
+    $('#theme-toggle').addEventListener('click', () => {
+      const light = document.documentElement.getAttribute('data-theme') !== 'light';
+      try { localStorage.setItem(THEME_KEY, light ? 'light' : 'dark'); } catch { /* storage blocked, session only */ }
+      applyTheme(light);
+    });
+    const yearNode = $('#year');
+    if (yearNode) yearNode.textContent = new Date().getFullYear();
     shellChrome();
     statsBar();
     if (store.ref !== refCode || store.lang !== lang) save();

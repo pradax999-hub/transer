@@ -17,11 +17,6 @@ const configured = value => typeof value === 'string' && value.trim().length > 0
 const PUBLIC_URL = new URL(process.env.CLIENT_URL || `http://localhost:${PORT}`);
 const ADMIN_TOKEN = process.env.DRIVER_ADMIN_TOKEN || '';
 const PRIVATE_DATA_PATH = '/wry-ops-8f3c9a71d6e24b50';
-const CONTACT = Object.freeze({
-  operator: 'Serhii Boliak', ico: '08865931',
-  phone: '+420 774 571 747', phoneDigits: '420774571747', email: 'cztransfertaxi@gmail.com',
-  czk: '4160775073/0800', eur: '2209598233/0800'
-});
 if (!['https:', 'http:'].includes(PUBLIC_URL.protocol) || (PUBLIC_URL.protocol !== 'https:' && !['localhost', '127.0.0.1'].includes(PUBLIC_URL.hostname))) {
   throw new Error('CLIENT_URL must be HTTPS, except for localhost development.');
 }
@@ -178,7 +173,7 @@ app.get(['/inter.woff2', '/instrument-serif-italic.woff2'], (req, res) => {
   res.sendFile(path.join(__dirname, path.basename(req.path)));
 });
 
-// ============ Transfer by Van tariffs ============
+// ============ Тарифи Wayro ============
 const FLEET_TARIFFS = {
   sedan:   { base: 850,  rate: 34, hour: 690,  city: 390 },
   minibus: { base: 1250, rate: 43, hour: 890,  city: 590 },
@@ -240,7 +235,7 @@ const place = name => PLACES.find(p => p.n.toLowerCase() === String(name || '').
 
 // ============ Розрахунок ціни ============
 // ============ Geocoding + routing (реальна відстань) ============
-const UA = 'TransferByVan/3.0';
+const UA = 'WayroTransfer/3.0';
 const GEO_CACHE = new Map();
 const ROUTE_CACHE = new Map();
 const CACHE_TTL = 1000 * 60 * 60 * 12;
@@ -436,7 +431,7 @@ function applyExtras(base, booking) {
   const subtotal = base * returnMultiplier;
   let discount = 0;
   const promo = String(booking.promo || '').toUpperCase();
-  if (promo === 'VAN10' || promo === 'WAYRO10' || promo.startsWith('TV-') || promo.startsWith('WY-')) discount = Math.round(subtotal * 0.10);
+  if (promo === 'WAYRO10' || promo.startsWith('WY-')) discount = Math.round(subtotal * 0.10);
   else if (promo === 'PRG15') discount = Math.round(subtotal * 0.15);
   return { base, subtotal, discount, total: Math.max(0, subtotal - discount), currency: 'CZK' };
 }
@@ -461,13 +456,19 @@ function bookingConfirmationTemplate(order) {
     [tr('Kontakt', 'Contact'), [b.name, b.phone, b.email].filter(Boolean).join(' / ')],
     [tr('Platba', 'Payment'), b.pay === 'online' ? tr('Online, stav ověřuje Stripe', 'Online, verified by Stripe') : b.pay === 'card' ? tr('Kartou u řidiče', 'Card to driver') : tr('Hotově u řidiče', 'Cash to driver')],
     [tr('Cena', 'Price'), `${order.amount} ${order.currency}`],
-    ...(b.notes ? [[tr('Poznámka', 'Note'), b.notes]] : [])
+    ...(b.notes ? [[tr('Poznámka', 'Note'), b.notes]] : []),
+    [tr('Provozovatel', 'Operator'), 'Serhii Boliak, IČO: 08865931'],
+    [tr('Bankovní spojení', 'Bank accounts'), 'CZK: 4160775073/0800 | EUR: 2209598233/0800 (Česká spořitelna)'],
+    [tr('Kontakt 24/7', 'Contact 24/7'), '+420 774 571 747 | cztransfertaxi@gmail.com']
   ];
   return `<!DOCTYPE html><html lang="${en ? 'en' : 'cs'}"><head><meta charset="UTF-8"></head><body style="margin:0;padding:24px;background:#0d0c08;color:#eee7d8;font-family:Arial,sans-serif"><div style="max-width:620px;margin:auto;padding:28px;border:1px solid #3b3320">
     <h1 style="color:#f5c66b;font-size:24px">Transfer by Van / ${tr('Přijali jsme žádost', 'Request received')}</h1>
     <p style="font-size:14px;line-height:1.7;color:#b9b0a0">${tr('Přijetí žádosti ani platba ještě nepotvrzují přidělení vozu. Vyčkejte na odpověď dispečinku.', 'Receiving a request or payment does not confirm a vehicle assignment. Please await dispatch confirmation.')}</p>
     <table role="presentation" style="width:100%;border-collapse:collapse">${rows.map(([label, value]) => `<tr><td style="padding:12px 12px 12px 0;border-bottom:1px solid #342e20;color:#b9b0a0;vertical-align:top;font-size:12px;width:32%">${escapeHtml(label)}</td><td style="padding:12px 0;border-bottom:1px solid #342e20;font-size:14px;line-height:1.6;overflow-wrap:anywhere">${escapeHtml(value)}</td></tr>`).join('')}</table>
-    <p style="font-size:12px;color:#b9b0a0;line-height:1.7">${tr('Trasu uchováváme přesně podle zvolených míst v žádosti.', 'The itinerary preserves the exact locations chosen in your request.')}<br>Transfer by Van · ${CONTACT.operator} · IČO ${CONTACT.ico}<br>${CONTACT.phone} · ${CONTACT.email}</p>
+    <p style="font-size:12px;color:#b9b0a0;line-height:1.7">${tr('Trasu uchováváme přesně podle zvolených míst v žádosti.', 'The itinerary preserves the exact locations chosen in your request.')}</p>
+    <div style="margin-top:20px;padding-top:16px;border-top:1px solid #342e20;font-size:11px;color:#8f8875">
+      Transfer by Van · Serhii Boliak · IČO: 08865931 · cztransfertaxi@gmail.com · +420 774 571 747
+    </div>
     </div></body></html>`;
 }
 
@@ -492,16 +493,16 @@ function driverAssignedTemplate(order, driverName) {
     </p>
     
     <div class="driver">
-      <div class="driver-name">👤 ${driverName || 'Transfer by Van driver'}</div>
+      <div class="driver-name">👤 ${driverName || 'Řidič Transfer by Van'}</div>
       <div style="color:#8a8474;font-size:12px;margin-top:6px">
-        Слідкуйте за автомобілем у реальному часі через додаток або веб-сайт.
+        Sledujte polohu vozu v reálném čase přes odkaz v rezervaci.
       </div>
     </div>
     
-    <div class="row"><span class="label">Номер замовлення</span><span>${order.id}</span></div>
-    <div class="row"><span class="label">Час подачі</span><span>${order.booking.date} ${order.booking.time}</span></div>
+    <div class="row"><span class="label">Číslo rezervace</span><span>${order.id}</span></div>
+    <div class="row"><span class="label">Čas přistavení</span><span>${order.booking.date} ${order.booking.time}</span></div>
     
-    <div class="footer">Transfer by Van · ${CONTACT.phone} · ${CONTACT.email}</div>
+    <div class="footer">Transfer by Van · Serhii Boliak · IČO: 08865931 · +420 774 571 747</div>
   </div>
 </body>
 </html>`;
@@ -523,14 +524,14 @@ function paymentSuccessTemplate(order) {
   <div class="card">
     <h1>✅ Платіж підтверджено</h1>
     <p style="color:#9c9585;font-size:13px;line-height:1.6;margin-bottom:20px">
-      Stripe підтвердив платіж. Призначення автомобіля окремо підтверджує оператор.
+      Ваша оплата успішно пройшла. Замовлення повністю підтверджене.
     </p>
     
     <div class="row"><span class="label">Номер замовлення</span><span>${order.id}</span></div>
     <div class="row"><span class="label">Сума</span><span class="total">${order.amount} ${order.currency}</span></div>
-    <div class="row"><span class="label">Дата оплати</span><span>${new Date(order.paidAt).toLocaleString('uk-UA')}</span></div>
+    <div class="row"><span class="label">Datum úhrady</span><span>${new Date(order.paidAt).toLocaleString('cs-CZ', { timeZone: 'Europe/Prague' })}</span></div>
     
-    <div class="footer">Transfer by Van · ${CONTACT.phone} · ${CONTACT.email}</div>
+    <div class="footer">Transfer by Van · Serhii Boliak · IČO: 08865931 · cztransfertaxi@gmail.com · +420 774 571 747</div>
   </div>
 </body>
 </html>`;
@@ -565,7 +566,7 @@ app.get('/api/geocode', async (req, res) => {
 
   const local = PLACES
     .filter(p => p.n.toLowerCase().includes(q.toLowerCase()))
-    .map(p => ({ label: p.n, full: p.n, address: p.n, lat: p.lat, lng: p.lng, known: true, source: 'transfer-by-van', kind: 'address' }));
+    .map(p => ({ label: p.n, full: p.n, address: p.n, lat: p.lat, lng: p.lng, known: true, source: 'wayro', kind: 'address' }));
 
   try {
     const remote = await geocode(q, { lang: req.query.lang, lat: req.query.lat ? Number(req.query.lat) : undefined, lng: req.query.lng ? Number(req.query.lng) : undefined });
@@ -679,7 +680,7 @@ app.post('/api/checkout', async (req, res) => {
     if (previous) return res.status(409).json({ error: 'This request has already been received. Check your booking before submitting again.' });
     const wantsOnlinePayment = booking.pay === 'online';
     if (wantsOnlinePayment && !stripe) return res.status(503).json({ error: 'Online payment is not configured. Choose payment to the driver.' });
-    const orderId = `TV-${crypto.randomUUID().toUpperCase()}`;
+    const orderId = `WY-${crypto.randomUUID().toUpperCase()}`;
     const accessToken = newToken();
     const locations = {
       pickup: locationSnapshot(quote.from, booking.from),
@@ -709,10 +710,10 @@ app.post('/api/checkout', async (req, res) => {
     // Відправка email підтвердження
     if (order.email) {
       try {
-        const result = await sendEmail(order.email, `Transfer by Van / ${orderId}`, bookingConfirmationTemplate(order));
+        const result = await sendEmail(order.email, `Wayro / ${orderId}`, bookingConfirmationTemplate(order));
         order.emailStatus = result.status;
         if (configured(process.env.DISPATCH_EMAIL)) {
-          await sendEmail(process.env.DISPATCH_EMAIL, `Transfer by Van / new request ${orderId}`, bookingConfirmationTemplate(order));
+          await sendEmail(process.env.DISPATCH_EMAIL, `Wayro / new request ${orderId}`, bookingConfirmationTemplate(order));
         }
       } catch (e) {
         if (order.emailStatus !== 'accepted') order.emailStatus = 'failed';
@@ -971,9 +972,14 @@ app.post('/api/driver/:orderId', driverAccess, (req, res) => {
 // Публічна конфігурація для фронтенду (тільки безпечні поля)
 app.get('/api/config', (req, res) => {
   res.json({
-    whatsapp: process.env.WHATSAPP || CONTACT.phoneDigits,
-    phone: process.env.PHONE || CONTACT.phone,
-    supportEmail: process.env.SUPPORT_EMAIL || CONTACT.email,
+    brandName: 'Transfer by Van',
+    operatorName: 'Serhii Boliak',
+    ico: '08865931',
+    accountCzk: '4160775073/0800',
+    accountEur: '2209598233/0800',
+    whatsapp: process.env.WHATSAPP || '420774571747',
+    phone: process.env.PHONE || '+420 774 571 747',
+    supportEmail: process.env.SUPPORT_EMAIL || 'cztransfertaxi@gmail.com',
     flightProvider: process.env.FLIGHT_PROVIDER || null,
     emailConfigured: Boolean(transporter),
     stripe: Boolean(stripe),
@@ -1041,7 +1047,7 @@ app.post('/api/test-email', requireOperator, async (req, res) => {
   if (!to) return res.status(400).json({ error: 'Email required' });
   
   try {
-    const result = await sendEmail(to, 'Transfer by Van test e-mail', '<h1>Transfer by Van</h1><p>The e-mail transport accepted this test request.</p>');
+    const result = await sendEmail(to, 'Wayro Test Email', '<h1>✅ Email works!</h1><p>Your Wayro backend is configured correctly.</p>');
     res.status(result.sent ? 200 : 503).json({ success: !!result.sent, messageId: result.messageId || null, status: result.status });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -1055,7 +1061,7 @@ app.use((error, req, res, next) => {
 });
 app.listen(PORT, () => {
   console.log('\n==========================================');
-  console.log(`Transfer by Van backend running on http://localhost:${PORT}`);
+  console.log(`🚖 Wayro Backend running on http://localhost:${PORT}`);
   console.log(`Gateway: ${stripe ? 'Stripe configured; verify in test mode first' : 'Online payment disabled: no Stripe key'}`);
   console.log(`📧 Email: ${transporter ? 'CONFIGURED' : 'NOT CONFIGURED (set EMAIL_USER/PASS)'}`);
   console.log('==========================================\n');

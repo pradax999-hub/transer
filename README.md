@@ -1,4 +1,4 @@
-# Transfer by Van: перед публикацией
+# Wayro: перед публикацией
 
 **Актуальное состояние:** можно размещать для тестирования, но готовность к реальным
 заказам ещё не подтверждена. В этой среде не запускались браузер, телефон, SMTP и
@@ -59,7 +59,7 @@ CSV содержит персональные данные: храните вы�
 первый результат не бронируется автоматически. Данные отличаются от Google Maps.
 
 Публичный Nominatim больше не используется: его политика запрещает автоподсказки.
-Без ключа доступны только локальные точки Transfer by Van. Для производственного маршрутизатора
+Без ключа доступны только локальные точки Wayro. Для производственного маршрутизатора
 задайте `OSRM_URL`; публичный OSRM по умолчанию подходит только для ознакомления.
 Рассчитанное время не учитывает текущие пробки. Котировка действует 15 минут;
 backend проверяет её перед оплатой, а не доверяет цене или distanceKm от браузера.
@@ -144,7 +144,7 @@ EMAIL_PORT=587
 EMAIL_SECURE=false
 EMAIL_USER=your-email@gmail.com
 EMAIL_PASS=ваш-app-password
-EMAIL_FROM="Transfer by Van <cztransfertaxi@gmail.com>"
+EMAIL_FROM="Wayro Transfer <noreply@wayro.cz>"
 ```
 
 ### Перевірка email
@@ -167,7 +167,7 @@ STRIPE_WEBHOOK_SECRET=whsec_...
 
 ---
 
-## 4. Тарифы Transfer by Van
+## 4. Тарифи Wayro
 | Клас | Аеропорт-Центр | Далекі (CZK/км) |
 |------|---------------|-----------------|
 | Sedan Standard | 850 CZK (36€) | 34 CZK/км |
@@ -228,9 +228,7 @@ STRIPE_WEBHOOK_SECRET=whsec_...
 curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
 sudo apt-get install -y nodejs
 git clone <your-repo>
-cd transfer-by-van-backend
+cd wayro-backend
 npm install --production
-pm2 start server.js --name transfer-by-van
+pm2 start server.js --name wayro
 ```
-#   t r a n s e r  
- 
